@@ -1,0 +1,301 @@
+body {
+    text-align: center;
+    color: black;
+    background-color: #fcfaf6;
+}
+
+.header {
+    background: url(../img/background.webp) center no-repeat fixed;
+    background-size: cover;
+    color: white;
+    padding: 70px;
+    border-radius: 50px;
+}
+
+.container-fluid {
+    padding: 3% 15%;
+}
+
+.navbar {
+    padding-bottom: 4.5rem;
+}
+
+.navbar-brand {
+    font-size: 2rem;
+}
+
+.nav-item {
+    padding: 0 18px;
+    text-align: right;
+}
+
+.nav-link {
+    font-size: 1.2rem;
+    font-weight: 100;
+}
+
+.dropdown-item{
+    text-align: center;
+    align-items: center;
+}
+
+.big-heading {
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 3.5em;
+}
+
+.title-image {
+    width: 280px;
+}
+
+.download-buttons {
+    margin: 5% 3% 5% 0%;
+    font-size: 1rem;
+}
+
+.goto-buttons {
+    display: block;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.goto2-buttons {
+    display: block;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.goto3-buttons {
+    border-radius: 15px;
+    /* border: none; */
+    padding: 35px;
+    background-color: #fcfaf6;
+}
+
+a {
+    text-decoration: none;
+}
+
+.myColor {
+    color: black;
+    transition: 0.1s;
+    margin-bottom: 20px;
+}
+
+.myColor:hover {
+    color: #9b7834;
+    scale: 150%;
+}
+
+.myColor2 {
+    margin-bottom: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: black;
+    transition: 0.1s;
+}
+
+.myColor2:hover {
+    color: #9b7834;
+    scale: 150%;
+}
+
+.testimonial-image {
+    width: 10%;
+    border-radius: 50%;
+    margin: 20px;
+}
+
+.testimonial-text {
+    font-size: 3rem;
+    line-height: 1.5;
+}
+
+.feeling {
+    border-radius: 50px;
+    width: 80%;
+    background-color: #9A7C4F;
+}
+
+.icon {
+    color: black;
+    font-size: 25px;
+    transition: 0.1s;
+}
+
+.icon:hover {
+    color: gray;
+    scale: 150%;
+}
+
+.icon1 {
+    margin-left: 20px;
+    color: black;
+    font-size: 25px;
+    transition: 0.1s;
+}
+
+.icon1:hover {
+    color: gray;
+    scale: 150%;
+}
+
+.card-body {
+    position: relative;
+    background-color: #f6efe3;
+    text-align: center;
+
+    img {
+        height: 120px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.card-header{
+    background-color: #f6efe3;
+    transition: 0.2s;
+}
+
+#explore-p {
+    margin-top: 20px;
+    font-size: large;
+}
+
+#pricing {
+    position: relative;
+    padding: 20px;
+}
+
+@media only screen and (min-width: 1500px) {
+    #pricing {
+        position: relative;
+        padding: 100px;
+    }
+}
+
+.explore-button {
+    width: 90%;
+    border: none;
+}
+
+.pricing-col {
+    padding: 3% 2%;
+}
+
+.pricing-text {
+    font-size: 3rem;
+    line-height: 1.5;
+}
+
+.the-shadow {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.end {
+    margin-top: 50px;
+    width: 70%;
+    border-radius: 50px;
+}
+
+.feature-box {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
+    width: 100%;
+    border-radius: 30px;
+    background-color: #f6efe3;
+    transition: 0.2s;
+}
+
+.feature-box:hover{
+    scale: 105%;
+    background-color: #f0e6d8;
+}
+
+@media only screen and (min-width: 1366px) {
+    .card-body {
+        position: relative;
+        background-color: #f6efe3;
+        text-align: center;
+        transition: 0.2s;
+
+        img {
+            height: 170px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}
+
+@media only screen and (min-width: 1270px){
+    .feature-box {
+        width: 30%;
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .nhan-xet{
+        font-size: 30px;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .goto3-buttons{
+        padding: 20px;
+        width: 50%;
+    }
+    
+}
+
+.card{
+    transition: 0.2s;
+}
+
+.card:hover{
+    scale: 105%;
+    .card-body{
+        background-color: #f0e6d8;
+    }
+    .card-header{
+        background-color: #f0e6d8;
+    }
+}
+
+.btn-home {
+    background-color: #f6efe3;
+    font-size: 20px;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    transition: 0.1s;
+}
+
+.btn-home:hover {
+    background-color: #fcfaf6;
+    cursor: pointer;
+}
+
+.btn-back {
+    background-color: #fcfaf6;
+    font-size: 20px;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    transition: 0.1s;
+}
+
+.btn-back:hover {
+    background-color: #f6efe3;
+    cursor: pointer;
+}
+
+.mini-div{
+    align-items: center;
+}

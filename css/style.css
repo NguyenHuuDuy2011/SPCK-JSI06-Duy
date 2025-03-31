@@ -1,0 +1,131 @@
+body {
+    background-image: url('../img/img29.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.container{
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    margin: auto;
+}
+
+.leaderboard {
+    color: var(--color-white);
+    position: absolute;
+    width: 70%;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 70px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.6);
+    border-radius: 20px;
+}
+
+.container-fluid {
+    padding: 1% 8%;
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 70%;
+    border-radius: 0px 0px 20px 20px;
+}
+
+.navbar-brand {
+    font-size: 2rem;
+}
+
+.nav-item {
+    padding: 0 18px;
+    text-align: right;
+}
+
+.nav-link {
+    font-size: 1.2rem;
+    font-weight: 100;
+}
+
+.dropdown-item {
+    text-align: center;
+    align-items: center;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin: 5px;
+    background: #e3cea9;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.1s;
+    border-radius: 10px;
+}
+
+.btn:hover {
+    background: #f6efe3;
+}
+
+.btn-home{
+    color: white;
+    background-color: rgba(0, 0, 0, 0.0);
+    font-size: 20px;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    transition: 0.1s;
+}
+
+.btn-home:hover{
+    background-color: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+}
+
+.btn-back {
+    background-color: rgba(0, 0, 0, 0.5);
+    font-size: 20px;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    transition: 0.1s;
+}
+
+.btn-back:hover {
+    background-color: #f6efe3;
+    cursor: pointer;
+}
+
+#leaderboard {
+    margin-top: 50px;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 22px;
+}
+
+th{
+    padding: 5px;
+}
+
+@media only screen and (max-width: 747px) {
+    .container-fluid {
+        display: none;
+    }
+}
+
+@media only screen and (max-height: 800px) {
+    .container-fluid {
+        display: none;
+    }
+}
+
+.title{
+    color: orange;
+}
+
+.title-th{
+    color: yellowgreen;
+}

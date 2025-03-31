@@ -1,0 +1,64 @@
+body {
+    text-align: center;
+    color: black;
+    background-color: #fcfaf6;
+}
+
+.container-fluid {
+    padding: 3% 15%;
+}
+
+.navbar {
+    padding-bottom: 4.5rem;
+}
+
+.navbar-brand {
+    font-size: 2rem;
+}
+
+.nav-item {
+    padding: 0 18px;
+    text-align: right;
+}
+
+.nav-link {
+    font-size: 1.2rem;
+    font-weight: 100;
+}
+
+a {
+    text-decoration: none;
+}
+
+.icon {
+    color: black;
+    font-size: 25px;
+    transition: 0.1s;
+}
+
+.icon:hover {
+    color: gray;
+    scale: 150%;
+}
+
+.icon1 {
+    margin-left: 20px;
+    color: black;
+    font-size: 25px;
+    transition: 0.1s;
+}
+
+.icon1:hover {
+    color: gray;
+    scale: 150%;
+}
+
+#footer-contact{
+    margin-top: 100px;
+    height: 100px;
+}
+
+img{
+    border-radius: 20px;
+    width: 55%;
+}

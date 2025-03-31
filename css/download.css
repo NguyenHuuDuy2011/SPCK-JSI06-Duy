@@ -1,0 +1,144 @@
+body {
+    text-align: center;
+    color: black;
+    background-color: #fcfaf6;
+}
+
+.header {
+    padding: 40px;
+    border-radius: 50px;
+    background: url(../img/background.webp) center no-repeat fixed;
+    background-size: cover;
+    color: white;
+}
+
+.container-fluid {
+    padding: 3% 15%;
+}
+
+.navbar {
+    padding-bottom: 4.5rem;
+}
+
+.navbar-brand {
+    font-size: 2rem;
+}
+
+.nav-item {
+    padding: 0 18px;
+    text-align: right;
+}
+
+.nav-link {
+    font-size: 1.2rem;
+    font-weight: 100;
+}
+
+.big-heading {
+    font-family: "Protest Guerrilla";
+    font-weight: 400;
+    font-size: 3.5rem;
+}
+
+.title-image {
+    width: 280px;
+}
+
+.download {
+    border-radius: 8px;
+    position: relative;
+    left: 160px;
+    display: block;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    padding: 10px;
+    width: 300px;
+    border: none;
+    background-color: #fcfaf6;
+    color: black;
+    transition: 0.2s;
+    font-size: large;
+}
+
+.dl {
+    text-decoration: none;
+    
+}
+
+.download:hover {
+    background-color: gray;
+    color: black;
+}
+
+.download-buttons{
+    background-color: #fcfaf6;
+}
+
+.end {
+    width: 70%;
+    border-radius: 50px;
+    background-color: #9A7C4F;
+}
+
+.icon {
+    color: black;
+    font-size: 25px;
+    transition: 0.1s;
+}
+
+.icon:hover {
+    color: gray;
+    scale: 150%;
+}
+
+.icon1 {
+    margin-left: 20px;
+    color: black;
+    font-size: 25px;
+    transition: 0.1s;
+}
+
+.icon1:hover {
+    color: gray;
+    scale: 150%;
+}
+
+#features {
+    img {
+        width: 140px;
+    }
+
+    .product {
+        padding: 20px;
+        flex-wrap: wrap;
+        position: relative;
+        display: flex;
+        gap: 100px;
+        justify-content: center;
+    }
+
+    .feature-box {
+        border-radius: 10px;
+        height: 300px;
+        width: 320px;
+        padding: 15px;
+        position: relative;
+        background-color: #fcfaf6;
+        text-align: center;
+    }
+
+    .img1 {
+        width: 130px;
+    }
+
+    .img2 {
+        width: 235px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+}
+
+.dropdown-item {
+    text-align: center;
+    align-items: center;
+}

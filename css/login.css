@@ -1,0 +1,99 @@
+body {
+    background-image: url('../img/img29.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.auth-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.auth-container .box {
+    color: var(--color-white);
+    position: absolute;
+    width: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 30px 45px;
+}
+
+.container-fluid {
+    padding: 1% 8%;
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 70%;
+    border-radius: 0px 0px 20px 20px;
+}
+
+.navbar-brand {
+    font-size: 2rem;
+}
+
+.nav-item {
+    padding: 0 18px;
+    text-align: right;
+}
+
+.nav-link {
+    font-size: 1.2rem;
+    font-weight: 100;
+}
+
+.dropdown-item {
+    text-align: center;
+    align-items: center;
+}
+
+.box .form-group {
+    background-color: #232a31;
+}
+
+.box input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--color-white);
+    height: 100%;
+    padding: 10px;
+}
+
+.box input:focus {
+    background-color: var(--color-white);
+    color: var(--color-black);
+    box-shadow: none;
+    border: none;
+    outline: none;
+}
+
+box .form-group .icon,
+.box input::placeholder {
+    color: #878787;
+}
+
+.box .form-group .icon {
+    padding: 0 8px;
+}
+
+.box .btn-primary {
+    display: block;
+    padding: 12px 0px !important;
+}
+
+@media only screen and (max-width: 747px){
+    .container-fluid{
+        display: none;
+    }
+}
+
+@media only screen  and (max-height: 666px) {
+    .container-fluid {
+        display: none;
+    }
+}
+    
