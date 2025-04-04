@@ -67,7 +67,7 @@ function handleLogin(event) {
         .catch((error) => {
             var errorCode = error.code; // Mã lỗi Firebase trả về
             var errorMessage = error.message; // Thông báo lỗi từ Firebase
-            alert("Mật khẩu không đúng"); // Hiển thị lỗi (chưa xử lý hết các lỗi có thể xảy ra)
+            alert("Tài khoản hoặc mật khẩu không đúng"); // Hiển thị lỗi (chưa xử lý hết các lỗi có thể xảy ra)
         });
 }
 
