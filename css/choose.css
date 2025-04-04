@@ -6,7 +6,7 @@ body {
 
 .container,
 .quiz-container {
-    width: 50%;
+    width: 40%;
     margin: auto;
     padding: 20px;
     background-color: #f6efe3;
@@ -70,36 +70,4 @@ body {
 
 th {
     padding: 5px;
-}
-
-.question-nav {
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}
-
-.btn-nav {
-    padding: 10px 15px;
-    background-color: #f6efe3;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.btn-nav:hover {
-    background-color: #ddd;
-}
-
-.btn-nav.active {
-    background-color: #e3cea9;
-    /* Màu xanh nổi bật */
-    color: black;
-    /* Chữ màu trắng */
-    font-weight: bold;
-    /* Chữ đậm */
-    border: 2px solid black;
-    /* Viền đậm hơn */
 }

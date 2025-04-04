@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../css/choose.css">
+</head>
+
+<body>
+    <a href="../index.html"><button class="btn-back"><i class="fa-solid fa-arrow-left"></i> Về trang chủ</button></a>
+    <div class="quiz-container">
+        <h2 id="question">Chọn môn làm bài</h2>
+        <div id="answer-buttons" class="btn-container">
+            <button class="btn" onclick="math()">Toán</button>
+            <button class="btn" onclick="history()">Lịch sử - Địa lí</button>
+            <button class="btn" onclick="IT()">Tin học</button>
+            <button class="btn" onclick="literature()">Ngữ văn</button>
+        </div>
+        <h3>Dựa theo chương trình phổ thông 2018 - lớp 8</h3>
+        <!-- <hr>
+        <button class="btn-home"><i class="fa-regular fa-floppy-disk"></i> Tạm dừng Quiz và lưu lại điểm</button> -->
+    </div>
+    <script>
+        function math() {
+            window.location.href = "./quiz.html?subject=math";
+        }
+
+        function history() {
+            window.location.href = "./quiz.html?subject=history";
+        }
+
+        function IT() {
+            window.location.href = "./quiz.html?subject=IT";
+        }
+
+        function literature() {
+            window.location.href = "./quiz.html?subject=literature";
+        }
+    </script>
+
+</body>
+
+</html>
