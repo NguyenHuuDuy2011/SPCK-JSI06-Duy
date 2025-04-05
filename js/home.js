@@ -12,7 +12,7 @@ window.onload = function () {
         alert(":(\nTrang web chưa sẵn sàng!\nHãy đăng nhập để tiếp tục\nStop code: LOGIN_REQUIRED");
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("username");
-        window.location.href = "./html/login.html"; // Chuyển hướng đến trang đăng nhập
+        window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
         return;
     }
 
@@ -20,7 +20,7 @@ window.onload = function () {
     const currentTime = Date.now();
     const oneHour = 60 * 60 * 1000; // 1 tiếng (ms)
     if (currentTime - parseInt(loginTime) > oneHour) {
-        alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!");
+        alert(":(\nPhiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!\nStop code: SESSION_EXPIRED");
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("username");
         localStorage.removeItem("loginTime");
@@ -51,6 +51,6 @@ window.onload = function () {
         localStorage.removeItem("username");
         localStorage.removeItem("loginTime");
         alert("Đăng xuất thành công!");
-        window.location.href = "./html/login.html"; // Chuyển hướng đến trang đăng nhập
+        window.location.href = "../index.html"; // Chuyển hướng đến trang đăng nhập
     });
 };

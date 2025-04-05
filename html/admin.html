@@ -21,7 +21,9 @@
 <body>
     <div class="container-fluid" id="store-header">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="">Quiz Website</a>
+            <a class="navbar-brand" href="">
+                <i class="fa-solid fa-house-chimney" style="color: green;"></i> Quiz Website
+            </a>
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 style="border: none;">
                 <span class="navbar-toggler-icon"></span>
@@ -74,7 +76,7 @@
                     <h1 class="big-heading text-dark">Quiz Website - Giáo Viên</h1>
                     <p class="text-dark">Quiz Website - Trang web giúp bạn thư giãn với những câu đố vui</p>
                     <hr class="text-dark">
-                    <a href="./choose.html"><button class="btn btn-outline-dark btn-lg goto-buttons mt-4"><i
+                    <a href="./add.html"><button class="btn btn-outline-dark btn-lg goto-buttons mt-4"><i
                             class="fa-regular fa-circle-play"></i> Tạo đề bài Quiz</button></a>
                     <!-- <button onclick="startQuiz()" class="btn btn-outline-dark btn-lg goto-buttons mt-4"><i class="fa-regular fa-circle-play"></i> Bắt đầu
                         Quiz</button> -->
@@ -168,8 +170,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <script src="./js/guest.js"></script>
-    <script src="./js/check_session.js"></script>
     <script>
         function addToCart(img_path, title, des, price) {
             const item = {

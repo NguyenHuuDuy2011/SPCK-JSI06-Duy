@@ -1,0 +1,158 @@
+/* Đặt nền và căn chỉnh */
+body {
+    font-family: 'Fira Sans', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* Nút quay lại */
+.btn-back {
+    background-color: #e3e3e3;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 20px;
+    transition: background-color 0.1s ease;
+}
+
+.btn-back:hover {
+    background-color: #d6d6d6;
+}
+
+/* Container chính */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề */
+h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+form label {
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Giới hạn chiều rộng của form */
+form {
+    max-width: 600px;
+    /* Giới hạn chiều rộng tối đa */
+    margin: 0 auto;
+    /* Căn giữa form */
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+/* Đảm bảo các input và select không tràn ra ngoài */
+form input,
+form select {
+    width: 100%;
+    /* Chiều rộng tối đa là 100% của form */
+    box-sizing: border-box;
+    /* Bao gồm padding và border trong kích thước */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+form input:focus,
+form select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Nút thêm câu hỏi */
+form .btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+
+form .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Danh sách câu hỏi */
+#question-list {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.question-item {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.question-item p {
+    margin: 0 0 10px;
+    color: #333;
+}
+
+.question-item ul {
+    padding-left: 20px;
+    margin: 0 0 10px;
+}
+
+.question-item ul li {
+    color: #555;
+    margin-bottom: 5px;
+}
+
+/* Nút sửa và xóa */
+.question-item button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.1s ease;
+}
+
+.question-item button:hover {
+    background-color: #0056b3;
+}
+
+.question-item button:last-child {
+    background-color: #dc3545;
+}
+
+.question-item button:last-child:hover {
+    background-color: #a71d2a;
+}
+
+/* Tiêu đề danh sách câu hỏi */
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
