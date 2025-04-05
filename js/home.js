@@ -24,7 +24,7 @@ window.onload = function () {
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("username");
         localStorage.removeItem("loginTime");
-        window.location.href = "./html/login.html"; // Chuyển hướng đến trang đăng nhập
+        window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
         return;
     }
 
@@ -51,6 +51,6 @@ window.onload = function () {
         localStorage.removeItem("username");
         localStorage.removeItem("loginTime");
         alert("Đăng xuất thành công!");
-        window.location.href = "../index.html"; // Chuyển hướng đến trang đăng nhập
+        window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
     });
 };
