@@ -80,7 +80,7 @@ th {
     justify-content: center;
 }
 
-.btn-nav {
+.nav-btn {
     padding: 10px 15px;
     background-color: #f6efe3;
     border: 1px solid #ccc;
@@ -89,11 +89,11 @@ th {
     font-size: 14px;
 }
 
-.btn-nav:hover {
+.nav-btn:hover {
     background-color: #ddd;
 }
 
-.btn-nav.active {
+.nav-btn.active {
     background-color: #e3cea9;
     /* Màu xanh nổi bật */
     color: black;
@@ -102,4 +102,11 @@ th {
     /* Chữ đậm */
     border: 2px solid black;
     /* Viền đậm hơn */
+}
+
+.nav-btn.disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+    pointer-events: none;
 }

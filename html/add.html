@@ -20,7 +20,7 @@
             <label for="subject">Chọn môn học:</label>
             <select id="subject">
                 <option value="math">Toán</option>
-                <option value="history">Lịch sử</option>
+                <option value="history">Lịch sử - Địa lí</option>
                 <option value="IT">Tin học</option>
                 <option value="literature">Ngữ văn</option>
             </select>
@@ -42,11 +42,51 @@
             <button type="submit" class="btn">Thêm câu hỏi</button>
         </form>
 
-        <h2>Danh sách câu hỏi đã thêm</h2>
+        <h2>Danh sách các câu hỏi</h2>
+        <p id="subject-name"></p>
         <div id="question-list"></div>
     </div>
 
     <script>
+        // DOM element để hiển thị tên phân môn
+            const subjectNameElement = document.getElementById("subject-name");
+            const subjectSelect = document.getElementById("subject");
+
+            // Hàm cập nhật tên phân môn
+            function updateSubjectName() {
+                const subject = subjectSelect.value; // Lấy giá trị môn học được chọn
+                let subjectName = "";
+
+                // Gán tên phân môn dựa trên giá trị
+                switch (subject) {
+                    case "math":
+                        subjectName = "Toán";
+                        break;
+                    case "history":
+                        subjectName = "Lịch sử - Địa lí";
+                        break;
+                    case "IT":
+                        subjectName = "Tin học";
+                        break;
+                    case "literature":
+                        subjectName = "Ngữ văn";
+                        break;
+                    default:
+                        subjectName = "Không xác định";
+                }
+
+                // Cập nhật nội dung của phần tử
+                subjectNameElement.innerText = `Phân môn: ${subjectName}`;
+            }
+
+            // Gọi hàm cập nhật khi người dùng thay đổi môn học
+            subjectSelect.addEventListener("change", () => {
+                updateSubjectName();
+                renderQuestions(); // Hiển thị danh sách câu hỏi tương ứng
+            });
+
+            // Gọi hàm cập nhật khi trang được tải
+            updateSubjectName();
         // Lấy danh sách câu hỏi từ localStorage
         const questionSets = JSON.parse(localStorage.getItem("questionSets")) || {
             math: [],
@@ -56,54 +96,75 @@
         };
 
         const form = document.getElementById("question-form");
-        const subjectSelect = document.getElementById("subject");
         const questionInput = document.getElementById("question");
         const answersInputs = document.querySelectorAll(".answer");
         const correctInput = document.getElementById("correct");
         const questionList = document.getElementById("question-list");
 
         // Hiển thị danh sách câu hỏi
-        function renderQuestions() {
-            const subject = subjectSelect.value;
-            const questions = questionSets[subject];
-            questionList.innerHTML = "";
+            function renderQuestions() {
+                const subject = subjectSelect.value; // Lấy môn học được chọn
+                const questions = questionSets[subject]; // Lấy danh sách câu hỏi của môn học
+                questionList.innerHTML = ""; // Xóa nội dung cũ
 
-            questions.forEach((q, index) => {
-                const questionDiv = document.createElement("div");
-                questionDiv.classList.add("question-item");
-                questionDiv.innerHTML = `
-                    <p><strong>Câu hỏi:</strong> ${q.question}</p>
-                    <ul>
-                        ${q.answers.map((a, i) => `<li>${i + 1}. ${a}</li>`).join("")}
-                    </ul>
-                    <p><strong>Đáp án đúng:</strong> ${q.correct + 1}</p>
-                    <button onclick="editQuestion('${subject}', ${index})">Sửa</button>
-                    <button onclick="deleteQuestion('${subject}', ${index})">Xóa</button>
-                `;
-                questionList.appendChild(questionDiv);
-            });
-        }
+                // Kiểm tra nếu không có câu hỏi
+                if (questions.length === 0) {
+                    questionList.innerHTML = "<h4>Phân môn này chưa có câu hỏi.</h4>";
+                    return;
+                }
+
+                // Hiển thị danh sách câu hỏi
+                questions.forEach((q, index) => {
+                    const questionDiv = document.createElement("div");
+                    questionDiv.classList.add("question-item");
+                    questionDiv.innerHTML = `
+            <p><strong>Câu hỏi:</strong> ${q.question}</p>
+            <ul>
+                ${q.answers.map((a, i) => `<li>${i + 1}. ${a}</li>`).join("")}
+            </ul>
+            <p><strong>Đáp án đúng:</strong> ${q.correct + 1}</p>
+            <button onclick="editQuestion('${subject}', ${index})">Sửa</button>
+            <button onclick="deleteQuestion('${subject}', ${index})">Xóa</button>
+        `;
+                    questionList.appendChild(questionDiv);
+                });
+            }
 
         // Thêm câu hỏi
         form.addEventListener("submit", (e) => {
-            e.preventDefault();
+                e.preventDefault();
 
-            const subject = subjectSelect.value;
-            const question = questionInput.value;
-            const answers = Array.from(answersInputs).map(input => input.value);
-            const correct = parseInt(correctInput.value) - 1;
+                const subject = subjectSelect.value; // Lấy môn học được chọn
+                const question = questionInput.value;
+                const answers = Array.from(answersInputs).map(input => input.value);
+                const correct = parseInt(correctInput.value) - 1;
 
-            if (correct < 0 || correct >= answers.length) {
-                alert("Đáp án đúng không hợp lệ!");
-                return;
-            }
+                if (correct < 0 || correct >= answers.length) {
+                    alert("Đáp án đúng không hợp lệ!");
+                    return;
+                }
 
-            questionSets[subject].push({ question, answers, correct });
-            localStorage.setItem("questionSets", JSON.stringify(questionSets)); // Lưu vào localStorage
-            alert("Thêm câu hỏi thành công!");
-            form.reset();
-            renderQuestions();
-        });
+                // Kiểm tra xem admin đang sửa câu hỏi hay thêm mới
+                const editingIndex = form.getAttribute("data-editing-index");
+                if (editingIndex !== null) {
+                    // Cập nhật câu hỏi cũ
+                    questionSets[subject][editingIndex] = { question, answers, correct };
+                    form.removeAttribute("data-editing-index"); // Xóa trạng thái sửa
+                    alert("Câu hỏi đã được sửa thành công!");
+                } else {
+                    // Thêm câu hỏi mới
+                    questionSets[subject].push({ question, answers, correct });
+                    alert("Thêm câu hỏi thành công!");
+                }
+
+                // Lưu vào localStorage và làm mới danh sách câu hỏi
+                localStorage.setItem("questionSets", JSON.stringify(questionSets));
+
+                const selectedSubject = subjectSelect.value; // Lưu giá trị môn học được chọn
+                form.reset(); // Đặt lại form
+                subjectSelect.value = selectedSubject; // Đặt lại giá trị môn học đã chọn
+                renderQuestions(); // Làm mới danh sách câu hỏi
+            });
 
         // Xóa câu hỏi
         function deleteQuestion(subject, index) {
@@ -115,18 +176,32 @@
         }
 
         // Sửa câu hỏi
-        function editQuestion(subject, index) {
-            const question = questionSets[subject][index];
-            questionInput.value = question.question;
-            answersInputs.forEach((input, i) => {
-                input.value = question.answers[i] || "";
-            });
-            correctInput.value = question.correct + 1;
-            subjectSelect.value = subject;
+        // function editQuestion(subject, index) {
+        //     const question = questionSets[subject][index];
+        //     questionInput.value = question.question;
+        //     answersInputs.forEach((input, i) => {
+        //         input.value = question.answers[i] || "";
+        //     });
+        //     correctInput.value = question.correct + 1;
+        //     subjectSelect.value = subject;
 
-            // Xóa câu hỏi cũ sau khi sửa
-            deleteQuestion(subject, index);
-        }
+        //     // Xóa câu hỏi cũ sau khi sửa
+        //     deleteQuestion(subject, index);
+        // }
+
+        // Sửa câu hỏi
+            function editQuestion(subject, index) {
+                const question = questionSets[subject][index];
+                questionInput.value = question.question;
+                answersInputs.forEach((input, i) => {
+                    input.value = question.answers[i] || "";
+                });
+                correctInput.value = question.correct + 1;
+                subjectSelect.value = subject;
+
+                // Lưu chỉ số câu hỏi đang được sửa vào một biến tạm
+                form.setAttribute("data-editing-index", index);
+            }
 
         // Hiển thị câu hỏi ban đầu
         subjectSelect.addEventListener("change", renderQuestions);

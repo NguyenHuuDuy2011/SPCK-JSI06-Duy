@@ -3,23 +3,12 @@ import { app } from "./firebase-quiz.js"; // Import Firebase từ firebase.js
 
 const db = getFirestore(app);
 
-const questionSets = {
-    math: [
-        { question: "Câu hỏi Toán 1: 2 + 2 bằng mấy?", answers: ["3", "4", "5", "6"], correct: 1 },
-        { question: "Câu hỏi Toán 2: Góc vuông có số đo bao nhiêu?", answers: ["0", "90", "180", "360"], correct: 1 },
-    ],
-    history: [
-        { question: "Câu hỏi Lịch sử 1: Ai là người đầu tiên đặt tên nước Việt Nam?", answers: ["Vua Gia Long", "Hồ Chí Minh", "Trần Thủ Độ", "Nguyễn Huệ"], correct: 0 },
-        { question: "Câu hỏi Lịch sử 2: Năm 1945, sự kiện gì xảy ra ở Việt Nam?", answers: ["Cách mạng tháng Tám", "Chiến tranh thế giới thứ hai", "Thành lập Đảng", "Chiến tranh Đông Dương"], correct: 0 },
-    ],
-    IT: [
-        { question: "Câu hỏi Tin học 1: HTML là viết tắt của?", answers: ["HyperText Markup Language", "HyperText Machine Language", "HighText Markup Language", "None of the above"], correct: 0 },
-        { question: "Câu hỏi Tin học 2: CSS dùng để làm gì?", answers: ["Định dạng giao diện", "Lập trình logic", "Lưu trữ dữ liệu", "Tạo cơ sở dữ liệu"], correct: 0 },
-    ],
-    literature: [
-        { question: "Câu hỏi Văn 1: Tác giả của 'Truyện Kiều' là ai?", answers: ["Nguyễn Du", "Hồ Xuân Hương", "Nguyễn Trãi", "Phạm Ngũ Lão"], correct: 0 },
-        { question: "Câu hỏi Văn 2: 'Chinh phụ ngâm' được viết bằng thể loại nào?", answers: ["Thơ lục bát", "Thơ song thất lục bát", "Thơ thất ngôn", "Thơ ngũ ngôn"], correct: 1 },
-    ],
+// Lấy danh sách câu hỏi từ localStorage
+const questionSets = JSON.parse(localStorage.getItem("questionSets")) || {
+    math: [],
+    history: [],
+    IT: [],
+    literature: []
 };
 
 // Lấy môn học từ URL
@@ -35,37 +24,10 @@ let score = 0;
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
 const scoreElement = document.getElementById("score");
-const questionNav = document.getElementById("question-nav"); // Thêm phần tử DOM cho danh sách câu hỏi
-
-// Hiển thị danh sách các câu hỏi
-// ...existing code...
-
-// Hiển thị danh sách các câu hỏi
-function renderQuestionNav() {
-    questionNav.innerHTML = ""; // Xóa danh sách cũ
-
-    questions.forEach((_, index) => {
-        const button = document.createElement("button");
-        button.classList.add("btn-nav");
-        button.innerText = `Câu ${index + 1}`;
-        button.onclick = () => goToQuestion(index); // Chuyển đến câu hỏi tương ứng
-
-        // Thêm lớp 'active' nếu đây là câu hỏi hiện tại
-        if (index === currentQuestionIndex) {
-            button.classList.add("active");
-        }
-
-        questionNav.appendChild(button);
-    });
-}
-
-// Chuyển đến câu hỏi tương ứng
-function goToQuestion(index) {
-    currentQuestionIndex = index;
-    renderQuestionNav(); // Cập nhật trạng thái nút
-    showQuestion();
-}
-
+const questionNav = document.getElementById("question-nav");
+const retryQuizBtn = document.getElementById("retry-quiz-btn");
+const endQuizBtn = document.getElementById("end-quiz-btn");
+const saveScoreBtn = document.getElementById("save-score-btn");
 
 // Hiển thị câu hỏi
 function showQuestion() {
@@ -87,8 +49,12 @@ function showQuestion() {
         button.onclick = () => checkAnswer(index);
         answerButtons.appendChild(button);
     });
+
+    // Cập nhật trạng thái của các nút trong question-nav
+    updateQuestionNavState();
 }
 
+// Kiểm tra đáp án
 // Kiểm tra đáp án
 function checkAnswer(selectedIndex) {
     if (selectedIndex === questions[currentQuestionIndex].correct) {
@@ -101,9 +67,86 @@ function checkAnswer(selectedIndex) {
     if (currentQuestionIndex < questions.length) {
         showQuestion();
     } else {
-        alert(`Quiz hoàn thành! Tổng điểm: ${score}`);
-        saveScore(); // Lưu điểm
+        // Khi hoàn thành quiz
+        questionElement.innerText = "Chúc mừng bạn đã hoàn thành bài Quiz!";
+        answerButtons.innerHTML = ""; // Xóa các nút đáp án
+        disableQuestionNav(); // Vô hiệu hóa các nút trong question-nav
+        enableButtons(); // Kích hoạt các nút sau khi hoàn thành quiz
     }
+}
+
+// Kích hoạt các nút sau khi hoàn thành quiz
+function enableButtons() {
+    saveScoreBtn.disabled = false;
+    retryQuizBtn.disabled = false;
+    endQuizBtn.disabled = false;
+}
+
+// Vô hiệu hóa các nút khi bắt đầu quiz
+function disableButtons() {
+    saveScoreBtn.disabled = true;
+    retryQuizBtn.disabled = true;
+    endQuizBtn.disabled = true;
+}
+
+
+// Vô hiệu hóa các nút trong question-nav
+function disableQuestionNav() {
+    const navButtons = questionNav.querySelectorAll(".nav-btn");
+    navButtons.forEach((button) => {
+        button.disabled = true; // Vô hiệu hóa nút
+        button.classList.add("disabled"); // Thêm lớp CSS để hiển thị trạng thái bị vô hiệu hóa
+    });
+}
+
+// Làm lại bài Quiz
+retryQuizBtn.addEventListener("click", () => {
+    if (confirm("Bạn có chắc chắn muốn làm lại bài Quiz?")) {
+        currentQuestionIndex = 0; // Đặt lại chỉ số câu hỏi
+        score = 0; // Đặt lại điểm
+        scoreElement.innerText = score; // Cập nhật điểm trên giao diện
+        disableButtons(); // Vô hiệu hóa các nút
+        showQuestion(); // Hiển thị lại câu hỏi đầu tiên
+    }
+});
+
+// Kết thúc Quiz
+endQuizBtn.addEventListener("click", () => {
+    if (confirm("Bạn có chắc chắn muốn kết thúc bài Quiz?")) {
+        alert(`Quiz đã kết thúc! Tổng điểm của bạn là: ${score}`);
+        window.location.href = "./choose.html"; // Quay lại trang chọn môn học
+    }
+});
+
+// Hiển thị danh sách câu hỏi trong question-nav
+function renderQuestionNav() {
+    questionNav.innerHTML = ""; // Xóa nội dung cũ
+
+    questions.forEach((_, index) => {
+        const navButton = document.createElement("button");
+        navButton.classList.add("nav-btn");
+        navButton.innerText = `Câu ${index + 1}`;
+        navButton.onclick = () => goToQuestion(index); // Chuyển đến câu hỏi tương ứng
+        questionNav.appendChild(navButton);
+    });
+}
+
+// Chuyển đến câu hỏi tương ứng
+function goToQuestion(index) {
+    currentQuestionIndex = index; // Cập nhật chỉ số câu hỏi hiện tại
+    showQuestion(); // Hiển thị câu hỏi
+}
+
+// Cập nhật trạng thái của các nút trong question-nav
+function updateQuestionNavState() {
+    const navButtons = questionNav.querySelectorAll(".nav-btn");
+    navButtons.forEach((button, index) => {
+        if (index === currentQuestionIndex) {
+            button.classList.add("active"); // Đánh dấu câu hỏi hiện tại
+        } else {
+            button.classList.remove("active");
+        }
+    });
 }
 
 // Lưu điểm vào Firebase
@@ -128,8 +171,9 @@ async function saveScore() {
 // Gán sự kiện cho nút Lưu điểm
 document.querySelector(".btn-home").addEventListener("click", saveScore);
 
-// Hiển thị câu hỏi đầu tiên và danh sách câu hỏi khi tải trang
+// Gọi hàm renderQuestionNav khi trang được tải
 window.onload = function () {
-    renderQuestionNav(); // Hiển thị danh sách câu hỏi
-    showQuestion();
+    disableButtons(); // Vô hiệu hóa các nút khi bắt đầu
+    renderQuestionNav(); // Hiển thị danh sách câu hỏi trong question-nav
+    showQuestion(); // Hiển thị câu hỏi đầu tiên
 };
