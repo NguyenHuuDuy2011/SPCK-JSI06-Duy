@@ -3,6 +3,14 @@ import { app } from "./firebase-quiz.js"; // Import Firebase từ firebase.js
 
 const db = getFirestore(app);
 
+// Hàm xáo trộn mảng (Fisher-Yates Shuffle)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); // Chọn ngẫu nhiên một chỉ số
+        [array[i], array[j]] = [array[j], array[i]]; // Hoán đổi vị trí
+    }
+}
+
 // Lấy danh sách câu hỏi từ localStorage
 const questionSets = JSON.parse(localStorage.getItem("questionSets")) || {
     math: [],
@@ -15,7 +23,10 @@ const questionSets = JSON.parse(localStorage.getItem("questionSets")) || {
 const params = new URLSearchParams(window.location.search);
 const subject = params.get("subject");
 
-const questions = questionSets[subject] || []; // Nếu không có môn học, trả về mảng rỗng
+let questions = questionSets[subject] || []; // Nếu không có môn học, trả về mảng rỗng
+
+// Xáo trộn câu hỏi
+shuffleArray(questions); // Xáo trộn thứ tự câu hỏi
 
 let currentQuestionIndex = 0;
 let score = 0;
@@ -38,6 +49,12 @@ function showQuestion() {
     }
 
     const questionData = questions[currentQuestionIndex];
+
+    // Xáo trộn các đáp án và cập nhật chỉ số đáp án đúng
+    const originalAnswers = [...questionData.answers]; // Sao chép mảng đáp án gốc
+    shuffleArray(questionData.answers); // Xáo trộn mảng đáp án
+    questionData.correct = questionData.answers.indexOf(originalAnswers[questionData.correct]); // Cập nhật chỉ số đáp án đúng
+
     questionElement.innerText = questionData.question;
 
     answerButtons.innerHTML = ""; // Xóa đáp án cũ
@@ -79,14 +96,12 @@ function checkAnswer(selectedIndex) {
 function enableButtons() {
     saveScoreBtn.disabled = false;
     retryQuizBtn.disabled = false;
-    endQuizBtn.disabled = false;
 }
 
 // Vô hiệu hóa các nút khi bắt đầu quiz
 function disableButtons() {
     saveScoreBtn.disabled = true;
     retryQuizBtn.disabled = true;
-    endQuizBtn.disabled = true;
 }
 
 
@@ -113,7 +128,7 @@ retryQuizBtn.addEventListener("click", () => {
 // Kết thúc Quiz
 endQuizBtn.addEventListener("click", () => {
     if (confirm("Bạn có chắc chắn muốn kết thúc bài Quiz?")) {
-        alert(`Quiz đã kết thúc! Tổng điểm của bạn là: ${score}`);
+        alert(`Quiz đã kết thúc! Tổng điểm của bạn là: ${score}\nStop code: QUIZ_ENDED_BY_USER`);
         window.location.href = "./choose.html"; // Quay lại trang chọn môn học
     }
 });

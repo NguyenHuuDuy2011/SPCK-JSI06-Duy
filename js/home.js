@@ -12,7 +12,9 @@ window.onload = function () {
         alert(":(\nTrang web chưa sẵn sàng!\nHãy đăng nhập để tiếp tục\nStop code: LOGIN_REQUIRED");
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("username");
-        window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
+        const basePath = window.location.pathname.split('/')[1];
+        window.location.href = `/${basePath}/html/login.html`;
+        // window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
         return;
     }
 
@@ -24,7 +26,10 @@ window.onload = function () {
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("username");
         localStorage.removeItem("loginTime");
-        window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
+        const basePath = window.location.pathname.split('/')[1];
+        window.location.href = `/${basePath}/html/login.html`;
+
+        // window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
         return;
     }
 
@@ -47,10 +52,13 @@ window.onload = function () {
     // Thêm sự kiện cho nút Đăng xuất
     const logoutLink = document.getElementById("logout-link");
     logoutLink.addEventListener("click", function () {
-        localStorage.removeItem("isLoggedIn");
-        localStorage.removeItem("username");
-        localStorage.removeItem("loginTime");
-        alert("Đăng xuất thành công!");
-        window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
+        if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+            // Xóa thông tin đăng nhập khỏi localStorage
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("username");
+            localStorage.removeItem("loginTime");
+            alert("Đăng xuất thành công!");
+            window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
+        }
     });
 };
