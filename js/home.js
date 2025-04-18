@@ -12,9 +12,7 @@ window.onload = function () {
         alert(":(\nTrang web chưa sẵn sàng!\nHãy đăng nhập để tiếp tục\nStop code: LOGIN_REQUIRED");
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("username");
-        const basePath = window.location.pathname.split('/')[1];
-        window.location.href = `/${basePath}/html/login.html`;
-        // window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
+        window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
         return;
     }
 
@@ -26,10 +24,7 @@ window.onload = function () {
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("username");
         localStorage.removeItem("loginTime");
-        const basePath = window.location.pathname.split('/')[1];
-        window.location.href = `/${basePath}/html/login.html`;
-
-        // window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
+        window.location.href = "../html/login.html"; // Chuyển hướng đến trang đăng nhập
         return;
     }
 

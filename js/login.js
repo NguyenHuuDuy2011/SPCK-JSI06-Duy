@@ -17,12 +17,12 @@ function handleLogin(event) {
 
     // Kiểm tra xem người dùng đã nhập đủ email và password chưa
     if (!email || !password) {
-        alert("Vui lòng điền đủ các trường"); // Hiển thị thông báo nếu thiếu
+        alert("Vui lòng điền đủ các thông tin trước khi đăng nhập"); // Hiển thị thông báo nếu thiếu
         return; // Dừng lại không tiếp tục xử lý
     }
 
-    if (email == "admin@gmail.com" && password == "admin") {
-        alert("Đăng nhập thành công!"); // Hiển thị thông báo nếu đăng nhập admin thành công
+    if (email == "admin@gmail.com" && password == "admin@2025") {
+        alert("Đăng nhập thành công!\nNote: Login_for_Administrator"); // Hiển thị thông báo nếu đăng nhập admin thành công
         localStorage.setItem("isLoggedIn", "true"); // Lưu trạng thái đăng nhập vào localStorage
         localStorage.setItem("username", email); // Lưu email làm tên người dùng
         localStorage.setItem("loginTime", Date.now().toString()); // Lưu thời gian đăng nhập (timestamp)

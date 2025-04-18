@@ -19,11 +19,22 @@ async function saveScore(username, score) {
 
 // Load leaderboard từ Firestore
 async function loadLeaderboard() {
+    const subjectMapping = {
+        math: "Toán",
+        history: "Lịch sử - Địa lí",
+        IT: "Tin học",
+        literature: "Ngữ văn",
+    };
+
     const querySnapshot = await getDocs(leaderboardCollection);
     const leaderboard = [];
 
     querySnapshot.forEach((doc) => {
-        leaderboard.push({ name: doc.data().name, score: doc.data().score });
+        leaderboard.push({
+            name: doc.data().name,
+            score: doc.data().score,
+            subject: subjectMapping[doc.data().subject] || "Không xác định", // Chuyển đổi sang tiếng Việt
+        });
     });
 
     const table = document.getElementById("leaderboard");
@@ -32,11 +43,32 @@ async function loadLeaderboard() {
         return;
     }
 
-    table.innerHTML = "<tr><th class='title-th'>Hạng</th><th>|</th><th class='title-th'>Tên Người Chơi</th><th>|</th><th class='title-th'>Điểm</th></tr>";
+    table.innerHTML = `
+        <tr>
+            <th class='title-th'>Hạng</th>
+            <th class='dash'>|</th>
+            <th class='title-th'>Tên Người Chơi</th>
+            <th class='dash'>|</th>
+            <th class='title-th'>Phân môn</th>
+            <th class='dash'>|</th>
+            <th class='title-th'>Điểm</th>
+        </tr>
+    `;
+
     leaderboard
-        .sort((a, b) => b.score - a.score) 
+        .sort((a, b) => b.score - a.score)
         .forEach((entry, index) => {
-            table.innerHTML += `<tr><td>${index + 1}</td><th>|</th><td>${entry.name}</td><th>|</th><td>${entry.score}</td></tr>`;
+            table.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <th class='dash'>|</th>
+                    <td>${entry.name}</td>
+                    <th class='dash'>|</th>
+                    <td>${entry.subject}</td>
+                    <th class='dash'>|</th>
+                    <td>${entry.score}</td>
+                </tr>
+            `;
         });
 }
 
