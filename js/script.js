@@ -144,7 +144,7 @@ function checkUnansweredQuestions() {
 
 // Biến lưu thời gian làm bài (ví dụ: 10 phút)
 // Biến lưu thời gian làm bài (ví dụ: 10 phút)
-const quizDuration = 5 * 60 * 1000; // 10 phút (đơn vị: ms)
+const quizDuration = 2 * 60 * 1000; // 10 phút (đơn vị: ms)
 let remainingTime = quizDuration;
 let timerInterval; // Khai báo biến toàn cục để lưu ID của setInterval
 let startTime; // Biến lưu thời gian bắt đầu làm bài
@@ -158,6 +158,11 @@ questionElement.parentNode.insertBefore(countdownElement, questionElement);
 
 // Hàm bắt đầu bộ đếm ngược
 function startCountdown() {
+    if (questions.length === 0) {
+        countdownElement.innerText = formatTime(0); // Hiển thị "Thời gian còn lại: N/A"
+        return; // Không chạy bộ đếm ngược
+    }
+
     startTime = Date.now(); // Lưu thời gian bắt đầu làm bài
     remainingTime = quizDuration; // Đặt lại thời gian còn lại
     countdownElement.innerText = formatTime(remainingTime);
@@ -168,16 +173,19 @@ function startCountdown() {
 
         if (remainingTime <= 0) {
             clearInterval(timerInterval); // Dừng bộ đếm
-            alert("Hết thời gian làm bài!");
+            alert("Thông báo - Quiz Website:\nHết thời gian làm bài!");
             checkQuizCompletion(); // Kết thúc bài quiz
         }
     }, 1000);
 }
 
 // Hàm định dạng thời gian (mm:ss)
+// Hàm định dạng thời gian (mm:ss)
 function formatTime(ms) {
-    const minutes = Math.floor(ms
-        / 60000);
+    if (questions.length === 0) {
+        return "Thời gian còn lại: N/A"; // Hiển thị N/A nếu không có câu hỏi
+    }
+    const minutes = Math.floor(ms / 60000);
     const seconds = Math.floor((ms % 60000) / 1000);
     return `Thời gian còn lại: ${minutes} phút ${seconds} giây`;
 }
@@ -329,6 +337,13 @@ function goToQuestion(index) {
 
 // Gọi hàm renderQuestionNav khi trang được tải
 window.onload = function () {
+    // if (questions.length === 0) {
+    //     questionElement.innerText = "Chưa có câu hỏi nào được thêm cho môn học này!";
+    //     answerButtons.innerHTML = ""; // Xóa các nút đáp án
+    //     disableButtons(); // Vô hiệu hóa các nút
+    //     return; // Dừng lại, không chạy bộ đếm ngược
+    // }
+
     disableButtons(); // Vô hiệu hóa các nút khi bắt đầu
     renderQuestionNav(); // Hiển thị danh sách câu hỏi trong question-nav
     showQuestion(); // Hiển thị câu hỏi đầu tiên
