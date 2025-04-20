@@ -18,7 +18,7 @@ function handleRegister(event) {
 
     // Kiểm tra xem người dùng có để trống trường nào không
     if (!username || !email || !password || !confirmPassword) {
-        alert("Vui lòng điền đủ các trường"); // Thông báo nếu có trường bị bỏ trống
+        alert("Vui lòng điền đủ thông tin!"); // Thông báo nếu có trường bị bỏ trống
         return; // Dừng hàm ngay lập tức
     }
 
@@ -43,12 +43,12 @@ function handleRegister(event) {
             // Thêm dữ liệu người dùng vào Firestore (bảng "users")
             db.collection("users").add(userData)
                 .then((docRef) => {
-                    alert("Đăng ký thành công"); // Hiển thị thông báo khi đăng ký thành công
+                    alert("Đăng ký thành công!"); // Hiển thị thông báo khi đăng ký thành công
                     window.location.href = "../index.html"; // Chuyển hướng sang trang đăng nhập
                     console.log("Document written with ID: ", docRef.id); // Log ID của user vừa tạo
                 })
                 .catch((error) => {
-                    alert("Đăng ký thất bại"); // Hiển thị lỗi nếu không lưu được vào Firestore
+                    alert("Đăng ký thất bại!"); // Hiển thị lỗi nếu không lưu được vào Firestore
                     console.error("Error adding document: ", error);
                 });
         })

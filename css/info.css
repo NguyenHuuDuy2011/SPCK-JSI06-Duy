@@ -1,0 +1,87 @@
+/* Định dạng chung */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #a8d0e6, #f8f9fa);
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Tiêu đề */
+h1,
+h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Thông tin tài khoản */
+.account-info p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+/* Bảng lịch sử làm bài */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.history-table th,
+.history-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.history-table th {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+}
+
+.history-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.history-table tr:hover {
+    background-color: #d1ecf1;
+}
+
+.history-table td {
+    font-size: 14px;
+}
+
+/* Nút quay lại */
+.btn-back {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: #2980b9;
+}
+
+.btn-back i {
+    margin-right: 5px;
+}

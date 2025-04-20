@@ -30,19 +30,25 @@ window.onload = function () {
 
     // Nếu đã đăng nhập và phiên còn hiệu lực, hiển thị thông tin người dùng
     loginLink.innerHTML = `
-        <div class="dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
-                <i class="fa-solid fa-user" style="color: green;"></i> Xin chào, ${username}
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="userDropdown" id="profile-dropdown">
-                <li>
-                    <a class="dropdown-item" href="#" id="logout-link" style="color: yellow;">
-                        <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
-                    </a>
-                </li>
-            </ul>
-        </div>
-    `;
+    <div class="dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
+            <i class="fa-solid fa-user" style="color: green;"></i> Xin chào, ${username}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="userDropdown" id="profile-dropdown">
+            <li>
+                <a class="dropdown-item" href="#" id="logout-link" style="color: yellow;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item" href="../html/info.html" style="color: yellow;">
+                    <i class="fa-solid fa-circle-info"></i> Thông tin tài khoản
+                </a>
+            </li>
+        </ul>
+    </div>
+`;
 
     // Thêm sự kiện cho nút Đăng xuất
     const logoutLink = document.getElementById("logout-link");
