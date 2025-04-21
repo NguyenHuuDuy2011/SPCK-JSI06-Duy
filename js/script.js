@@ -144,7 +144,7 @@ function checkUnansweredQuestions() {
 
 // Biến lưu thời gian làm bài (ví dụ: 10 phút)
 // Biến lưu thời gian làm bài (ví dụ: 10 phút)
-const quizDuration = 2 * 60 * 1000; // 10 phút (đơn vị: ms)
+const quizDuration = 0.1 * 60 * 1000; // 10 phút (đơn vị: ms)
 let remainingTime = quizDuration;
 let timerInterval; // Khai báo biến toàn cục để lưu ID của setInterval
 let startTime; // Biến lưu thời gian bắt đầu làm bài
@@ -173,8 +173,12 @@ function startCountdown() {
 
         if (remainingTime <= 0) {
             clearInterval(timerInterval); // Dừng bộ đếm
-            alert("Thông báo - Quiz Website:\nHết thời gian làm bài!");
+            questionElement.innerText = "Thời gian làm bài đã hết!";
+            answerButtons.innerHTML = "";
+            alert("Thông báo từ Quiz Website:\nĐã hết thời gian làm bài!\nBạn sẽ được chuyển đến trang kết quả.");
             checkQuizCompletion(); // Kết thúc bài quiz
+            disableQuestionNav(); // Vô hiệu hóa các nút trong question-nav
+            enableButtons(); // Kích hoạt các nút sau khi hoàn thành quiz
         }
     }, 1000);
 }
@@ -240,6 +244,9 @@ retryQuizBtn.addEventListener("click", () => {
         disableButtons(); // Vô hiệu hóa các nút
         renderQuestionNav(); // Làm mới danh sách câu hỏi trong question-nav
         showQuestion(); // Hiển thị lại câu hỏi đầu tiên
+        clearInterval(timerInterval); // Dừng bộ đếm ngược
+        countdownElement.innerText = formatTime(quizDuration); // Đặt lại thời gian còn lại
+        startCountdown(); // Bắt đầu đếm thời gian lại
     }
 });
 
@@ -280,7 +287,21 @@ function updateQuestionNavState() {
 
 // Lưu điểm vào Firebase
 async function saveScore() {
-    const playerName = prompt("Nhập tên của bạn:");
+    if (score <= 0) {
+        alert("Bạn chưa trả lời câu hỏi nào! Không thể lưu điểm.\nVui lòng trả lời ít nhất một câu hỏi trước khi lưu điểm.");
+        if (confirm("Bạn có chắc chắn muốn làm lại bài Quiz?")) {
+        currentQuestionIndex = 0; // Đặt lại chỉ số câu hỏi
+        score = 0; // Đặt lại điểm
+        scoreElement.innerText = score; // Cập nhật điểm trên giao diện
+        answeredQuestions = Array(questions.length).fill(false); // Đặt lại trạng thái câu hỏi
+        disableButtons(); // Vô hiệu hóa các nút
+        renderQuestionNav(); // Làm mới danh sách câu hỏi trong question-nav
+        showQuestion(); // Hiển thị lại câu hỏi đầu tiên
+    }
+        return;
+    }
+    else {
+        const playerName = prompt("Nhập tên của bạn:");
     if (!playerName) return;
 
     const elapsedTime = Date.now() - startTime; // Tính thời gian làm bài
@@ -298,13 +319,14 @@ async function saveScore() {
         // Lưu lịch sử làm bài
         saveQuizHistory(subject, score);
 
-        alert(`Điểm đã được lưu! Thời gian làm bài: ${minutes} phút ${seconds} giây`);
+        alert(`Điểm đã được lưu! Thời gian làm bài: ${minutes} phút ${seconds} giây\nChuyển sang bảng xếp hạng tại đây.`);
         window.location.href = "ranking.html"; // Chuyển sang bảng xếp hạng
     } catch (error) {
         console.error("Lỗi khi lưu điểm:", error);
         alert("Lưu điểm thất bại!");
     }
-}
+}   
+    }
 
 function saveQuizHistory(subject, score) {
     if (score <= 0) {

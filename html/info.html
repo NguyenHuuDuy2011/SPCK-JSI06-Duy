@@ -15,7 +15,7 @@
     <div class="container">
         <h1>Thông tin tài khoản</h1>
         <div class="account-info">
-            <p><strong>Tên người dùng:</strong> <span id="username"></span></p>
+            <p><strong>Tên tài khoản:</strong> <span id="username"></span></p>
             <p><strong>Thời gian đăng nhập:</strong> <span id="loginTime"></span></p>
         </div>
         <h2>Lịch sử làm bài</h2>
@@ -31,55 +31,74 @@
                 <!-- Lịch sử sẽ được thêm vào đây -->
             </tbody>
         </table>
-
         <button onclick="goBack()" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
     </div>
 
     <script>
         // Lấy thông tin từ localStorage
-        const username = localStorage.getItem("username");
-        const loginTime = localStorage.getItem("loginTime");
+            const username = localStorage.getItem("username");
+            const loginTime = localStorage.getItem("loginTime");
 
-        // Hiển thị thông tin tài khoản
-        document.getElementById("username").innerText = username || "Không xác định";
-        document.getElementById("loginTime").innerText = loginTime ? new Date(parseInt(loginTime)).toLocaleString() : "Không xác định";
+            // Hiển thị thông tin tài khoản
+            document.getElementById("username").innerText = username || "---N/A---";
+            document.getElementById("loginTime").innerText = loginTime
+                ? new Date(parseInt(loginTime)).toLocaleDateString("vi-VN", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric"
+                }) + " --- " + new Date(parseInt(loginTime)).toLocaleTimeString("vi-VN")
+                : "---N/A---";
 
-        // Hàm quay lại trang trước
-        function goBack() {
-            window.history.back();
-        }
+            // Hàm quay lại trang trước
+            function goBack() {
+                window.history.back();
+            }
 
-        
-
-        // Lấy lịch sử làm bài từ localStorage (hoặc Firestore nếu cần)
-        // Lấy lịch sử làm bài từ localStorage
-        // Tạo ánh xạ tên môn học từ tiếng Anh sang tiếng Việt
-            const subjectMapping = {
-                math: "Toán",
-                history: "Lịch sử - Địa lí",
-                IT: "Tin học",
-                literature: "Ngữ văn"
-            };
-
-            // Lấy lịch sử làm bài từ localStorage
-            const quizHistory = JSON.parse(localStorage.getItem("quizHistory")) || [];
-            console.log("Lịch sử làm bài:", quizHistory);
-
-            // Hiển thị lịch sử làm bài
-            const historyTableBody = document.getElementById("history-table").querySelector("tbody");
-            if (quizHistory.length === 0) {
-                historyTableBody.innerHTML = "<tr><td colspan='3'>Không có lịch sử làm bài</td></tr>";
+            // Kiểm tra tài khoản trước khi hiển thị lịch sử
+            if (!username || username === "---N/A---") {
+                const historyTableBody = document.getElementById("history-table").querySelector("tbody");
+                historyTableBody.innerHTML = "<tr><td colspan='3'>Chưa có tài khoản để xem lịch sử làm bài!</td></tr>";
             } else {
-               quizHistory.forEach((entry) => {
-                    console.log("Mục lịch sử:", entry);
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-        <td>${subjectMapping[entry.subject] || entry.subject}</td> <!-- Chuyển đổi tên môn học -->
-        <td>${entry.score}</td> <!-- Hiển thị điểm số -->
-        <td>${new Date(entry.timestamp).toLocaleString()}</td>
-    `;
-                    historyTableBody.appendChild(row);
-                });
+                // Tạo ánh xạ tên môn học từ tiếng Anh sang tiếng Việt
+                const subjectMapping = {
+                    math: "Toán",
+                    history: "Lịch sử - Địa lí",
+                    IT: "Tin học",
+                    literature: "Ngữ văn"
+                };
+
+                // Lấy lịch sử làm bài từ localStorage
+                const quizHistory = JSON.parse(localStorage.getItem("quizHistory")) || [];
+                console.log("Lịch sử làm bài:", quizHistory);
+
+                // Hiển thị lịch sử làm bài
+                const historyTableBody = document.getElementById("history-table").querySelector("tbody");
+                if (quizHistory.length === 0) {
+                    historyTableBody.innerHTML = "<tr><td colspan='3'>Không có lịch sử làm bài</td></tr>";
+                } else {
+                    quizHistory.forEach((entry) => {
+                        console.log("Mục lịch sử:", entry);
+                        const row = document.createElement("tr");
+
+                        // Định dạng ngày làm bài (dd/mm/yyyy)
+                        const formattedDate = new Date(entry.timestamp).toLocaleDateString("vi-VN", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric"
+                        });
+
+                        // Định dạng giờ làm bài (hh:mm:ss)
+                        const formattedTime = new Date(entry.timestamp).toLocaleTimeString("vi-VN");
+
+                        // Hiển thị cả ngày và giờ làm bài
+                        row.innerHTML = `
+                <td>${subjectMapping[entry.subject] || entry.subject}</td> <!-- Chuyển đổi tên môn học -->
+                <td>${entry.score}</td> <!-- Hiển thị điểm số -->
+                <td>${formattedDate} -- ${formattedTime}</td> <!-- Hiển thị ngày và giờ làm bài -->
+            `;
+                        historyTableBody.appendChild(row);
+                    });
+                }
             }
     </script>
 </body>

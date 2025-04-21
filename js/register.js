@@ -43,7 +43,7 @@ function handleRegister(event) {
             // Thêm dữ liệu người dùng vào Firestore (bảng "users")
             db.collection("users").add(userData)
                 .then((docRef) => {
-                    alert("Đăng ký thành công!"); // Hiển thị thông báo khi đăng ký thành công
+                    alert("Đăng ký thành công!\nChuyển đến trang chủ Quiz Website tại đây"); // Hiển thị thông báo khi đăng ký thành công
                     window.location.href = "../index.html"; // Chuyển hướng sang trang đăng nhập
                     console.log("Document written with ID: ", docRef.id); // Log ID của user vừa tạo
                 })

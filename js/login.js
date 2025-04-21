@@ -22,7 +22,7 @@ function handleLogin(event) {
     }
 
     if (email == "admin@gmail.com" && password == "admin@2025") {
-        alert("Đăng nhập thành công!\nNote: Login_for_Administrator"); // Hiển thị thông báo nếu đăng nhập admin thành công
+        alert("Đăng nhập thành công!\nChuyển sang trang chủ Admin tại đây\nNote: Login_for_Administrator"); // Hiển thị thông báo nếu đăng nhập admin thành công
         localStorage.setItem("isLoggedIn", "true"); // Lưu trạng thái đăng nhập vào localStorage
         localStorage.setItem("username", email); // Lưu email làm tên người dùng
         localStorage.setItem("loginTime", Date.now().toString()); // Lưu thời gian đăng nhập (timestamp)
