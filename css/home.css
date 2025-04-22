@@ -4,14 +4,6 @@ body {
     background-color: #fcfaf6;
 }
 
-.header {
-    background: url(../img/background.webp) center no-repeat fixed;
-    background-size: cover;
-    color: white;
-    padding: 70px;
-    border-radius: 50px;
-}
-
 .container-fluid {
     padding: 3% 15%;
 }
@@ -128,29 +120,6 @@ a {
     background-color: #9A7C4F;
 }
 
-.icon {
-    color: black;
-    font-size: 25px;
-    transition: 0.1s;
-}
-
-.icon:hover {
-    color: gray;
-    scale: 150%;
-}
-
-.icon1 {
-    margin-left: 20px;
-    color: black;
-    font-size: 25px;
-    transition: 0.1s;
-}
-
-.icon1:hover {
-    color: gray;
-    scale: 150%;
-}
-
 .card-body {
     position: relative;
     background-color: #f6efe3;
@@ -207,21 +176,6 @@ a {
     margin-top: 50px;
     width: 70%;
     border-radius: 50px;
-}
-
-.feature-box {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 20px;
-    width: 100%;
-    border-radius: 30px;
-    background-color: #f6efe3;
-    transition: 0.2s;
-}
-
-.feature-box:hover{
-    scale: 105%;
-    background-color: #f0e6d8;
 }
 
 @media only screen and (min-width: 1366px) {
@@ -305,4 +259,103 @@ a {
 
 .mini-div{
     align-items: center;
+}
+
+.navbar {
+    padding: 10px 20px;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.hero {
+    background: url('../img/background.webp');
+    width: 70%;
+    /* Đặt độ rộng 70% */
+    height: 50vh;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Căn giữa theo chiều dọc */
+    align-items: center;
+    /* Căn giữa theo chiều ngang */
+    text-align: center;
+    position: relative;
+    margin: 0 auto;
+    /* Căn giữa theo chiều ngang */
+    border-radius: 50px;
+    /* Bo góc nếu cần */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Thêm bóng đổ nếu muốn */
+}
+
+.hero h1 {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+}
+
+.btn-custom {
+    background-color: green;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+}
+
+.btn-custom:hover {
+    background-color: greenyellow;
+}
+
+.features {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.features h3 {
+    margin-bottom: 30px;
+}
+
+.feature-card {
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #f6efe3;
+    margin-bottom: 20px;
+}
+
+.feature-card:hover {
+    scale: 105%;
+    transition: 0.1s;
+}
+
+.icon {
+    color: black;
+    font-size: 25px;
+    transition: 0.1s;
+}
+
+.icon:hover {
+    color: gray;
+    scale: 150%;
+}
+
+.icon1 {
+    margin-left: 20px;
+    color: black;
+    font-size: 25px;
+    transition: 0.1s;
+}
+
+.icon1:hover {
+    color: gray;
+    scale: 150%;
 }
