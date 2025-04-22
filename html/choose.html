@@ -14,13 +14,24 @@
 <body>
     <a href="../index.html"><button class="btn-back"><i class="fa-solid fa-arrow-left"></i> Về trang chủ</button></a>
     <div class="quiz-container">
-        <h2 id="question">Chọn 1 môn để làm bài</h2>
-        <div id="answer-buttons" class="btn-container">
+        <div id="grade-selection" class="grade-container">
+            <h3>Chọn khối lớp của bạn:</h3>
+            <button class="btn-grade" onclick="selectGrade(6)">Khối 6</button>
+            <button class="btn-grade" onclick="selectGrade(7)">Khối 7</button>
+            <button class="btn-grade" onclick="selectGrade(8)">Khối 8</button>
+            <button class="btn-grade" onclick="selectGrade(9)">Khối 9</button>
+        </div>
+        <h2 id="subject-selection" style="display: none;">Chọn 1 môn để làm bài</h2>
+        <div id="answer-buttons" class="btn-container" style="display: none;">
+            <!-- Các nút môn học sẽ được tạo động -->
+            <button id="back-to-grade" class="btn-back" style="display: none;" onclick="goBackToGrade()"><i class="fa-solid fa-arrow-left"></i> Quay về chọn lớp</button>
+        </div>
+        <!-- <div id="answer-buttons" class="btn-container">
             <button class="btn" onclick="math()">Toán 8</button>
             <button class="btn" onclick="history()">Lịch sử - Địa lí 8</button>
             <button class="btn" onclick="IT()">Tin học 8</button>
             <button class="btn" onclick="literature()">Ngữ văn 8</button>
-        </div>
+        </div> -->
         <!-- <h3>Dựa theo chương trình phổ thông 2018 - Khối lớp: 8</h3> -->
         <h3></h3>
         <!-- <hr>
@@ -42,6 +53,86 @@
         function literature() {
             window.location.href = "./quiz.html?subject=literature";
         }
+
+        const subjectsByGrade = {
+                6: [
+                    { name: "Toán", id: "math" },
+                    { name: "Lịch sử - Địa lí", id: "history" },
+                    { name: "Tin học", id: "IT" },
+                    { name: "Ngữ văn", id: "literature" }
+                ],
+                7: [
+                    { name: "Toán", id: "math" },
+                    { name: "Lịch sử - Địa lí", id: "history" },
+                    { name: "Tin học", id: "IT" },
+                    { name: "Ngữ văn", id: "literature" }
+                ],
+                8: [
+                    { name: "Toán", id: "math" },
+                    { name: "Lịch sử - Địa lí", id: "history" },
+                    { name: "Tin học", id: "IT" },
+                    { name: "Ngữ văn", id: "literature" }
+                ],
+                9: [
+                    { name: "Toán", id: "math" },
+                    { name: "Lịch sử - Địa lí", id: "history" },
+                    { name: "Tin học", id: "IT" },
+                    { name: "Ngữ văn", id: "literature" }
+                ]
+            };
+
+            function selectGrade(grade) {
+                    const gradeSelection = document.getElementById("grade-selection");
+                    const subjectSelection = document.getElementById("subject-selection");
+                    const answerButtons = document.getElementById("answer-buttons");
+                    const backToGradeButton = document.getElementById("back-to-grade");
+
+                    // Ẩn phần chọn khối lớp
+                    gradeSelection.style.display = "none";
+
+                    // Hiển thị dòng "Chọn 1 môn để làm bài"
+                    subjectSelection.style.display = "block";
+
+                    // Hiển thị các nút môn học
+                    answerButtons.style.display = "block";
+                    backToGradeButton.style.display = "inline-block"; // Hiển thị nút "Quay về chọn lớp"
+                    answerButtons.innerHTML = ""; // Xóa các nút cũ
+
+                    const subjects = subjectsByGrade[grade];
+                    subjects.forEach((subject) => {
+                        const button = document.createElement("button");
+                        button.classList.add("btn");
+                        button.innerText = `${subject.name} ${grade}`;
+                        button.onclick = () => {
+                            window.location.href = `./quiz.html?subject=${subject.id}&grade=${grade}`;
+                        };
+                        answerButtons.appendChild(button);
+                    });
+
+                    // Thêm nút "Quay về chọn lớp" vào cuối danh sách
+                    answerButtons.appendChild(backToGradeButton);
+                }
+
+                function goBackToGrade() {
+                    const gradeSelection = document.getElementById("grade-selection");
+                    const subjectSelection = document.getElementById("subject-selection");
+                    const answerButtons = document.getElementById("answer-buttons");
+                    const backToGradeButton = document.getElementById("back-to-grade");
+
+                    // Hiển thị phần chọn khối lớp
+                    gradeSelection.style.display = "block";
+
+                    // Ẩn phần chọn môn học
+                    subjectSelection.style.display = "none";
+                    answerButtons.style.display = "none";
+                    backToGradeButton.style.display = "none"; // Ẩn nút "Quay về chọn lớp"
+                }
+
+            // Khi trang được tải, chỉ hiển thị phần chọn khối lớp
+            window.onload = () => {
+                document.getElementById("grade-selection").style.display = "block";
+                document.getElementById("answer-buttons").style.display = "none";
+            };
     </script>
 
 </body>

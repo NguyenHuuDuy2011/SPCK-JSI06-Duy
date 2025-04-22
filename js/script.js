@@ -12,18 +12,19 @@ function shuffleArray(array) {
 }
 
 // Lấy danh sách câu hỏi từ localStorage
-const questionSets = JSON.parse(localStorage.getItem("questionSets")) || {
-    math: [],
-    history: [],
-    IT: [],
-    literature: []
-};
+// Lấy danh sách câu hỏi từ localStorage
+const questionSets = JSON.parse(localStorage.getItem("questionSets")) || {};
 
-// Lấy môn học từ URL
+// Lấy môn học và khối lớp từ URL
 const params = new URLSearchParams(window.location.search);
 const subject = params.get("subject");
+const grade = params.get("grade");
 
-let questions = questionSets[subject] || []; // Nếu không có môn học, trả về mảng rỗng
+let questions = questionSets[grade]?.[subject] || []; // Nếu không có dữ liệu, trả về mảng rỗng
+
+if (questions.length === 0) {
+    console.warn(`Không tìm thấy câu hỏi cho môn ${subject} khối ${grade}`);
+}
 
 // Xáo trộn câu hỏi
 shuffleArray(questions); // Xáo trộn thứ tự câu hỏi
@@ -144,7 +145,7 @@ function checkUnansweredQuestions() {
 
 // Biến lưu thời gian làm bài (ví dụ: 10 phút)
 // Biến lưu thời gian làm bài (ví dụ: 10 phút)
-const quizDuration = 0.1 * 60 * 1000; // 10 phút (đơn vị: ms)
+const quizDuration = 2 * 60 * 1000; // 10 phút (đơn vị: ms)
 let remainingTime = quizDuration;
 let timerInterval; // Khai báo biến toàn cục để lưu ID của setInterval
 let startTime; // Biến lưu thời gian bắt đầu làm bài

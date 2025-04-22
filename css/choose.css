@@ -47,6 +47,7 @@ body {
 }
 
 .btn-back {
+    margin-top: 20px;
     background-color: #fcfaf6;
     font-size: 20px;
     padding: 20px;
@@ -70,4 +71,26 @@ body {
 
 th {
     padding: 5px;
+}
+
+.grade-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.btn-grade {
+    margin: 0 10px;
+    padding: 20px 30px;
+    font-size: 20px;
+    background-color: #00ff95;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+.btn-grade:hover {
+    background-color: #00ffc8;
+    scale: 105%;
 }

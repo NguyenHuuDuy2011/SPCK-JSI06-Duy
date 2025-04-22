@@ -1,7 +1,7 @@
 /* Đặt nền và căn chỉnh */
 body {
     font-family: 'Fira Sans', sans-serif;
-    background-color: #f9f9f9;
+    background-color: #fcfaf6;
     margin: 0;
     padding: 0;
     text-align: center;
@@ -10,7 +10,7 @@ body {
 
 /* Nút quay lại */
 .btn-back {
-    background-color: #e3e3e3;
+    background-color: #fcfaf6;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -26,12 +26,12 @@ body {
 
 /* Container chính */
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 40%;
+        margin: auto;
+        padding: 20px;
+        background-color: #f6efe3;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
 }
 
 /* Tiêu đề */
@@ -79,18 +79,19 @@ form select:focus {
 
 /* Nút thêm câu hỏi */
 form .btn {
-    background-color: #007bff;
+    background-color: green;
     color: #fff;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.1s ease;
+    transition: 0.1s;
 }
 
 form .btn:hover {
-    background-color: #0056b3;
+    background-color: greenyellow;
+    color: black;
 }
 
 /* Danh sách câu hỏi */
@@ -102,7 +103,7 @@ form .btn:hover {
 }
 
 .question-item {
-    background-color: #f8f9fa;
+    background-color: #fcfaf6;
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -125,12 +126,13 @@ form .btn:hover {
 
 /* Nút sửa và xóa */
 .question-item button {
+    width: 100px;
     background-color: #007bff;
     color: #fff;
     border: none;
     padding: 8px 15px;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 16px;
     cursor: pointer;
     margin-right: 10px;
     transition: background-color 0.1s ease;
@@ -152,4 +154,25 @@ form .btn:hover {
 h2 {
     font-size: 24px;
     margin-bottom: 20px;
+}
+
+select {
+    background-color: #fcfaf6;
+    width: 70%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+/* Đặt chiều rộng tối đa cho các nút */
+
+option {
+    padding: 10px;
+    font-size: 14px;
+    background-color: #fcfaf6;
+}
+
+input{
+    background-color: #fcfaf6;
 }

@@ -9,44 +9,142 @@
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../css/add.css">
+
 </head>
 
 <body>
     <a href="./admin.html"><button class="btn-back"><i class="fa-solid fa-arrow-left"></i> Về lại trang chủ - Admin</button></a>
     <div class="container">
-        <h1>Quản lý câu hỏi</h1>
-        <form id="question-form">
-            <label for="subject">Chọn môn học:</label>
-            <select id="subject">
+        <p>Chọn khối lớp</p>
+        <div id="grade-selection" class="grade-container">
+            <select id="grade" onchange="selectGrade()">
+                <option value="" selected disabled>Chọn khối</option>
+                <option value="6">Lớp 6</option>
+                <option value="7">Lớp 7</option>
+                <option value="8">Lớp 8</option>
+                <option value="9">Lớp 9</option>
+            </select>
+        </div>
+        <div id="subject-selection" class="subject-container" style="display: none;">
+            <p>Chọn môn học</p>
+            <!-- <label for="subject">Chọn môn học:</label> -->
+            <select id="subject" onchange="selectSubject()">
+                <option value="" selected disabled>Chọn môn</option>
                 <option value="math">Toán</option>
                 <option value="history">Lịch sử - Địa lí</option>
                 <option value="IT">Tin học</option>
                 <option value="literature">Ngữ văn</option>
             </select>
-
-            <label for="question">Câu hỏi:</label>
-            <input type="text" id="question" placeholder="Nhập câu hỏi" required>
-
-            <label for="answers">Đáp án:</label>
-            <div id="answers">
-                <input type="text" class="answer" placeholder="Đáp án 1" required>
-                <input type="text" class="answer" placeholder="Đáp án 2" required>
-                <input type="text" class="answer" placeholder="Đáp án 3" required>
-                <input type="text" class="answer" placeholder="Đáp án 4" required>
-            </div>
-
-            <label for="correct">Đáp án đúng (1-4):</label>
-            <input type="number" id="correct" min="1" max="4" required>
-
-            <button type="submit" class="btn">Thêm câu hỏi</button>
-        </form>
-
+        </div>
+        
+        <div id="question-form-container" style="display: none;">
+            <!-- Form nhập câu hỏi -->
+            <form id="question-form">
+                <hr>
+                <label for="question">Câu hỏi:</label>
+                <input type="text" id="question" placeholder="Nhập câu hỏi" required>
+        
+                <label for="answers">Đáp án:</label>
+                <div id="answers">
+                    <input type="text" class="answer" placeholder="Đáp án 1" required>
+                    <input type="text" class="answer" placeholder="Đáp án 2" required>
+                    <input type="text" class="answer" placeholder="Đáp án 3" required>
+                    <input type="text" class="answer" placeholder="Đáp án 4" required>
+                </div>
+        
+                <label for="correct">Đáp án đúng (1-4):</label>
+                <input type="number" id="correct" min="1" max="4" required>
+        
+                <button type="submit" class="btn">Thêm câu hỏi</button>
+                <hr>
+            </form>
+        </div>
+        
         <h2>Danh sách các câu hỏi</h2>
         <p id="subject-name"></p>
         <div id="question-list"></div>
     </div>
 
     <script>
+        let selectedGrade = null;
+            let selectedSubject = null;
+            // Khi người dùng chọn khối lớp
+            function selectGrade() {
+                    const gradeSelect = document.getElementById("grade");
+                    selectedGrade = gradeSelect.value;
+                    console.log("Khối lớp được chọn:", selectedGrade);
+
+                    if (selectedGrade) {
+                        // Hiển thị phần chọn môn học
+                        document.getElementById("subject-selection").style.display = "block";
+
+                        // Ẩn form nhập câu hỏi và danh sách câu hỏi
+                        document.getElementById("question-form-container").style.display = "none";
+                        document.getElementById("question-list").innerHTML = "";
+
+                        // Reset ô chọn môn về giá trị mặc định
+                        const subjectSelect = document.getElementById("subject");
+                        subjectSelect.value = ""; // Đặt lại giá trị của ô chọn môn
+                    }
+                }
+
+                function selectSubject() {
+                    const subjectSelect = document.getElementById("subject");
+                    selectedSubject = subjectSelect.value;
+                    console.log("Môn học được chọn:", selectedSubject);
+
+                    if (selectedSubject) {
+                        document.getElementById("question-form-container").style.display = "block";
+                        renderQuestions();
+                    }
+                }
+           
+
+            // Thêm câu hỏi
+            document.getElementById("question-form").addEventListener("submit", (e) => {
+                    e.preventDefault();
+
+                    const question = document.getElementById("question").value;
+                    const answers = Array.from(document.querySelectorAll(".answer")).map(input => input.value);
+                    const correct = parseInt(document.getElementById("correct").value) - 1;
+
+                    if (correct < 0 || correct >= answers.length) {
+                        alert("Đáp án đúng không hợp lệ!");
+                        return;
+                    }
+
+                    const questionSets = JSON.parse(localStorage.getItem("questionSets")) || {};
+
+                    // Đảm bảo tồn tại cấu trúc cho khối lớp và môn học
+                    if (!questionSets[String(selectedGrade)]) {
+                        questionSets[String(selectedGrade)] = {};
+                    }
+                    if (!questionSets[String(selectedGrade)][selectedSubject]) {
+                        questionSets[String(selectedGrade)][selectedSubject] = [];
+                    }
+
+                    const editingIndex = document.getElementById("question-form").getAttribute("data-editing-index");
+                    if (editingIndex !== null) {
+                        // Cập nhật câu hỏi đã chỉnh sửa
+                        questionSets[String(selectedGrade)][selectedSubject][editingIndex] = { question, answers, correct };
+                        alert("Cập nhật câu hỏi thành công!");
+                        document.getElementById("question-form").removeAttribute("data-editing-index");
+
+                        // Đặt lại text trên nút thành "Thêm câu hỏi"
+                        const submitButton = document.querySelector("#question-form button[type='submit']");
+                        submitButton.textContent = "Thêm câu hỏi";
+                    } else {
+                        // Thêm câu hỏi mới
+                        questionSets[String(selectedGrade)][selectedSubject].push({ question, answers, correct });
+                        alert("Thêm câu hỏi thành công!");
+                    }
+
+                    // Lưu lại vào localStorage
+                    localStorage.setItem("questionSets", JSON.stringify(questionSets));
+
+                    document.getElementById("question-form").reset();
+                    renderQuestions(); // Làm mới danh sách câu hỏi
+                });
         // DOM element để hiển thị tên phân môn
             const subjectNameElement = document.getElementById("subject-name");
             const subjectSelect = document.getElementById("subject");
@@ -101,12 +199,22 @@
         const questionList = document.getElementById("question-list");
 
         // Hiển thị danh sách câu hỏi
-            function renderQuestions() {
-                const subject = subjectSelect.value; // Lấy môn học được chọn
-                const questions = questionSets[subject]; // Lấy danh sách câu hỏi của môn học
+        function renderQuestions() {
+                const questionSets = JSON.parse(localStorage.getItem("questionSets")) || {};
+                console.log("Dữ liệu trong localStorage:", questionSets);
+
+                // Chuyển đổi `selectedGrade` sang chuỗi để khớp với khóa trong `localStorage`
+                const gradeKey = String(selectedGrade);
+                const questions = questionSets[gradeKey]?.[selectedSubject] || [];
+                console.log("Danh sách câu hỏi:", questions);
+
+                const questionList = document.getElementById("question-list");
                 questionList.innerHTML = ""; // Xóa nội dung cũ
 
-                // Kiểm tra nếu không có câu hỏi
+                if (!selectedGrade || !selectedSubject) {
+                    return; // Không làm gì nếu chưa chọn khối hoặc môn
+                }
+
                 if (questions.length === 0) {
                     questionList.innerHTML = "<h4>Phân môn này chưa có câu hỏi.</h4>";
                     return;
@@ -122,57 +230,27 @@
                 ${q.answers.map((a, i) => `<li>${i + 1}. ${a}</li>`).join("")}
             </ul>
             <p><strong>Đáp án đúng:</strong> ${q.correct + 1}</p>
-            <button onclick="editQuestion('${subject}', ${index})">Sửa</button>
-            <button onclick="deleteQuestion('${subject}', ${index})">Xóa</button>
+            <button onclick="editQuestion(${index})">Sửa</button>
+            <button onclick="deleteQuestion(${index})">Xóa</button>
         `;
                     questionList.appendChild(questionDiv);
                 });
             }
 
         // Thêm câu hỏi
-        form.addEventListener("submit", (e) => {
-                e.preventDefault();
-
-                const subject = subjectSelect.value; // Lấy môn học được chọn
-                const question = questionInput.value;
-                const answers = Array.from(answersInputs).map(input => input.value);
-                const correct = parseInt(correctInput.value) - 1;
-
-                if (correct < 0 || correct >= answers.length) {
-                    alert("Đáp án đúng không hợp lệ!");
-                    return;
-                }
-
-                // Kiểm tra xem admin đang sửa câu hỏi hay thêm mới
-                const editingIndex = form.getAttribute("data-editing-index");
-                if (editingIndex !== null) {
-                    // Cập nhật câu hỏi cũ
-                    questionSets[subject][editingIndex] = { question, answers, correct };
-                    form.removeAttribute("data-editing-index"); // Xóa trạng thái sửa
-                    alert("Câu hỏi đã được sửa thành công!");
-                } else {
-                    // Thêm câu hỏi mới
-                    questionSets[subject].push({ question, answers, correct });
-                    alert("Thêm câu hỏi thành công!");
-                }
-
-                // Lưu vào localStorage và làm mới danh sách câu hỏi
-                localStorage.setItem("questionSets", JSON.stringify(questionSets));
-
-                const selectedSubject = subjectSelect.value; // Lưu giá trị môn học được chọn
-                form.reset(); // Đặt lại form
-                subjectSelect.value = selectedSubject; // Đặt lại giá trị môn học đã chọn
-                renderQuestions(); // Làm mới danh sách câu hỏi
-            });
 
         // Xóa câu hỏi
-        function deleteQuestion(subject, index) {
-            if (confirm("Bạn có chắc chắn muốn xóa câu hỏi này?")) {
-                questionSets[subject].splice(index, 1);
-                localStorage.setItem("questionSets", JSON.stringify(questionSets)); // Cập nhật localStorage
-                renderQuestions();
+        function deleteQuestion(index) {
+                const questionSets = JSON.parse(localStorage.getItem("questionSets")) || {};
+                const questions = questionSets[selectedGrade]?.[selectedSubject] || [];
+
+                if (confirm("Bạn có chắc chắn muốn xóa câu hỏi này?")) {
+                    questions.splice(index, 1); // Xóa câu hỏi
+                    questionSets[selectedGrade][selectedSubject] = questions; // Cập nhật danh sách
+                    localStorage.setItem("questionSets", JSON.stringify(questionSets)); // Lưu lại vào localStorage
+                    renderQuestions(); // Làm mới danh sách câu hỏi
+                }
             }
-        }
 
         // Sửa câu hỏi
         // function editQuestion(subject, index) {
@@ -189,17 +267,25 @@
         // }
 
         // Sửa câu hỏi
-            function editQuestion(subject, index) {
-                const question = questionSets[subject][index];
-                questionInput.value = question.question;
+        function editQuestion(index) {
+                const questionSets = JSON.parse(localStorage.getItem("questionSets")) || {};
+                const questions = questionSets[selectedGrade]?.[selectedSubject] || [];
+                const question = questions[index];
+
+                // Điền thông tin câu hỏi vào form
+                document.getElementById("question").value = question.question;
+                const answersInputs = document.querySelectorAll(".answer");
                 answersInputs.forEach((input, i) => {
                     input.value = question.answers[i] || "";
                 });
-                correctInput.value = question.correct + 1;
-                subjectSelect.value = subject;
+                document.getElementById("correct").value = question.correct + 1;
 
-                // Lưu chỉ số câu hỏi đang được sửa vào một biến tạm
-                form.setAttribute("data-editing-index", index);
+                // Lưu chỉ số câu hỏi đang được sửa
+                document.getElementById("question-form").setAttribute("data-editing-index", index);
+
+                // Thay đổi text trên nút thành "Sửa câu hỏi"
+                const submitButton = document.querySelector("#question-form button[type='submit']");
+                submitButton.textContent = "Sửa câu hỏi";
             }
 
         // Hiển thị câu hỏi ban đầu
