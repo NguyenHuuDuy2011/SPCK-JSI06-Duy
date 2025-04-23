@@ -172,11 +172,18 @@ function startCountdown() {
         remainingTime -= 1000; // Giảm thời gian còn lại mỗi giây
         countdownElement.innerText = formatTime(remainingTime);
 
+        // Thay đổi màu sắc khi thời gian <= 20 giây
+        if (remainingTime <= 20000) { // 20 giây = 20000 ms
+            countdownElement.style.color = "red"; // Đổi màu chữ thành đỏ
+        } else {
+            countdownElement.style.color = "black"; // Đổi lại màu chữ thành đen (hoặc màu mặc định)
+        }
+
         if (remainingTime <= 0) {
             clearInterval(timerInterval); // Dừng bộ đếm
             questionElement.innerText = "Thời gian làm bài đã hết!";
             answerButtons.innerHTML = "";
-            alert("Thông báo từ Quiz Website:\nĐã hết thời gian làm bài!\nBạn sẽ được chuyển đến trang kết quả.");
+            alert("Thông báo từ Quiz Website:\nĐã hết thời gian làm bài!");
             checkQuizCompletion(); // Kết thúc bài quiz
             disableQuestionNav(); // Vô hiệu hóa các nút trong question-nav
             enableButtons(); // Kích hoạt các nút sau khi hoàn thành quiz
@@ -320,8 +327,8 @@ async function saveScore() {
         // Lưu lịch sử làm bài
         saveQuizHistory(subject, score);
 
-        alert(`Điểm đã được lưu! Thời gian làm bài: ${minutes} phút ${seconds} giây\nChuyển sang bảng xếp hạng tại đây.`);
-        window.location.href = "ranking.html"; // Chuyển sang bảng xếp hạng
+        alert(`Điểm đã được lưu! Thời gian làm bài: ${minutes} phút ${seconds} giây\nCảm ơn bạn đã tham gia bài Quiz!`);
+        window.location.href = "./choose.html"; // Quay lại trang chọn môn học
     } catch (error) {
         console.error("Lỗi khi lưu điểm:", error);
         alert("Lưu điểm thất bại!");

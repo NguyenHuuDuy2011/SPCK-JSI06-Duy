@@ -53,7 +53,7 @@
                 </div>
         
                 <label for="correct">Đáp án đúng (1-4):</label>
-                <input type="number" id="correct" min="1" max="4" required>
+                <input type="number" id="correct" min="1" max="4" required placeholder="A-1, B-2, C-3, D-4">
         
                 <button type="submit" class="btn">Thêm câu hỏi</button>
                 <hr>
@@ -62,6 +62,7 @@
         
         <h2>Danh sách các câu hỏi</h2>
         <p id="subject-name"></p>
+        <p id="total-questions">Tổng số câu hỏi: 0</p>
         <div id="question-list"></div>
     </div>
 
@@ -169,11 +170,11 @@
                         subjectName = "Ngữ văn";
                         break;
                     default:
-                        subjectName = "Không xác định";
+                        subjectName = "Chưa xác định";
                 }
 
                 // Cập nhật nội dung của phần tử
-                subjectNameElement.innerText = `Phân môn: ${subjectName}`;
+                subjectNameElement.innerText = `Khối lớp: ${selectedGrade || "Chưa xác định"} - Phân môn: ${subjectName}`;
             }
 
             // Gọi hàm cập nhật khi người dùng thay đổi môn học
@@ -209,14 +210,17 @@
                 console.log("Danh sách câu hỏi:", questions);
 
                 const questionList = document.getElementById("question-list");
+                const totalQuestionsElement = document.getElementById("total-questions");
                 questionList.innerHTML = ""; // Xóa nội dung cũ
 
                 if (!selectedGrade || !selectedSubject) {
+                    totalQuestionsElement.innerText = "Tổng số câu hỏi: 0";
                     return; // Không làm gì nếu chưa chọn khối hoặc môn
                 }
 
                 if (questions.length === 0) {
                     questionList.innerHTML = "<h4>Phân môn này chưa có câu hỏi.</h4>";
+                    totalQuestionsElement.innerText = "Tổng số câu hỏi: 0";
                     return;
                 }
 
@@ -235,6 +239,9 @@
         `;
                     questionList.appendChild(questionDiv);
                 });
+
+                // Cập nhật tổng số câu hỏi
+                totalQuestionsElement.innerText = `Tổng số câu hỏi: ${questions.length}`;
             }
 
         // Thêm câu hỏi
