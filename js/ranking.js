@@ -1,81 +1,98 @@
-import { getFirestore, collection, getDocs, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { app } from "./firebase-quiz.js";
 
 const db = getFirestore(app);
 const leaderboardCollection = collection(db, "leaderboard");
 
-// Hàm lưu điểm vào Firestore
-async function saveScore(username, score) {
-    const userDoc = doc(leaderboardCollection, username);
-    try {
-        const docSnap = await getDoc(userDoc);
-        if (!docSnap.exists() || score > docSnap.data().score) {
-            await setDoc(userDoc, { name: username, score: score });
-        }
-    } catch (error) {
-        console.error("Lỗi khi lưu điểm số:", error);
-    }
-}
+// Lấy các phần tử DOM
+document.addEventListener("DOMContentLoaded", () => {
+    const schoolSelect = document.getElementById("school-select");
+    const filterBtn = document.getElementById("filter-btn");
+    const leaderboardTable = document.getElementById("leaderboard");
+    const leaderboardTableBody = document.querySelector("#leaderboard tbody");
+    const noDataRow = document.getElementById("no-data-row"); // Lấy hàng "Không có dữ liệu"
 
-// Load leaderboard từ Firestore
-async function loadLeaderboard() {
-    const subjectMapping = {
-        math: "Toán",
-        history: "Lịch sử - Địa lí",
-        IT: "Tin học",
-        literature: "Ngữ văn",
-    };
-
-    const querySnapshot = await getDocs(leaderboardCollection);
-    const leaderboard = [];
-
-    querySnapshot.forEach((doc) => {
-        leaderboard.push({
-            name: doc.data().name,
-            score: doc.data().score,
-            subject: subjectMapping[doc.data().subject] || "Không xác định", // Chuyển đổi sang tiếng Việt
-        });
-    });
-
-    const table = document.getElementById("leaderboard");
-    if (!table) {
-        console.error("Không tìm thấy phần tử bảng");
+    if (!leaderboardTable || !leaderboardTableBody || !noDataRow) {
+        console.error("Không tìm thấy bảng xếp hạng, tbody hoặc hàng 'Không có dữ liệu'. Kiểm tra lại HTML.");
         return;
     }
 
-    table.innerHTML = `
-        <tr>
-            <th class='title-th'>Hạng</th>
-            <th class='dash'>|</th>
-            <th class='title-th'>Tên Người Chơi</th>
-            <th class='dash'>|</th>
-            <th class='title-th'>Phân môn</th>
-            <th class='dash'>|</th>
-            <th class='title-th'>Điểm</th>
-        </tr>
-    `;
+    // Bản đồ ánh xạ phân môn sang tiếng Việt (chỉ các môn được hỗ trợ)
+    const subjectMapping = {
+        math: "Toán",
+        literature: "Ngữ văn",
+        history: "Lịch sử - Địa lý",
+        IT: "Tin học",
+    };
 
-    leaderboard
-        .sort((a, b) => b.score - a.score)
-        .forEach((entry, index) => {
-            table.innerHTML += `
-                <tr>
-                    <td>${index + 1}</td>
-                    <th class='dash'>|</th>
-                    <td>${entry.name}</td>
-                    <th class='dash'>|</th>
-                    <td>${entry.subject}</td>
-                    <th class='dash'>|</th>
-                    <td>${entry.score}</td>
-                </tr>
-            `;
+    // Hàm tải bảng xếp hạng từ Firestore
+    async function loadLeaderboard(selectedSchool = "all") {
+        leaderboardTableBody.innerHTML = ""; // Xóa nội dung cũ
+
+        let q = query(leaderboardCollection, orderBy("score", "desc"));
+
+        // Lọc theo trường
+        if (selectedSchool !== "all") {
+            if (selectedSchool === "other") {
+                q = query(leaderboardCollection, where("school", "not-in", [
+                    "THCS Bình Trị Đông A",
+                    "THCS Nguyễn Văn Trỗi",
+                    "THCS Lê Quý Đôn"
+                ]));
+            } else {
+                q = query(leaderboardCollection, where("school", "==", selectedSchool));
+            }
+        }
+
+        const querySnapshot = await getDocs(q);
+        const leaderboard = [];
+
+        querySnapshot.forEach((doc) => {
+            const subject = doc.data().subject;
+            if (subjectMapping[subject]) { // Chỉ thêm nếu môn học nằm trong subjectMapping
+                leaderboard.push({
+                    name: doc.data().name,
+                    school: doc.data().school || "N/A",
+                    grade: doc.data().grade || "N/A",
+                    class: doc.data().class || "N/A",
+                    subject: subjectMapping[subject], // Ánh xạ môn học sang tiếng Việt
+                    score: doc.data().score,
+                });
+            }
         });
-}
 
-// Gọi loadLeaderboard khi trang được tải
-window.onload = async () => {
-    console.log("Đang tải bảng xếp hạng...");
-    await loadLeaderboard();
-};
+        // Kiểm tra nếu không có dữ liệu
+        if (leaderboard.length === 0) {
+            leaderboardTable.style.display = "none"; // Ẩn bảng
+            document.getElementById("no-data-message").style.display = "block"; // Hiển thị thông báo
+        } else {
+            leaderboardTable.style.display = "table"; // Hiển thị bảng
+            document.getElementById("no-data-message").style.display = "none"; // Ẩn thông báo
 
-export { saveScore, loadLeaderboard };
+            leaderboard.sort((a, b) => b.score - a.score); // Sắp xếp điểm từ cao đến thấp
+
+            leaderboard.forEach((entry, index) => {
+                leaderboardTableBody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${entry.school}</td>
+                        <td>${entry.grade}</td>
+                        <td>${entry.class}</td>
+                        <td>${entry.name}</td>
+                        <td>${entry.subject}</td>
+                        <td>${entry.score}</td>
+                    </tr>
+                `;
+            });
+        }
+    }
+
+    // Tải toàn bộ dữ liệu khi trang được tải
+    loadLeaderboard();
+
+    // Lắng nghe sự kiện bấm nút "Lọc"
+    filterBtn.addEventListener("click", () => {
+        const selectedSchool = schoolSelect.value;
+        loadLeaderboard(selectedSchool); // Lọc dữ liệu theo trường
+    });
+});

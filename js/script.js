@@ -18,7 +18,7 @@ const questionSets = JSON.parse(localStorage.getItem("questionSets")) || {};
 // Lấy môn học và khối lớp từ URL
 const params = new URLSearchParams(window.location.search);
 const subject = params.get("subject");
-const grade = params.get("grade");
+const grade = params.get("grade"); // Lấy khối lớp từ URL
 
 let questions = questionSets[grade]?.[subject] || []; // Nếu không có dữ liệu, trả về mảng rỗng
 
@@ -297,44 +297,52 @@ function updateQuestionNavState() {
 async function saveScore() {
     if (score <= 0) {
         alert("Bạn chưa trả lời câu hỏi nào! Không thể lưu điểm.\nVui lòng trả lời ít nhất một câu hỏi trước khi lưu điểm.");
-        if (confirm("Bạn có chắc chắn muốn làm lại bài Quiz?")) {
-        currentQuestionIndex = 0; // Đặt lại chỉ số câu hỏi
-        score = 0; // Đặt lại điểm
-        scoreElement.innerText = score; // Cập nhật điểm trên giao diện
-        answeredQuestions = Array(questions.length).fill(false); // Đặt lại trạng thái câu hỏi
-        disableButtons(); // Vô hiệu hóa các nút
-        renderQuestionNav(); // Làm mới danh sách câu hỏi trong question-nav
-        showQuestion(); // Hiển thị lại câu hỏi đầu tiên
-    }
         return;
     }
-    else {
-        const playerName = prompt("Nhập tên của bạn:");
-    if (!playerName) return;
+    let playerName = prompt("Nhập họ và tên của bạn:");
 
-    const elapsedTime = Date.now() - startTime; // Tính thời gian làm bài
+    if (playerName === null) {
+        alert("Bạn đã hủy việc lưu điểm.");
+        return;
+    }
+
+    if (!playerName.trim()) {
+        playerName = email;
+    }
+
+    const school = prompt("Nhập tên trường của bạn:\nCú pháp gõ tên: THCS và Tên trường (VD: THCS Bình Trị Đông A):");
+    if (!school || !school.trim()) {
+        alert("Vui lòng nhập tên trường.");
+        return;
+    }
+
+    const studentClass = prompt("Nhập lớp của bạn (VD: 8A3):");
+    if (!studentClass || !studentClass.trim()) {
+        alert("Vui lòng nhập lớp.");
+        return;
+    }
+
+    const elapsedTime = Date.now() - startTime;
     const minutes = Math.floor(elapsedTime / 60000);
     const seconds = Math.floor((elapsedTime % 60000) / 1000);
 
     try {
         await addDoc(collection(db, "leaderboard"), {
             name: playerName,
+            school: school.trim(),
+            class: studentClass.trim(), // Lưu lớp học đầy đủ (VD: 8A3)
             score: score,
-            subject: subject, // Lưu cả môn học
-            time: `${minutes} phút ${seconds} giây`, // Lưu thời gian làm bài
+            grade: grade, // Khối lớp
+            subject: subject,
+            time: `${minutes} phút ${seconds} giây`,
         });
 
-        // Lưu lịch sử làm bài
-        saveQuizHistory(subject, score);
-
-        alert(`Điểm đã được lưu! Thời gian làm bài: ${minutes} phút ${seconds} giây\nCảm ơn bạn đã tham gia bài Quiz!`);
-        window.location.href = "./choose.html"; // Quay lại trang chọn môn học
+        alert("Điểm đã được lưu thành công!");
     } catch (error) {
         console.error("Lỗi khi lưu điểm:", error);
-        alert("Lưu điểm thất bại!");
+        alert("Lưu điểm thất bại! Vui lòng thử lại.");
     }
-}   
-    }
+}
 
 function saveQuizHistory(subject, score) {
     if (score <= 0) {
@@ -342,12 +350,12 @@ function saveQuizHistory(subject, score) {
         return;
     }
 
-    console.log("Điểm số hiện tại trước khi lưu:", score); // Kiểm tra giá trị của score
     const quizHistory = JSON.parse(localStorage.getItem("quizHistory")) || [];
     quizHistory.push({
         subject: subject,
-        score: score, // Lưu điểm số chính xác
-        timestamp: Date.now() // Lưu thời gian làm bài
+        grade: grade, // Lưu khối lớp
+        score: score,
+        timestamp: Date.now(), // Lưu thời gian làm bài
     });
     localStorage.setItem("quizHistory", JSON.stringify(quizHistory));
 }

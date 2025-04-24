@@ -62,20 +62,44 @@
             </nav>
         </div>
         <div class="leaderboard">
-            <h2 class="title"><i class="fa-solid fa-ranking-star"></i> Bảng Xếp Hạng</h2>
+            <h2 class="title"><i class="fa-solid fa-ranking-star"></i> Bảng đánh giá năng lực học sinh</h2>
+        
+            <!-- Bộ lọc theo trường và lớp -->
+            <div class="filters">
+                <label for="school-select">Chọn trường:</label>
+                <select id="school-select" class="form-select">
+                    <option value="all">Hiển thị tất cả</option>
+                    <option value="THCS Bình Trị Đông A">Trường THCS Bình Trị Đông A</option>
+                    <option value="THCS Trần Quốc Toản">Trường THCS Trần Quốc Toản</option>
+                    <option value="THCS Lê Quý Đôn">Trường THCS Lê Quý Đôn</option>
+                    <option value="THCS Nguyễn Du">Trường THCS Nguyễn Du</option>
+                    <option value="other">Khác</option>
+                </select>
+                <button id="filter-btn" class="">Tìm kiếm danh sách theo tên trường</button>
+            </div>
+            <hr>
             <table id="leaderboard">
                 <thead>
                     <tr>
-                        <th class="title-th">Hạng | </th>
-                        <th class="title-th"> Tên Người Chơi | </th>
-                        <th class="title-th"> Phân môn | </th>
-                        <th class="title-th"> Điểm</th>
+                        <th class='title-th'>Hạng</th>
+                        <th class='title-th'>Trường</th>
+                        <th class='title-th'>Khối</th>
+                        <th class='title-th'>Lớp</th>
+                        <th class='title-th'>Tên học sinh</th>
+                        <th class='title-th'>Phân môn</th>
+                        <th class='title-th'>Điểm</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Dữ liệu sẽ được thêm vào đây từ Firebase -->
+                    <!-- Hàng hiển thị khi không có dữ liệu -->
+                    <tr id="no-data-row" style="display: none;">
+                        <td colspan="7" class="text-center">Chưa có học sinh tham gia làm bài!</td>
+                    </tr>
                 </tbody>
             </table>
+            <div id="no-data-message" style="display: none; text-align: center; margin-top: 30px; font-size: 20px; color: red;">
+                Chưa có học sinh tham gia làm bài!
+            </div>
             <br>
             <button onclick="goBack()" class="btn-home"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
         </div>

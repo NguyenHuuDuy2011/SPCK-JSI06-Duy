@@ -1,141 +1,159 @@
+/* Tổng thể */
 body {
-    background-image: url('../img/img29.jpg');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+    background: #e3cea9;
+    /* Màu nền sáng nhẹ */
+    color: #333;
+    /* Màu chữ tối */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
     text-align: center;
 }
 
-.container{
+/* Container chính */
+.container {
     position: relative;
     width: 100%;
     min-height: 100vh;
     margin: auto;
+    padding: 20px;
 }
 
+/* Bảng xếp hạng */
 .leaderboard {
-    color: var(--color-white);
-    position: absolute;
-    width: 70%;
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 70px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.6);
-    border-radius: 20px;
-}
-
-.container-fluid {
-    padding: 1% 8%;
-    background-color: rgba(0, 0, 0, 0.2);
-    width: 70%;
-    border-radius: 0px 0px 20px 20px;
-}
-
-.navbar-brand {
-    font-size: 2rem;
-}
-
-.nav-item {
-    padding: 0 18px;
-    text-align: right;
-}
-
-.nav-link {
-    font-size: 1.2rem;
-    font-weight: 100;
-}
-
-.dropdown-item {
-    text-align: center;
-    align-items: center;
-}
-
-.btn {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    margin: 5px;
-    background: #e3cea9;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    transition: 0.1s;
-    border-radius: 10px;
-}
-
-.btn:hover {
-    background: #f6efe3;
-}
-
-.btn-home{
-    color: #e3cea9;
-    background-color: rgba(0, 0, 0, 0.0);
-    font-size: 20px;
-    padding: 20px;
-    border: none;
-    border-radius: 10px;
-    transition: 0.1s;
-}
-
-.btn-home:hover{
-    background-color: rgba(0, 0, 0, 0.4);
-    cursor: pointer;
-}
-
-.btn-back {
-    background-color: rgba(0, 0, 0, 0.5);
-    font-size: 20px;
-    padding: 20px;
-    border: none;
-    border-radius: 10px;
-    transition: 0.1s;
-}
-
-.btn-back:hover {
+    color: #333;
+    /* Màu chữ tối */
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    margin: 50px auto;
     background-color: #f6efe3;
-    cursor: pointer;
+    /* Màu nền trắng */
+    padding: 40px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    /* Đổ bóng nhẹ */
+    border-radius: 10px;
 }
 
+/* Tiêu đề */
+.title {
+    color: black;
+    /* Màu cam nhạt */
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+/* Bảng */
 #leaderboard {
-    margin-top: 50px;
-    padding: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 22px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 18px;
 }
 
-th{
-    padding: 5px;
+#leaderboard th,
+#leaderboard td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    /* Đường viền nhẹ */
 }
 
-@media only screen and (max-width: 747px) {
-    .container-fluid {
-        display: none;
+#leaderboard th {
+    background-color: #05be87;
+    /* Màu cam nhạt */
+    color: #fff;
+    /* Màu chữ trắng */
+    font-weight: bold;
+}
+
+#leaderboard tr:nth-child(even) {
+    background-color: #f9f9f9 !important;
+    /* Bắt buộc áp dụng */
+}
+
+#leaderboard tr:hover {
+    background-color: #f1f1f1;
+    /* Màu nền khi hover */
+}
+
+/* Nút lọc */
+#filter-btn {
+    width: 35%;
+    margin-top: 20px;
+    background-color: #4caf50;
+    /* Màu xanh lá */
+    color: #fff;
+    /* Màu chữ trắng */
+    font-size: 18px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+#filter-btn:hover {
+    background-color: #45a049;
+    scale: 102%;
+    /* Màu xanh lá đậm hơn khi hover */
+}
+
+/* Nút quay lại */
+.btn-home {
+    color: black;
+    background-color: rgba(0, 0, 0, 0.0);
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.1s;
+    margin-top: 20px;
+}
+
+.btn-home:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    /* Màu nền đậm hơn khi hover */
+}
+
+/* Tiêu đề bảng */
+.title-th {
+    color: #4caf50;
+    /* Màu xanh lá */
+    font-weight: bold;
+}
+
+/* Dấu gạch ngang */
+.dash {
+    color: #999;
+    /* Màu xám nhạt */
+}
+
+/* Đáp ứng trên thiết bị nhỏ */
+@media only screen and (max-width: 768px) {
+    .leaderboard {
+        padding: 20px;
     }
-}
 
-@media only screen and (max-height: 800px) {
-    .container-fluid {
-        display: none;
+    #filter-btn {
+        width: 80%;
     }
-}
 
-.title{
-    color: orange;
-}
+    #leaderboard th,
+    #leaderboard td {
+        font-size: 16px;
+        padding: 8px;
+    }
+}  
 
-.title-th{
-    color: yellowgreen;
-}
-
-.dash{
-    color: yellow;
-    padding: 5px;
-}
-
-td{
-    
-    padding: 5px;
+#school-select {
+    width: 70%;
+    margin: 0 auto;
+    margin-top: 5px;
+    /* Căn giữa theo chiều ngang */
+    display: block;
+    /* Đảm bảo phần tử là block để margin hoạt động */
 }
