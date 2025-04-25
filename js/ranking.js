@@ -36,8 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (selectedSchool === "other") {
                 q = query(leaderboardCollection, where("school", "not-in", [
                     "THCS Bình Trị Đông A",
-                    "THCS Nguyễn Văn Trỗi",
-                    "THCS Lê Quý Đôn"
+                    "THCS Trần Quốc Toản",
+                    "THCS Lê Quý Đôn",
+                    "THCS Nguyễn Du"
                 ]));
             } else {
                 q = query(leaderboardCollection, where("school", "==", selectedSchool));

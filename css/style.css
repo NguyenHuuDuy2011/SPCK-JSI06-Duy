@@ -135,7 +135,8 @@ body {
 /* Đáp ứng trên thiết bị nhỏ */
 @media only screen and (max-width: 768px) {
     .leaderboard {
-        padding: 20px;
+        width: 100%;
+        padding: 30px;
     }
 
     #filter-btn {
@@ -147,6 +148,8 @@ body {
         font-size: 16px;
         padding: 8px;
     }
+
+
 }  
 
 #school-select {
@@ -156,4 +159,18 @@ body {
     /* Căn giữa theo chiều ngang */
     display: block;
     /* Đảm bảo phần tử là block để margin hoạt động */
+}
+
+/* Tăng kích thước chữ trong navbar */
+.navbar .nav-link {
+    font-size: 18px;
+    /* Tăng kích thước chữ */
+    padding: 10px;
+}
+
+.navbar-brand {
+    font-size: 22px;
+    /* Tăng kích thước chữ cho tên thương hiệu */
+    font-weight: bold;
+    /* Làm chữ đậm hơn (tùy chọn) */
 }
