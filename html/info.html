@@ -68,7 +68,9 @@
                 };
 
                 // Lấy lịch sử làm bài từ localStorage
-                const quizHistory = JSON.parse(localStorage.getItem("quizHistory")) || [];
+                // Lấy lịch sử làm bài từ localStorage
+                const quizHistoryRaw = localStorage.getItem("quizHistory");
+                const quizHistory = quizHistoryRaw ? JSON.parse(quizHistoryRaw) : []; // Kiểm tra dữ liệu trước khi parse
                 console.log("Lịch sử làm bài:", quizHistory);
 
                 // Hiển thị lịch sử làm bài

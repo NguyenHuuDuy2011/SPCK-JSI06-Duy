@@ -216,7 +216,7 @@ function checkQuizCompletion() {
         clearInterval(timerInterval); // Dừng bộ đếm ngược
 
         // Lưu lịch sử quiz vào localStorage
-        saveQuizHistory(subject, score);
+        saveQuizHistory(subject, score); // Gọi hàm lưu lịch sử
     }
 }
 

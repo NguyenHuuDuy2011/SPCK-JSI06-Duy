@@ -359,3 +359,37 @@ a {
     color: gray;
     scale: 150%;
 }
+
+/* Làm mờ nền
+.blur-background {
+    filter: blur(5px);
+    /* Làm mờ nền */
+    /* pointer-events: none; */
+    /* Vô hiệu hóa tương tác với nền */
+/* } */
+
+/* Thông báo */
+/* .notification {
+    position: fixed;
+    /* Đảm bảo thông báo nằm trên cùng và không bị làm mờ */
+    /* background-color: #fff; */
+    /* padding: 30px; */
+    /* border-radius: 10px; */
+    /* text-align: center; */
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    /* z-index: 9999; */
+    /* Đảm bảo thông báo nằm trên lớp mờ */
+    /* animation: scaleUp 0.5s ease-in-out; */
+    /* Hiệu ứng phóng to */
+/* } */
+
+/* Hiệu ứng xuất hiện */
+/* @keyframes scaleUp { */
+    /* from { */
+        /* transform: scale(0.8); */
+    /* } */
+/*  */
+    /* to { */
+        /* transform: scale(1); */
+    /* } */
+/* } */
