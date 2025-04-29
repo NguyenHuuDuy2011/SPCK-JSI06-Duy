@@ -4,7 +4,7 @@ window.onload = function () {
 
     // Lấy trạng thái đăng nhập và thời gian đăng nhập từ localStorage
     const isLoggedIn = localStorage.getItem("isLoggedIn");
-    const username = localStorage.getItem("username");
+    const username = localStorage.getItem("username").replace(/"/g, ""); // Loại bỏ dấu ngoặc kép
     const loginTime = localStorage.getItem("loginTime"); // Thời gian đăng nhập (timestamp)
 
     // Kiểm tra nếu chưa đăng nhập
