@@ -1,11 +1,14 @@
-// Kiểm tra trạng thái đăng nhập
 window.onload = function () {
     const loginLink = document.getElementById("login-link");
 
     // Lấy trạng thái đăng nhập và thời gian đăng nhập từ localStorage
     const isLoggedIn = localStorage.getItem("isLoggedIn");
-    const username = localStorage.getItem("username").replace(/"/g, ""); // Loại bỏ dấu ngoặc kép
-    const loginTime = localStorage.getItem("loginTime"); // Thời gian đăng nhập (timestamp)
+    const username = localStorage.getItem("username");
+    const loginTime = localStorage.getItem("loginTime");
+
+    console.log("isLoggedIn:", isLoggedIn);
+    console.log("username:", username);
+    console.log("loginTime:", loginTime);
 
     // Kiểm tra nếu chưa đăng nhập
     if (!isLoggedIn || isLoggedIn !== "true" || !username || !loginTime) {
@@ -32,7 +35,7 @@ window.onload = function () {
     loginLink.innerHTML = `
     <div class="dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
-            <i class="fa-solid fa-user" style="color: green;"></i> Xin chào, ${username}
+            <i class="fa-solid fa-user" style="color: green;"></i> Xin chào, ${username.replace(/"/g, "")}
         </a>
         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="userDropdown" id="profile-dropdown">
             <li>
@@ -48,7 +51,7 @@ window.onload = function () {
             </li>
         </ul>
     </div>
-`;
+    `;
 
     // Thêm sự kiện cho nút Đăng xuất
     const logoutLink = document.getElementById("logout-link");
