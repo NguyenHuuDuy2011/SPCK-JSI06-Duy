@@ -110,3 +110,56 @@ th {
     cursor: not-allowed;
     pointer-events: none;
 }
+
+.correct {
+    background-color: green;
+    /* Màu xanh lá */
+    color: white;
+    pointer-events: none;
+    /* Vô hiệu hóa nút */
+}
+
+.incorrect {
+    background-color: orangered;
+    /* Màu đỏ */
+    color: white;
+    pointer-events: none;
+    /* Vô hiệu hóa nút */
+}
+
+.next-btn {
+    width: 20%;
+    margin-top: 20px;
+    background-color: #00aeff;
+    /* Màu xanh dương */
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.next-btn:hover {
+    background-color: #1976D2;
+    /* Màu xanh đậm hơn khi hover */
+}
+
+/* Hiệu ứng mờ dần */
+#question,
+#answer-buttons {
+    transition: opacity 0.5s ease;
+}
+
+/* Thanh trạng thái tiến trình */
+#progress-bar-container {
+    width: 80%;
+    margin: 20px auto;
+    /* Căn giữa theo chiều ngang */
+    margin-bottom: 20px;
+}
+
+#progress-bar {
+    height: 10px;
+    background-color: #4CAF50;
+    transition: width 0.5s ease;
+}

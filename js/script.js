@@ -37,10 +37,30 @@ timerElement.id = "timer";
 timerElement.style.marginTop = "10px";
 questionElement.parentNode.insertBefore(timerElement, questionElement);
 
+// Thêm thanh trạng thái tiến trình
+const progressBarContainer = document.createElement("div");
+progressBarContainer.id = "progress-bar-container";
+progressBarContainer.style.position = "relative";
+progressBarContainer.style.height = "10px";
+progressBarContainer.style.backgroundColor = "#e0e0e0";
+progressBarContainer.style.marginTop = "20px";
+progressBarContainer.style.borderRadius = "5px";
+
+const progressBar = document.createElement("div");
+progressBar.id = "progress-bar";
+progressBar.style.height = "100%";
+progressBar.style.width = "0%";
+progressBar.style.backgroundColor = "#4CAF50";
+progressBar.style.borderRadius = "5px";
+progressBar.style.transition = "none"; // Tắt transition để cập nhật mượt mà
+
+progressBarContainer.appendChild(progressBar);
+questionElement.parentNode.insertBefore(progressBarContainer, questionElement.nextSibling);
+
 // Mảng theo dõi trạng thái câu hỏi (true nếu đã trả lời, false nếu chưa)
 let answeredQuestions = [];
 let timer; // Biến lưu trữ interval
-let timeLeft = 120; // Thời gian mỗi câu hỏi (giây)
+let timeLeft = 30; // Thời gian mỗi câu hỏi (giây)
 
 // Hàm định dạng thời gian
 function formatTime(seconds) {
@@ -55,14 +75,14 @@ function formatTime(seconds) {
 // Bắt đầu đếm ngược thời gian
 function startCountdown() {
     clearInterval(timer); // Xóa interval cũ nếu có
-    timeLeft = 120; // Đặt lại thời gian cho mỗi câu hỏi
+    timeLeft = 3; // Đặt lại thời gian cho mỗi câu hỏi
     timerElement.innerText = formatTime(timeLeft);
 
     timer = setInterval(() => {
         timeLeft--;
         timerElement.innerText = formatTime(timeLeft);
 
-        // Thay đổi màu sắc khi thời gian <= 20 giây
+        // Thay đổi màu sắc khi thời gian <= 30 giây
         if (timeLeft <= 30) {
             timerElement.style.color = "red"; // Đổi màu chữ thành đỏ
         } else {
@@ -70,19 +90,18 @@ function startCountdown() {
         }
 
         if (timeLeft <= 0) {
-            clearInterval(timer); // Dừng đếm ngược
-            alert("Hết thời gian cho câu hỏi này!");
-            answeredQuestions[currentQuestionIndex] = false; // Đánh dấu câu hỏi chưa trả lời
-            currentQuestionIndex++; // Chuyển sang câu hỏi tiếp theo
-
-            if (currentQuestionIndex < questions.length) {
-                showQuestion();
-                startCountdown(); // Bắt đầu đếm ngược cho câu hỏi tiếp theo
-            } else {
-                checkQuizCompletion(); // Kiểm tra trạng thái hoàn thành bài Quiz
-            }
+            handleTimeUp(); // Gọi hàm xử lý khi hết thời gian
         }
     }, 1000); // Cập nhật mỗi giây
+}
+
+// Hàm xử lý khi hết thời gian làm bài
+function handleTimeUp() {
+    resetProgressBar(); // Ẩn thanh trạng thái khi hết thời gian
+    clearInterval(timer); // Dừng đếm ngược
+    questionElement.innerText = "Thời gian làm bài đã hết!";
+    answerButtons.innerHTML = ""; // Xóa các nút đáp án
+    enableButtons(); // Kích hoạt các nút "Lưu điểm" và "Làm lại bài"
 }
 
 // Hàm lấy câu hỏi từ Firebase
@@ -99,18 +118,68 @@ async function fetchQuestions() {
             renderQuestionNav(); // Hiển thị danh sách câu hỏi
             showQuestion(); // Hiển thị câu hỏi đầu tiên
         } else {
-            console.warn("Không tìm thấy câu hỏi trong Firebase.");
+            console.warn(`Không tìm thấy câu hỏi tại đường dẫn: ${questionPath}`);
             questionElement.innerText = "Chưa có câu hỏi nào được thêm cho môn học này!";
             answerButtons.innerHTML = ""; // Xóa các nút đáp án
+            resetProgressBar(); // Ẩn thanh trạng thái
         }
     } catch (error) {
         console.error("Lỗi khi tải câu hỏi từ Firebase:", error);
-        alert("Không thể tải câu hỏi. Vui lòng kiểm tra kết nối mạng hoặc quyền truy cập Firebase.");
+        alert(`Không thể tải câu hỏi. Vui lòng kiểm tra kết nối mạng hoặc quyền truy cập Firebase.\nChi tiết lỗi: ${error.message}`);
+        resetProgressBar(); // Ẩn thanh trạng thái khi xảy ra lỗi
     }
+}
+
+// Cập nhật thanh trạng thái tiến trình
+function updateProgressBar() {
+    const progress = ((currentQuestionIndex + 1) / questions.length) * 100; // Tính phần trăm tiến trình
+    progressBar.style.width = `${progress}%`; // Cập nhật chiều rộng của thanh trạng thái
+}
+
+// Hàm khởi động thanh trạng thái
+function startProgressBar(duration) {
+    let progress = 0; // Bắt đầu từ 0%
+    const interval = 50; // Cập nhật mỗi 50ms
+    const step = (100 / (duration / interval)); // Tính bước tăng theo thời gian
+
+    progressBar.style.width = "0%"; // Reset thanh trạng thái
+    progressBarContainer.style.display = "block"; // Hiển thị thanh trạng thái
+
+    const progressInterval = setInterval(() => {
+        progress += step; // Tăng tiến trình
+        progressBar.style.width = `${progress}%`; // Cập nhật chiều rộng của thanh trạng thái
+
+        if (progress >= 100) {
+            clearInterval(progressInterval); // Dừng khi đầy
+            progressBarContainer.style.display = "none"; // Ẩn thanh trạng thái sau khi đầy
+        }
+    }, interval); // Cập nhật mỗi 50ms
+}
+
+// Hàm reset thanh trạng thái
+function resetProgressBar() {
+    progressBar.style.width = "0%"; // Đặt lại chiều rộng về 0%
+    progressBarContainer.style.display = "none"; // Ẩn thanh trạng thái
+}
+
+// Hàm hiệu ứng chuyển cảnh
+function applyTransitionEffect(callback) {
+    // Làm mờ dần câu hỏi và đáp án
+    questionElement.style.opacity = "0";
+    answerButtons.style.opacity = "0";
+
+    setTimeout(() => {
+        callback(); // Gọi hàm hiển thị câu hỏi hoặc thông báo hoàn thành
+        // Hiện dần câu hỏi và đáp án
+        questionElement.style.opacity = "1";
+        answerButtons.style.opacity = "1";
+    }, 500); // Thời gian hiệu ứng (500ms)
 }
 
 // Hiển thị câu hỏi
 function showQuestion() {
+    resetProgressBar(); // Đảm bảo thanh trạng thái bị ẩn khi hiển thị câu hỏi
+
     if (questions.length === 0) {
         questionElement.innerText = "Chưa có câu hỏi nào được thêm cho môn học này!";
         answerButtons.innerHTML = "";
@@ -134,23 +203,64 @@ function showQuestion() {
     });
 
     updateQuestionNavState(); // Cập nhật trạng thái của các nút trong question-nav
+    updateProgressBar(); // Cập nhật thanh trạng thái tiến trình
     startCountdown(); // Bắt đầu đếm ngược cho câu hỏi mới
 }
 
 // Kiểm tra đáp án
 function checkAnswer(selectedIndex) {
     const correctIndex = questions[currentQuestionIndex].correct;
+
+    // Hiển thị đáp án đúng và sai
+    const buttons = answerButtons.querySelectorAll("button");
+    buttons.forEach((button, index) => {
+        if (index === correctIndex) {
+            button.classList.add("correct"); // Thêm lớp CSS cho đáp án đúng
+            button.innerHTML += " ✅"; // Thêm ký hiệu đúng
+        } else if (index === selectedIndex) {
+            button.classList.add("incorrect"); // Thêm lớp CSS cho đáp án sai
+            button.innerHTML += " ❌"; // Thêm ký hiệu sai
+        }
+        button.disabled = true; // Vô hiệu hóa tất cả các nút sau khi trả lời
+    });
+
+    // Cộng điểm nếu trả lời đúng
     if (selectedIndex === correctIndex) {
-        score += 10; // Cộng điểm nếu trả lời đúng
+        score += 10;
         scoreElement.innerText = score; // Cập nhật điểm trên giao diện
     }
 
-    answeredQuestions[currentQuestionIndex] = true; // Đánh dấu câu hỏi hiện tại là đã trả lời
+    // Kiểm tra nếu còn câu hỏi phía sau
+    if (currentQuestionIndex < questions.length - 1) {
+        // Thêm nút "Tiếp tục" để chuyển câu tiếp theo
+        const nextButton = document.createElement("button");
+        nextButton.classList.add("btn", "next-btn");
+        nextButton.innerText = "Tiếp tục";
+        nextButton.onclick = () => {
+            clearTimeout(autoNextTimeout); // Hủy tự động chuyển câu
+            applyTransitionEffect(goToNextQuestion); // Thêm hiệu ứng chuyển cảnh
+        };
+        answerButtons.appendChild(nextButton);
 
-    // Chuyển sang câu hỏi tiếp theo
+        // Tự động chuyển câu sau 5 giây
+        startProgressBar(5000); // Khởi động thanh trạng thái trong 5 giây
+        const autoNextTimeout = setTimeout(() => {
+            applyTransitionEffect(goToNextQuestion); // Thêm hiệu ứng chuyển cảnh
+        }, 5000);
+    } else {
+        // Nếu không còn câu hỏi, hiển thị thông báo hoàn thành
+        startProgressBar(5000); // Khởi động thanh trạng thái trong 5 giây
+        setTimeout(() => {
+            applyTransitionEffect(checkQuizCompletion); // Thêm hiệu ứng chuyển cảnh
+        }, 5000);
+    }
+}
+
+// Chuyển sang câu hỏi tiếp theo
+function goToNextQuestion() {
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
-        showQuestion();
+        showQuestion(); // Hiển thị câu hỏi tiếp theo
     } else {
         checkQuizCompletion(); // Kiểm tra trạng thái hoàn thành bài quiz
     }
@@ -189,13 +299,12 @@ function goToQuestion(index) {
 
 // Kiểm tra trạng thái hoàn thành bài quiz
 function checkQuizCompletion() {
-    if (answeredQuestions.every(answered => answered)) {
-        questionElement.innerText = "Chúc mừng bạn đã hoàn thành bài Quiz!";
-        answerButtons.innerHTML = ""; // Xóa các nút đáp án
-        saveQuizHistory(subject, score); // Lưu lịch sử quiz
-        clearInterval(timer); // Dừng bộ đếm thời gian
-        enableButtons(); // Kích hoạt các nút sau khi hoàn thành quiz
-    }
+    resetProgressBar(); // Ẩn thanh trạng thái khi hoàn thành quiz
+    questionElement.innerText = "Chúc mừng bạn đã hoàn thành bài Quiz!";
+    answerButtons.innerHTML = ""; // Xóa các nút đáp án
+    saveQuizHistory(subject, score); // Lưu lịch sử quiz
+    clearInterval(timer); // Dừng bộ đếm thời gian
+    enableButtons(); // Kích hoạt các nút sau khi hoàn thành quiz
 }
 
 // Lưu lịch sử quiz vào localStorage
@@ -294,6 +403,7 @@ function enableButtons() {
 
 // Bắt đầu quiz khi trang được tải
 window.onload = function () {
+    resetProgressBar(); // Ẩn thanh trạng thái khi trang bắt đầu tải
     disableButtons(); // Vô hiệu hóa các nút khi bắt đầu
     fetchQuestions(); // Lấy câu hỏi từ Firebase và bắt đầu quiz
 };

@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Kiểm tra Firebase đã được khởi tạo chưa
+    if (!firebase.apps.length) {
+        console.error("Firebase chưa được khởi tạo. Vui lòng kiểm tra file firebase.js.");
+        alert("Lỗi kết nối Firebase. Vui lòng thử lại sau.");
+        return;
+    }
+
+    console.log("Firebase đã được khởi tạo thành công.");
+
     // Lấy các phần tử từ DOM
     const emailSection = document.getElementById("email-section");
     const passwordSection = document.getElementById("password-section");
@@ -19,27 +28,43 @@ document.addEventListener("DOMContentLoaded", () => {
     emailForm.addEventListener("submit", (event) => {
         event.preventDefault(); // Ngăn chặn hành vi mặc định của form
 
-        const email = emailInput.value.trim(); // Loại bỏ khoảng trắng thừa
+        const email = emailInput.value.trim().toLowerCase(); // Loại bỏ khoảng trắng và chuyển về chữ thường
         console.log("Email nhập vào:", email);
-            
+
+        if (!email) {
+            alert("Vui lòng nhập email.");
+            return;
+        }
+
+        // Kiểm tra email có chứa ký tự không hợp lệ
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert("Email không hợp lệ. Vui lòng nhập đúng định dạng email.");
+            return;
+        }
+
+        // Kiểm tra email trong Firebase
         firebase.auth().fetchSignInMethodsForEmail(email)
             .then((methods) => {
-                console.log("Phương thức đăng nhập:", methods);
+                console.log("Phương thức đăng nhập cho email:", methods);
                 if (methods.length > 0) {
-                    alert("Email hợp lệ. Vui lòng nhập mật khẩu mới.");
+                    // Email tồn tại trong Firebase
+                    alert("Tài khoản tồn tại. Vui lòng nhập mật khẩu mới.");
                     emailSection.classList.add("d-none");
                     passwordSection.classList.remove("d-none");
-                
-                    // Kích hoạt các trường nhập mật khẩu
-                    newPasswordInput.disabled = false;
-                    confirmPasswordInput.disabled = false;
                 } else {
-                    alert("Email không tồn tại trong hệ thống. Vui lòng kiểm tra lại.");
+                    // Email không tồn tại
+                    alert(`Tài khoản không tồn tại. Email: ${email}`);
                 }
             })
             .catch((error) => {
                 console.error("Lỗi khi kiểm tra email:", error);
-                alert("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+                if (error.code === "auth/invalid-email") {
+                    alert("Email không hợp lệ. Vui lòng nhập đúng định dạng email.");
+                } else if (error.code === "auth/network-request-failed") {
+                    alert("Lỗi mạng. Vui lòng kiểm tra kết nối internet.");
+                } else {
+                    alert("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+                }
             });
     });
 
@@ -47,8 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
     resetPasswordForm.addEventListener("submit", (event) => {
         event.preventDefault(); // Ngăn chặn hành vi mặc định của form
 
-        const newPassword = newPasswordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
+        const newPassword = newPasswordInput.value.trim();
+        const confirmPassword = confirmPasswordInput.value.trim();
 
         // Kiểm tra xem mật khẩu mới và xác nhận mật khẩu có khớp không
         if (newPassword !== confirmPassword) {
@@ -62,31 +87,32 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Gọi Firebase để đặt lại mật khẩu
-        const user = firebase.auth().currentUser;
-        if (user) {
-            user.updatePassword(newPassword)
-                .then(() => {
-                    alert("Mật khẩu đã được đặt lại thành công!");
-                    window.location.href = "../html/login.html"; // Chuyển hướng về trang đăng nhập
-                })
-                .catch((error) => {
-                    console.error("Lỗi khi đặt lại mật khẩu:", error);
-                    alert("Đã xảy ra lỗi khi đặt lại mật khẩu. Vui lòng thử lại.");
-                });
-        } else {
-            alert("Không tìm thấy người dùng. Vui lòng đăng nhập lại.");
-            window.location.href = "../html/login.html"; // Chuyển hướng về trang đăng nhập
-        }
+        // Đặt lại mật khẩu trong Firebase
+        const email = emailInput.value.trim();
+        firebase.auth().signInWithEmailAndPassword(email, "temporaryPassword") // Đăng nhập tạm thời
+            .then((userCredential) => {
+                const user = userCredential.user;
+                return user.updatePassword(newPassword); // Cập nhật mật khẩu mới
+            })
+            .then(() => {
+                alert("Mật khẩu đã được thay đổi thành công!");
+                window.location.href = "../html/login.html"; // Chuyển hướng về trang đăng nhập
+            })
+            .catch((error) => {
+                console.error("Lỗi khi đặt lại mật khẩu:", error);
+                if (error.code === "auth/wrong-password") {
+                    alert("Không thể thay đổi mật khẩu. Vui lòng liên hệ quản trị viên.");
+                } else if (error.code === "auth/user-not-found") {
+                    alert("Tài khoản không tồn tại. Vui lòng kiểm tra email.");
+                } else {
+                    alert("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+                }
+            });
     });
 
     // Xử lý khi người dùng nhấn "Quay lại nhập email"
     backToEmailButton.addEventListener("click", () => {
         emailSection.classList.remove("d-none");
         passwordSection.classList.add("d-none");
-
-        // Vô hiệu hóa các trường nhập mật khẩu
-        newPasswordInput.disabled = true;
-        confirmPasswordInput.disabled = true;
     });
 });
