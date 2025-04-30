@@ -60,7 +60,11 @@ questionElement.parentNode.insertBefore(progressBarContainer, questionElement.ne
 // Mảng theo dõi trạng thái câu hỏi (true nếu đã trả lời, false nếu chưa)
 let answeredQuestions = [];
 let timer; // Biến lưu trữ interval
-let timeLeft = 30; // Thời gian mỗi câu hỏi (giây)
+let timeLeft = 120; // Thời gian mỗi câu hỏi (giây)
+
+let isQuizFinished = false; // Trạng thái bài quiz (false: đang làm, true: đã kết thúc)
+let progressInterval; // Biến lưu trữ interval của thanh trạng thái
+let selectedAnswers = Array(questions.length).fill(null); // Mảng lưu trữ đáp án đã chọn (null nếu chưa trả lời)
 
 // Hàm định dạng thời gian
 function formatTime(seconds) {
@@ -74,8 +78,9 @@ function formatTime(seconds) {
 
 // Bắt đầu đếm ngược thời gian
 function startCountdown() {
+    if (isQuizFinished) return; // Không chạy bộ đếm thời gian nếu quiz đã kết thúc
+
     clearInterval(timer); // Xóa interval cũ nếu có
-    timeLeft = 3; // Đặt lại thời gian cho mỗi câu hỏi
     timerElement.innerText = formatTime(timeLeft);
 
     timer = setInterval(() => {
@@ -101,6 +106,14 @@ function handleTimeUp() {
     clearInterval(timer); // Dừng đếm ngược
     questionElement.innerText = "Thời gian làm bài đã hết!";
     answerButtons.innerHTML = ""; // Xóa các nút đáp án
+
+    // Disable các nút chuyển câu hỏi
+    const navButtons = questionNav.querySelectorAll(".nav-btn");
+    navButtons.forEach((button) => {
+        button.disabled = true;
+        button.classList.add("disabled"); // Thêm lớp CSS để hiển thị trạng thái bị vô hiệu hóa
+    });
+
     enableButtons(); // Kích hoạt các nút "Lưu điểm" và "Làm lại bài"
 }
 
@@ -138,6 +151,8 @@ function updateProgressBar() {
 
 // Hàm khởi động thanh trạng thái
 function startProgressBar(duration) {
+    clearInterval(progressInterval); // Dừng interval cũ nếu có
+
     let progress = 0; // Bắt đầu từ 0%
     const interval = 50; // Cập nhật mỗi 50ms
     const step = (100 / (duration / interval)); // Tính bước tăng theo thời gian
@@ -145,7 +160,7 @@ function startProgressBar(duration) {
     progressBar.style.width = "0%"; // Reset thanh trạng thái
     progressBarContainer.style.display = "block"; // Hiển thị thanh trạng thái
 
-    const progressInterval = setInterval(() => {
+    progressInterval = setInterval(() => {
         progress += step; // Tăng tiến trình
         progressBar.style.width = `${progress}%`; // Cập nhật chiều rộng của thanh trạng thái
 
@@ -195,12 +210,36 @@ function showQuestion() {
         const button = document.createElement("button");
         button.classList.add("btn");
         button.innerText = answer;
-        button.onclick = () => {
-            clearInterval(timer); // Dừng đếm ngược khi người dùng trả lời
-            checkAnswer(index); // Kiểm tra đáp án
-        };
+
+        // Nếu câu hỏi đã được trả lời, disable các nút và hiển thị trạng thái đúng/sai
+        if (answeredQuestions[currentQuestionIndex]) {
+            button.disabled = true;
+            if (index === questions[currentQuestionIndex].correct) {
+                button.classList.add("correct");
+                button.innerHTML += " ✅";
+            } else if (index === selectedAnswers[currentQuestionIndex]) {
+                button.classList.add("incorrect");
+                button.innerHTML += " ❌ <span style='color: black;'>(Đáp án bạn chọn)</span>";
+            }
+        } else {
+            button.onclick = () => {
+                clearInterval(timer); // Dừng đếm ngược khi người dùng trả lời
+                checkAnswer(index); // Kiểm tra đáp án
+            };
+        }
+
         answerButtons.appendChild(button);
     });
+
+    // Hiển thị trạng thái "Đã trả lời" nếu câu hỏi đã được trả lời
+    if (answeredQuestions[currentQuestionIndex]) {
+        const answeredStatus = document.createElement("span");
+        answeredStatus.innerText = " (Đã trả lời)";
+        answeredStatus.style.color = "green";
+        if (!questionElement.querySelector("span")) {
+            questionElement.appendChild(answeredStatus);
+        }
+    }
 
     updateQuestionNavState(); // Cập nhật trạng thái của các nút trong question-nav
     updateProgressBar(); // Cập nhật thanh trạng thái tiến trình
@@ -210,6 +249,9 @@ function showQuestion() {
 // Kiểm tra đáp án
 function checkAnswer(selectedIndex) {
     const correctIndex = questions[currentQuestionIndex].correct;
+
+    // Lưu đáp án đã chọn
+    selectedAnswers[currentQuestionIndex] = selectedIndex;
 
     // Hiển thị đáp án đúng và sai
     const buttons = answerButtons.querySelectorAll("button");
@@ -224,6 +266,17 @@ function checkAnswer(selectedIndex) {
         button.disabled = true; // Vô hiệu hóa tất cả các nút sau khi trả lời
     });
 
+    // Cập nhật trạng thái câu hỏi đã trả lời
+    answeredQuestions[currentQuestionIndex] = true;
+
+    // Hiển thị trạng thái "Đã trả lời" bên cạnh câu hỏi
+    const answeredStatus = document.createElement("span");
+    answeredStatus.innerText = " (Đã trả lời)";
+    answeredStatus.style.color = "green";
+    if (!questionElement.querySelector("span")) {
+        questionElement.appendChild(answeredStatus);
+    }
+
     // Cộng điểm nếu trả lời đúng
     if (selectedIndex === correctIndex) {
         score += 10;
@@ -235,7 +288,7 @@ function checkAnswer(selectedIndex) {
         // Thêm nút "Tiếp tục" để chuyển câu tiếp theo
         const nextButton = document.createElement("button");
         nextButton.classList.add("btn", "next-btn");
-        nextButton.innerText = "Tiếp tục";
+        nextButton.innerText = "Chuyển tiếp câu hỏi";
         nextButton.onclick = () => {
             clearTimeout(autoNextTimeout); // Hủy tự động chuyển câu
             applyTransitionEffect(goToNextQuestion); // Thêm hiệu ứng chuyển cảnh
@@ -258,6 +311,7 @@ function checkAnswer(selectedIndex) {
 
 // Chuyển sang câu hỏi tiếp theo
 function goToNextQuestion() {
+    clearInterval(progressInterval); // Dừng thanh trạng thái của câu hỏi trước
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
         showQuestion(); // Hiển thị câu hỏi tiếp theo
@@ -293,6 +347,7 @@ function updateQuestionNavState() {
 
 // Chuyển đến câu hỏi tương ứng
 function goToQuestion(index) {
+    clearInterval(progressInterval); // Dừng thanh trạng thái của câu hỏi trước
     currentQuestionIndex = index; // Cập nhật chỉ số câu hỏi hiện tại
     showQuestion(); // Hiển thị câu hỏi
 }
@@ -304,6 +359,7 @@ function checkQuizCompletion() {
     answerButtons.innerHTML = ""; // Xóa các nút đáp án
     saveQuizHistory(subject, score); // Lưu lịch sử quiz
     clearInterval(timer); // Dừng bộ đếm thời gian
+    isQuizFinished = true; // Đánh dấu trạng thái bài quiz đã kết thúc
     enableButtons(); // Kích hoạt các nút sau khi hoàn thành quiz
 }
 
@@ -329,6 +385,8 @@ retryQuizBtn.addEventListener("click", () => {
         score = 0;
         scoreElement.innerText = score;
         answeredQuestions = Array(questions.length).fill(false);
+        timeLeft = 30; // Reset thời gian
+        isQuizFinished = false; // Đặt lại trạng thái bài quiz
         showQuestion();
     }
 });
