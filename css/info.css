@@ -94,3 +94,19 @@ h2 {
 .btn-back i {
     margin-right: 5px;
 }
+
+.btn-clear {
+    background-color: orangered;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.btn-clear:hover {
+    background-color: darkred;
+}

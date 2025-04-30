@@ -397,3 +397,43 @@ a {
 /* transform: scale(1); */
 /* } */
 /* } */
+
+.banner {
+    background-color: #ffcc00;
+    /* Màu nền vàng */
+    color: #000;
+    /* Màu chữ đen */
+    text-align: center;
+    /* Căn giữa nội dung */
+    padding: 10px 0;
+    /* Khoảng cách trên dưới */
+    font-size: 1.2rem;
+    /* Kích thước chữ */
+    font-weight: bold;
+    /* Chữ đậm */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Thêm bóng đổ */
+    display: flex;
+    /* Sử dụng flexbox để căn chỉnh */
+    justify-content: center;
+    /* Căn giữa nội dung theo chiều ngang */
+    align-items: center;
+    /* Căn giữa nội dung theo chiều dọc */
+    gap: 10px;
+    /* Khoảng cách giữa hình ảnh và văn bản */
+}
+
+.banner img {
+    margin-left: 20px;
+    width: 50px;
+    /* Kích thước hình ảnh */
+    height: auto;
+    /* Tự động điều chỉnh chiều cao */
+}
+
+.banner p {
+    margin: 0;
+    /* Loại bỏ khoảng cách mặc định */
+    margin-left: 30px;
+    margin-right: 20px;
+}

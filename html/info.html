@@ -32,6 +32,7 @@
             </tbody>
         </table>
         <button onclick="goBack()" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
+        <button onclick="clearHistory()" class="btn-clear"><i class="fa-solid fa-trash"></i> Xóa lịch sử làm bài</button>
     </div>
 
     <script>
@@ -102,6 +103,30 @@
                     });
                 }
             }
+            function clearHistory() {
+                    // Lấy lịch sử làm bài từ localStorage
+                    const quizHistoryRaw = localStorage.getItem("quizHistory");
+                    const quizHistory = quizHistoryRaw ? JSON.parse(quizHistoryRaw) : [];
+
+                    // Kiểm tra nếu không có lịch sử
+                    if (quizHistory.length === 0) {
+                        alert("Không có lịch sử làm bài để xóa!");
+                        return; // Thoát khỏi hàm nếu không có lịch sử
+                    }
+
+                    // Xác nhận xóa lịch sử
+                    if (confirm("Bạn có chắc chắn muốn xóa lịch sử làm bài?")) {
+                        // Xóa lịch sử làm bài trong localStorage
+                        localStorage.removeItem("quizHistory");
+
+                        // Cập nhật giao diện
+                        const historyTableBody = document.getElementById("history-table").querySelector("tbody");
+                        historyTableBody.innerHTML = "<tr><td colspan='3'>Không có lịch sử làm bài!</td></tr>";
+
+                        // Hiển thị thông báo
+                        alert("Lịch sử làm bài đã được xóa!");
+                    }
+                }
     </script>
 </body>
 
