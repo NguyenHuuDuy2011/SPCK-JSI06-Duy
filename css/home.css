@@ -26,7 +26,7 @@ body {
     font-weight: 100;
 }
 
-.dropdown-item{
+.dropdown-item {
     text-align: center;
     align-items: center;
 }
@@ -132,7 +132,7 @@ a {
     }
 }
 
-.card-header{
+.card-header {
     background-color: #f6efe3;
     transition: 0.2s;
 }
@@ -193,7 +193,7 @@ a {
     }
 }
 
-@media only screen and (min-width: 1270px){
+@media only screen and (min-width: 1270px) {
     .feature-box {
         width: 30%;
         margin-left: 15px;
@@ -202,29 +202,31 @@ a {
 }
 
 @media only screen and (max-width: 750px) {
-    .nhan-xet{
+    .nhan-xet {
         font-size: 30px;
     }
 }
 
 @media only screen and (min-width: 1024px) {
-    .goto3-buttons{
+    .goto3-buttons {
         padding: 20px;
         width: 50%;
     }
-    
+
 }
 
-.card{
+.card {
     transition: 0.2s;
 }
 
-.card:hover{
+.card:hover {
     scale: 105%;
-    .card-body{
+
+    .card-body {
         background-color: #f0e6d8;
     }
-    .card-header{
+
+    .card-header {
         background-color: #f0e6d8;
     }
 }
@@ -257,7 +259,7 @@ a {
     cursor: pointer;
 }
 
-.mini-div{
+.mini-div {
     align-items: center;
 }
 
@@ -274,7 +276,7 @@ a {
     background: url('../img/background.webp');
     width: 70%;
     /* Đặt độ rộng 70% */
-    height: 50vh;
+    min-height: 50vh;
     color: black;
     display: flex;
     flex-direction: column;
@@ -295,6 +297,7 @@ a {
 .hero h1 {
     font-size: 4rem;
     font-weight: bold;
+    margin-top: 10px;
     margin-bottom: 20px;
 }
 
@@ -309,6 +312,7 @@ a {
     padding: 10px 30px;
     border-radius: 10px;
     font-size: 1.2rem;
+    margin-bottom: 10px;
 }
 
 .btn-custom:hover {
@@ -364,32 +368,32 @@ a {
 .blur-background {
     filter: blur(5px);
     /* Làm mờ nền */
-    /* pointer-events: none; */
-    /* Vô hiệu hóa tương tác với nền */
+/* pointer-events: none; */
+/* Vô hiệu hóa tương tác với nền */
 /* } */
 
 /* Thông báo */
 /* .notification {
     position: fixed;
     /* Đảm bảo thông báo nằm trên cùng và không bị làm mờ */
-    /* background-color: #fff; */
-    /* padding: 30px; */
-    /* border-radius: 10px; */
-    /* text-align: center; */
-    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
-    /* z-index: 9999; */
-    /* Đảm bảo thông báo nằm trên lớp mờ */
-    /* animation: scaleUp 0.5s ease-in-out; */
-    /* Hiệu ứng phóng to */
+/* background-color: #fff; */
+/* padding: 30px; */
+/* border-radius: 10px; */
+/* text-align: center; */
+/* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+/* z-index: 9999; */
+/* Đảm bảo thông báo nằm trên lớp mờ */
+/* animation: scaleUp 0.5s ease-in-out; */
+/* Hiệu ứng phóng to */
 /* } */
 
 /* Hiệu ứng xuất hiện */
 /* @keyframes scaleUp { */
-    /* from { */
-        /* transform: scale(0.8); */
-    /* } */
+/* from { */
+/* transform: scale(0.8); */
+/* } */
 /*  */
-    /* to { */
-        /* transform: scale(1); */
-    /* } */
+/* to { */
+/* transform: scale(1); */
+/* } */
 /* } */

@@ -402,7 +402,7 @@ endQuizBtn.addEventListener("click", () => {
 // Hàm lưu điểm vào Firestore
 async function saveScore() {
     if (score <= 0) {
-        alert("Bạn chưa trả lời câu hỏi nào! Không thể lưu điểm.");
+        alert("Tổng điểm số của bạn là 0 điểm! Bài quiz này yêu cầu điểm cao hơn 0 để lưu lại!");
         return;
     }
 
@@ -437,6 +437,14 @@ async function saveScore() {
             timestamp: new Date(),
         });
         alert("Điểm đã được lưu thành công!");
+        if (confirm("Bạn muốn xem bảng xếp hạng đánh giá không?")) {
+            alert("Chuyển sang bảng đánh giá học sinh tại đây");
+            window.location.href = "../html/ranking.html"; // Chuyển hướng đến trang bảng xếp hạng
+        }
+        else {
+            alert("Cảm ơn bạn đã tham gia bài Quiz!\nChuyển về trang chủ tại đây");
+            window.location.href = "../index.html"; // Chuyển hướng về trang chọn môn học
+    }
     } catch (error) {
         console.error("Lỗi khi lưu điểm:", error);
         alert("Lưu điểm thất bại! Vui lòng thử lại.");
