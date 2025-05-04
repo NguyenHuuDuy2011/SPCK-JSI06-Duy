@@ -38,6 +38,11 @@
 
         <div id="question-form-container" style="display: none;">
             <form id="question-form">
+                <!-- <select id="type" disabled>
+                    <option value="multiple-choice" selected>Trắc nghiệm</option>
+                    <option value="true-false">Đúng/Sai</option>
+                    <option value="fill-in-the-blank">Điền vào chỗ trống</option>
+                </select> -->
                 <hr>
                 <label for="question">Câu hỏi:</label>
                 <input type="text" id="question" placeholder="Nhập câu hỏi" required>
@@ -186,26 +191,33 @@
 
             // Cập nhật hàm renderQuestions để đảm bảo các nút sửa và xóa hoạt động
             async function renderQuestions() {
-                const questionPath = `questions/${selectedGrade}/${selectedSubject}`;
-                const questionRef = ref(db, questionPath);
-
-                try {
-                    const snapshot = await get(questionRef);
-                    const questions = snapshot.exists() ? snapshot.val() : [];
-                    const questionList = document.getElementById("question-list");
-                    const totalQuestionsElement = document.getElementById("total-questions");
-                    questionList.innerHTML = "";
-
-                    if (questions.length === 0) {
-                        questionList.innerHTML = "<h4>Phân môn này chưa có câu hỏi.</h4>";
-                        totalQuestionsElement.innerText = "Tổng số câu hỏi: 0";
-                        return;
+                    // Kiểm tra nếu chưa chọn khối hoặc môn học
+                    if (!selectedGrade || !selectedSubject) {
+                        return; // Không làm gì nếu chưa chọn khối hoặc môn học
                     }
 
-                    questions.forEach((q, index) => {
-                        const questionDiv = document.createElement("div");
-                        questionDiv.classList.add("question-item");
-                        questionDiv.innerHTML = `
+                    const questionPath = `questions/${selectedGrade}/${selectedSubject}`;
+                    const questionRef = ref(db, questionPath);
+
+                    try {
+                        const snapshot = await get(questionRef);
+                        const questions = snapshot.exists() ? snapshot.val() : [];
+                        const questionList = document.getElementById("question-list");
+                        const totalQuestionsElement = document.getElementById("total-questions");
+                        questionList.innerHTML = "";
+
+                        if (questions.length === 0) {
+                            // Hiển thị thông báo nếu không có câu hỏi
+                            questionList.innerHTML = "<h4>Phân môn này chưa có câu hỏi.</h4>";
+                            totalQuestionsElement.innerText = "Tổng số câu hỏi: 0";
+                            return;
+                        }
+
+                        // Hiển thị danh sách câu hỏi nếu có
+                        questions.forEach((q, index) => {
+                            const questionDiv = document.createElement("div");
+                            questionDiv.classList.add("question-item");
+                            questionDiv.innerHTML = `
                 <p><strong>Câu hỏi:</strong> ${q.question}</p>
                 <ul>
                     ${q.answers.map((a, i) => `<li>${i + 1}. ${a}</li>`).join("")}
@@ -214,15 +226,15 @@
                 <button onclick="editQuestion(${index})">Sửa</button>
                 <button onclick="deleteQuestion(${index})">Xóa</button>
             `;
-                        questionList.appendChild(questionDiv);
-                    });
+                            questionList.appendChild(questionDiv);
+                        });
 
-                    totalQuestionsElement.innerText = `Tổng số câu hỏi: ${questions.length}`;
-                } catch (error) {
-                    console.error("Lỗi khi tải dữ liệu:", error);
-                    alert("Không thể tải câu hỏi. Vui lòng kiểm tra quyền truy cập Firebase.");
+                        totalQuestionsElement.innerText = `Tổng số câu hỏi: ${questions.length}`;
+                    } catch (error) {
+                        console.error("Lỗi khi tải dữ liệu:", error);
+                        alert("Không thể tải câu hỏi. Vui lòng kiểm tra quyền truy cập Firebase.");
+                    }
                 }
-            }
 
         renderQuestions();
     </script>
