@@ -84,160 +84,160 @@
         let selectedSubject = null;
 
         // Gắn hàm vào đối tượng window để có thể gọi từ HTML
-            window.selectGrade = function selectGrade() {
-                const gradeSelect = document.getElementById("grade");
-                selectedGrade = gradeSelect.value;
-                console.log("Khối lớp được chọn:", selectedGrade);
+        window.selectGrade = function selectGrade() {
+            const gradeSelect = document.getElementById("grade");
+            selectedGrade = gradeSelect.value;
+            console.log("Khối lớp được chọn:", selectedGrade);
 
-                if (selectedGrade) {
-                    document.getElementById("subject-selection").style.display = "block";
-                    document.getElementById("question-form-container").style.display = "none";
-                    document.getElementById("question-list").innerHTML = "";
+            if (selectedGrade) {
+                document.getElementById("subject-selection").style.display = "block";
+                document.getElementById("question-form-container").style.display = "none";
+                document.getElementById("question-list").innerHTML = "";
 
-                    const subjectSelect = document.getElementById("subject");
-                    subjectSelect.value = "";
-                    const totalQuestionsElement = document.getElementById("total-questions");
-                    totalQuestionsElement.innerText = "Tổng số câu hỏi: 0";
-                }
-            };
-
-            window.selectSubject = function selectSubject() {
                 const subjectSelect = document.getElementById("subject");
-                selectedSubject = subjectSelect.value;
-                console.log("Môn học được chọn:", selectedSubject);
+                subjectSelect.value = "";
+                const totalQuestionsElement = document.getElementById("total-questions");
+                totalQuestionsElement.innerText = "Tổng số câu hỏi: 0";
+            }
+        };
 
-                if (selectedSubject) {
-                    document.getElementById("question-form-container").style.display = "block";
-                    renderQuestions();
-                }
-            };
+        window.selectSubject = function selectSubject() {
+            const subjectSelect = document.getElementById("subject");
+            selectedSubject = subjectSelect.value;
+            console.log("Môn học được chọn:", selectedSubject);
+
+            if (selectedSubject) {
+                document.getElementById("question-form-container").style.display = "block";
+                renderQuestions();
+            }
+        };
 
         document.getElementById("question-form").addEventListener("submit", async (e) => {
-                e.preventDefault();
+            e.preventDefault();
 
-                const question = document.getElementById("question").value;
-                const answers = Array.from(document.querySelectorAll(".answer")).map(input => input.value);
-                const correct = parseInt(document.getElementById("correct").value) - 1;
+            const question = document.getElementById("question").value;
+            const answers = Array.from(document.querySelectorAll(".answer")).map(input => input.value);
+            const correct = parseInt(document.getElementById("correct").value) - 1;
 
-                if (correct < 0 || correct >= answers.length) {
-                    alert("Đáp án đúng không hợp lệ!");
+            if (correct < 0 || correct >= answers.length) {
+                alert("Đáp án đúng không hợp lệ!");
+                return;
+            }
+
+            const questionPath = `questions/${selectedGrade}/${selectedSubject}`;
+            const questionRef = ref(db, questionPath);
+
+            const snapshot = await get(questionRef);
+            const questions = snapshot.exists() ? snapshot.val() : [];
+
+            // Kiểm tra xem form đang ở chế độ "Thêm" hay "Sửa"
+            const editingIndex = document.getElementById("question-form").getAttribute("data-editing-index");
+
+            if (editingIndex !== null) {
+                // Chế độ "Sửa câu hỏi"
+                questions[editingIndex] = { question, answers, correct };
+                alert("Câu hỏi đã được sửa thành công!");
+            } else {
+                // Chế độ "Thêm câu hỏi"
+                questions.push({ question, answers, correct });
+                alert("Thêm câu hỏi thành công!");
+            }
+
+            try {
+                await set(questionRef, questions);
+            } catch (error) {
+                console.error("Lỗi khi lưu dữ liệu:", error);
+                alert("Không thể lưu câu hỏi. Vui lòng kiểm tra quyền truy cập Firebase.");
+            }
+
+            // Reset form về trạng thái ban đầu
+            document.getElementById("question-form").reset();
+            document.getElementById("question-form").removeAttribute("data-editing-index");
+            const submitButton = document.querySelector("#question-form button[type='submit']");
+            submitButton.textContent = "Thêm câu hỏi";
+
+            renderQuestions();
+        });
+
+        // Gắn hàm vào đối tượng window để sử dụng trong HTML
+        window.deleteQuestion = async function deleteQuestion(index) {
+            const questionPath = `questions/${selectedGrade}/${selectedSubject}`;
+            const questionRef = ref(db, questionPath);
+
+            const snapshot = await get(questionRef);
+            const questions = snapshot.exists() ? snapshot.val() : [];
+
+            if (confirm("Bạn có chắc chắn muốn xóa câu hỏi này?")) {
+                questions.splice(index, 1);
+                await set(questionRef, questions);
+                renderQuestions();
+            }
+        };
+
+        window.editQuestion = async function editQuestion(index) {
+            const questionPath = `questions/${selectedGrade}/${selectedSubject}`;
+            const questionRef = ref(db, questionPath);
+
+            const snapshot = await get(questionRef);
+            const questions = snapshot.exists() ? snapshot.val() : [];
+            const question = questions[index];
+
+            document.getElementById("question").value = question.question;
+            const answersInputs = document.querySelectorAll(".answer");
+            answersInputs.forEach((input, i) => {
+                input.value = question.answers[i] || "";
+            });
+            document.getElementById("correct").value = question.correct + 1;
+
+            document.getElementById("question-form").setAttribute("data-editing-index", index);
+            const submitButton = document.querySelector("#question-form button[type='submit']");
+            submitButton.textContent = "Sửa câu hỏi";
+        };
+
+        // Cập nhật hàm renderQuestions để đảm bảo các nút sửa và xóa hoạt động
+        async function renderQuestions() {
+            if (!selectedGrade || !selectedSubject) {
+                return;
+            }
+
+            const questionPath = `questions/${selectedGrade}/${selectedSubject}`;
+            const questionRef = ref(db, questionPath);
+
+            try {
+                const snapshot = await get(questionRef);
+                const questions = snapshot.exists() ? snapshot.val() : [];
+                const questionList = document.getElementById("question-list");
+                const totalQuestionsElement = document.getElementById("total-questions");
+                questionList.innerHTML = "";
+
+                if (questions.length === 0) {
+                    questionList.innerHTML = "<h4>Phân môn này chưa có câu hỏi.</h4>";
+                    totalQuestionsElement.innerText = "Tổng số câu hỏi: 0";
                     return;
                 }
 
-                const questionPath = `questions/${selectedGrade}/${selectedSubject}`;
-                const questionRef = ref(db, questionPath);
-
-                const snapshot = await get(questionRef);
-                const questions = snapshot.exists() ? snapshot.val() : [];
-
-                // Kiểm tra xem form đang ở chế độ "Thêm" hay "Sửa"
-                const editingIndex = document.getElementById("question-form").getAttribute("data-editing-index");
-
-                if (editingIndex !== null) {
-                    // Chế độ "Sửa câu hỏi"
-                    questions[editingIndex] = { question, answers, correct };
-                    alert("Câu hỏi đã được sửa thành công!");
-                } else {
-                    // Chế độ "Thêm câu hỏi"
-                    questions.push({ question, answers, correct });
-                    alert("Thêm câu hỏi thành công!");
-                }
-
-                try {
-                    await set(questionRef, questions);
-                } catch (error) {
-                    console.error("Lỗi khi lưu dữ liệu:", error);
-                    alert("Không thể lưu câu hỏi. Vui lòng kiểm tra quyền truy cập Firebase.");
-                }
-
-                // Reset form về trạng thái ban đầu
-                document.getElementById("question-form").reset();
-                document.getElementById("question-form").removeAttribute("data-editing-index");
-                const submitButton = document.querySelector("#question-form button[type='submit']");
-                submitButton.textContent = "Thêm câu hỏi";
-
-                renderQuestions();
-            });
-
-        // Gắn hàm vào đối tượng window để sử dụng trong HTML
-            window.deleteQuestion = async function deleteQuestion(index) {
-                const questionPath = `questions/${selectedGrade}/${selectedSubject}`;
-                const questionRef = ref(db, questionPath);
-
-                const snapshot = await get(questionRef);
-                const questions = snapshot.exists() ? snapshot.val() : [];
-
-                if (confirm("Bạn có chắc chắn muốn xóa câu hỏi này?")) {
-                    questions.splice(index, 1);
-                    await set(questionRef, questions);
-                    renderQuestions();
-                }
-            };
-
-            window.editQuestion = async function editQuestion(index) {
-                const questionPath = `questions/${selectedGrade}/${selectedSubject}`;
-                const questionRef = ref(db, questionPath);
-
-                const snapshot = await get(questionRef);
-                const questions = snapshot.exists() ? snapshot.val() : [];
-                const question = questions[index];
-
-                document.getElementById("question").value = question.question;
-                const answersInputs = document.querySelectorAll(".answer");
-                answersInputs.forEach((input, i) => {
-                    input.value = question.answers[i] || "";
-                });
-                document.getElementById("correct").value = question.correct + 1;
-
-                document.getElementById("question-form").setAttribute("data-editing-index", index);
-                const submitButton = document.querySelector("#question-form button[type='submit']");
-                submitButton.textContent = "Sửa câu hỏi";
-            };
-
-            // Cập nhật hàm renderQuestions để đảm bảo các nút sửa và xóa hoạt động
-            async function renderQuestions() {
-                    if (!selectedGrade || !selectedSubject) {
-                        return;
-                    }
-
-                    const questionPath = `questions/${selectedGrade}/${selectedSubject}`;
-                    const questionRef = ref(db, questionPath);
-
-                    try {
-                        const snapshot = await get(questionRef);
-                        const questions = snapshot.exists() ? snapshot.val() : [];
-                        const questionList = document.getElementById("question-list");
-                        const totalQuestionsElement = document.getElementById("total-questions");
-                        questionList.innerHTML = "";
-
-                        if (questions.length === 0) {
-                            questionList.innerHTML = "<h4>Phân môn này chưa có câu hỏi.</h4>";
-                            totalQuestionsElement.innerText = "Tổng số câu hỏi: 0";
-                            return;
-                        }
-
-        questions.forEach((q, index) => {
-            const questionDiv = document.createElement("div");
-            questionDiv.classList.add("question-item");
-            questionDiv.innerHTML = `
+                questions.forEach((q, index) => {
+                    const questionDiv = document.createElement("div");
+                    questionDiv.classList.add("question-item");
+                    questionDiv.innerHTML = `
                 <p><strong>Loại câu hỏi:</strong> Trắc nghiệm</p>
                 <p><strong>Câu hỏi ${index + 1}:</strong> ${q.question}</p>
                 <ul>
                     ${q.answers
-                                            .map(
-                                                (a, i) =>
-                                                    `<li style="${i === q.correct ? 'font-weight: bold; color: green;' : ''}">
+                            .map(
+                                (a, i) =>
+                                    `<li style="${i === q.correct ? 'font-weight: bold; color: green;' : ''}">
                                     ${i + 1}. ${a} ${i === q.correct ? '<span style="color: green;">✔</span>' : ''}
                                 </li>`
-                                            )
-                                            .join("")}
+                            )
+                            .join("")}
                 </ul>
                 <p><strong>Đáp án đúng:</strong> <span style="font-weight: bold;">${q.correct + 1}</span></p>
                 <button onclick="editQuestion(${index})" class="btn btn-primary">Sửa</button>
                 <button onclick="deleteQuestion(${index})" class="btn btn-danger">Xóa</button>
             `;
-            questionList.appendChild(questionDiv);
-        });
+                    questionList.appendChild(questionDiv);
+                });
 
                 totalQuestionsElement.innerText = `Tổng số câu hỏi: ${questions.length}`;
             } catch (error) {

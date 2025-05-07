@@ -60,7 +60,7 @@ questionElement.parentNode.insertBefore(progressBarContainer, questionElement.ne
 // Mảng theo dõi trạng thái câu hỏi (true nếu đã trả lời, false nếu chưa)
 let answeredQuestions = [];
 let timer; // Biến lưu trữ interval
-let timeLeft = 7; // Thời gian mỗi câu hỏi (giây)
+let timeLeft = 120; // Thời gian mỗi câu hỏi (giây)
 
 let isQuizFinished = false; // Trạng thái bài quiz (false: đang làm, true: đã kết thúc)
 let progressInterval; // Biến lưu trữ interval của thanh trạng thái
@@ -104,21 +104,17 @@ function startCountdown() {
 function handleTimeUp() {
     resetProgressBar(); // Ẩn thanh trạng thái khi hết thời gian
     clearInterval(timer); // Dừng đếm ngược
+    questionElement.innerText = "Thời gian làm bài đã hết!";
+    answerButtons.innerHTML = ""; // Xóa các nút đáp án
 
-    // Thêm hiệu ứng chuyển cảnh
-    applyTransitionEffect(() => {
-        questionElement.innerText = "Thời gian làm bài đã hết!";
-        answerButtons.innerHTML = ""; // Xóa các nút đáp án
-
-        // Disable các nút chuyển câu hỏi
-        const navButtons = questionNav.querySelectorAll(".nav-btn");
-        navButtons.forEach((button) => {
-            button.disabled = true;
-            button.classList.add("disabled"); // Thêm lớp CSS để hiển thị trạng thái bị vô hiệu hóa
-        });
-
-        enableButtons(); // Kích hoạt các nút "Lưu điểm" và "Làm lại bài"
+    // Disable các nút chuyển câu hỏi
+    const navButtons = questionNav.querySelectorAll(".nav-btn");
+    navButtons.forEach((button) => {
+        button.disabled = true;
+        button.classList.add("disabled"); // Thêm lớp CSS để hiển thị trạng thái bị vô hiệu hóa
     });
+
+    enableButtons(); // Kích hoạt các nút "Lưu điểm" và "Làm lại bài"
 }
 
 // Hàm lấy câu hỏi từ Firebase
