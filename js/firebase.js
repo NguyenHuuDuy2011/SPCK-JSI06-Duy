@@ -1,4 +1,8 @@
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+// Cấu hình Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBqikvMPQ1_Zj2dsPzg9a0kj3Ki_h_AHaM",
   authDomain: "spck-jsi06-duy.firebaseapp.com",
@@ -9,11 +13,9 @@ const firebaseConfig = {
   measurementId: "G-42M9NZHWT1"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+// Khởi tạo Firebase
+const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and get a reference to the service
-const auth = firebase.auth();
-
-// Initialize Cloud Firestore and get a reference to the service
-const db = firebase.firestore(); 
+// Khởi tạo Firestore và Auth
+export const db = getFirestore(app); // Xuất Firestore
+export const auth = getAuth(app); // Xuất Auth

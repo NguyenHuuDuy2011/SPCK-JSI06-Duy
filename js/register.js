@@ -1,64 +1,58 @@
+import { db } from "./firebase.js";
+import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
 // Lấy các phần tử input của form đăng ký từ DOM
-const inpUsername = document.querySelector(".inp-username"); // Ô nhập tên người dùng
-const inpEmail = document.querySelector(".inp-email"); // Ô nhập email
-const inpPwd = document.querySelector(".inp-pwd"); // Ô nhập mật khẩu
-const inpConfirmPwd = document.querySelector(".inp-cf-pw"); // Ô nhập lại mật khẩu để xác nhận
-const registerForm = document.querySelector("#register-form"); // Lấy phần tử form đăng ký
+const inpUsername = document.querySelector(".inp-username");
+const inpEmail = document.querySelector(".inp-email");
+const inpPwd = document.querySelector(".inp-pwd");
+const inpConfirmPwd = document.querySelector(".inp-cf-pw");
+const registerForm = document.querySelector("#register-form"); // Đảm bảo khai báo biến trước khi sử dụng
 
 // Hàm xử lý khi người dùng nhấn nút đăng ký
 function handleRegister(event) {
-    event.preventDefault(); // Ngăn chặn hành vi mặc định của form (không cho trang web bị tải lại)
+    event.preventDefault();
 
-    // Lấy giá trị từ các ô input
-    let username = inpUsername.value;
-    let email = inpEmail.value.toLowerCase();
-    let password = inpPwd.value;
-    let confirmPassword = inpConfirmPwd.value;
-    let role_id = 2; // Mặc định người dùng có role_id = 2 (Guest), Admin sẽ có role_id = 1
+    const username = inpUsername.value.trim();
+    const email = inpEmail.value.trim();
+    const password = inpPwd.value.trim();
+    const confirmPassword = inpConfirmPwd.value.trim();
 
-    // Kiểm tra xem người dùng có để trống trường nào không
     if (!username || !email || !password || !confirmPassword) {
-        alert("Vui lòng điền đủ thông tin!"); // Thông báo nếu có trường bị bỏ trống
-        return; // Dừng hàm ngay lập tức
+        alert("Vui lòng điền đủ thông tin!");
+        return;
     }
 
-    // Kiểm tra mật khẩu nhập lại có khớp không
     if (password !== confirmPassword) {
-        alert("Mật khẩu không khớp"); // Hiển thị cảnh báo nếu mật khẩu không giống nhau
-        return; // Dừng hàm
+        alert("Mật khẩu không khớp!");
+        return;
     }
 
-    // Tạo tài khoản trên Firebase Authentication
-    firebase.auth().createUserWithEmailAndPassword(email, password)
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            // Tạo đối tượng userData chứa thông tin người dùng để lưu vào Firestore
-            let userData = {
-                username, // Lưu username
-                email, // Lưu email
-                password, // Lưu mật khẩu (thực tế không nên lưu mật khẩu ở Firestore!)
-                role_id: role_id, // Lưu role_id (quyền của user)
-                balance: 0 // Đặt số dư ví mặc định là 0
-            };
+            const user = userCredential.user;
 
-            // Thêm dữ liệu người dùng vào Firestore (bảng "users")
-            db.collection("users").add(userData)
-                .then((docRef) => {
-                    alert("Đăng ký thành công!\nChuyển đến trang chủ Quiz Website tại đây"); // Hiển thị thông báo khi đăng ký thành công
-                    window.location.href = "../index.html"; // Chuyển hướng sang trang đăng nhập
-                    console.log("Document written with ID: ", docRef.id); // Log ID của user vừa tạo
+            // Lưu thông tin người dùng vào Firestore
+            addDoc(collection(db, "users"), {
+                uid: user.uid,
+                username: username,
+                email: email
+            })
+                .then(() => {
+                    alert("Đăng ký tài khoản thành công!\nChuyển đến trang Đăng nhập tại đây");
+                    window.location.href = "../html/login.html";
                 })
                 .catch((error) => {
-                    alert("Đăng ký thất bại!"); // Hiển thị lỗi nếu không lưu được vào Firestore
-                    console.error("Error adding document: ", error);
+                    console.error("Lỗi khi lưu thông tin người dùng:", error);
+                    alert("Đăng ký thất bại!");
                 });
         })
         .catch((error) => {
-            var errorCode = error.code; // Mã lỗi từ Firebase (nếu có)
-            var errorMessage = error.message; // Nội dung lỗi chi tiết
-            alert(`Lỗi: ${errorMessage}`); // Hiển thị lỗi cho người dùng
-            console.log(errorMessage); // Log lỗi ra console để kiểm tra
+            console.error("Lỗi đăng ký:", error);
+            alert("Đăng ký thất bại! " + error.message);
         });
-} 
+}
 
-// Gắn sự kiện "submit" cho form, khi người dùng nhấn đăng ký sẽ gọi `handleRegister`
+// Gắn sự kiện "submit" cho form
 registerForm.addEventListener("submit", handleRegister);

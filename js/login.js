@@ -1,49 +1,41 @@
-// Lấy phần tử input email từ DOM
+import { auth } from "./firebase.js";
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
 const inpEmail = document.querySelector(".inp-email");
-
-// Lấy phần tử input password từ DOM
 const inpPwd = document.querySelector(".inp-pwd");
-
-// Lấy phần tử form đăng nhập từ DOM
 const loginForm = document.querySelector("#login-form");
 
-// // Lấy phần tử liên kết "Quên mật khẩu"
-// const forgotPasswordLink = document.getElementById("forgot-password-link");
-
-// Hàm xử lý khi người dùng nhấn nút đăng nhập
 function handleLogin(event) {
-    event.preventDefault(); // Ngăn chặn hành vi mặc định của form (tải lại trang)
+    event.preventDefault();
 
-    // Lấy giá trị email và password từ ô input
-    let email = inpEmail.value.trim();
-    let password = inpPwd.value.trim();
+    const email = inpEmail.value.trim();
+    const password = inpPwd.value.trim();
 
-    // Kiểm tra xem người dùng đã nhập đủ email và password chưa
     if (!email || !password) {
-        alert("Vui lòng điền đủ các thông tin trước khi đăng nhập"); // Hiển thị thông báo nếu thiếu
-        return; // Dừng lại không tiếp tục xử lý
+        alert("Vui lòng điền đủ các thông tin trước khi đăng nhập!");
+        return;
     }
 
     // Kiểm tra tài khoản admin
     if (email === "admin@gmail.com" && password === "admin@2025") {
-        alert("Đăng nhập thành công!\nChuyển sang trang chủ Admin tại đây\nNote: Login_for_Administrator"); // Hiển thị thông báo nếu đăng nhập admin thành công
-        localStorage.setItem("isLoggedIn", "true"); // Lưu trạng thái đăng nhập vào localStorage
-        localStorage.setItem("username", email); // Lưu email làm tên người dùng
-        localStorage.setItem("loginTime", Date.now().toString()); // Lưu thời gian đăng nhập (timestamp)
-        window.location.href = "../html/admin.html"; // Chuyển hướng đến trang admin
-        return; // Dừng lại không tiếp tục xử lý
+        alert("Đăng nhập thành công!\nChuyển sang trang chủ Admin tại đây");
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("username", "Administrator");
+        localStorage.setItem("loginTime", Date.now().toString());
+        window.location.href = "../html/admin.html";
+        return;
     }
 
-    // Gọi Firebase Auth để đăng nhập với email và password
-    firebase.auth().signInWithEmailAndPassword(email, password)
+    // Đăng nhập với Firebase Authentication
+    signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
-            alert("Đăng nhập thành công\nLưu ý đến người dùng: Tài khoản đã đăng nhập sẽ có hiệu lực trong 1 tiếng. Sau 1 tiếng, tài khoản của bạn sẽ tự động đăng xuất."); // Hiển thị thông báo thành công
+            alert("Đăng nhập thành công\nLưu ý đến người dùng: Tài khoản đã đăng nhập sẽ có hiệu lực trong 1 tiếng. Sau 1 tiếng, tài khoản của bạn sẽ tự động đăng xuất.");
 
             // Lưu trạng thái đăng nhập vào localStorage
             localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("username", JSON.stringify(user.email)); // Lưu email làm tên người dùng
-            localStorage.setItem("loginTime", JSON.stringify(Date.now())); // Lưu thời gian đăng nhập (timestamp)
+            localStorage.setItem("username", user.email);
+            localStorage.setItem("loginTime", Date.now().toString());
 
             // Chuyển hướng về trang chủ
             window.location.href = "../index.html";
@@ -62,11 +54,4 @@ function handleLogin(event) {
         });
 }
 
-// Xử lý sự kiện khi người dùng nhấn vào "Quên mật khẩu"
-// forgotPasswordLink.addEventListener("click", (event) => {
-//     event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-//     window.location.href = "../html/reset-password.html"; // Chuyển hướng đến trang đặt lại mật khẩu
-// });
-
-// Gán sự kiện "submit" cho form đăng nhập, khi submit thì gọi hàm handleLogin
 loginForm.addEventListener("submit", handleLogin);

@@ -70,12 +70,17 @@ body {
 }
 
 #leaderboard tr:nth-child(even) {
-    background-color: #f9f9f9 !important;
+    background-color: white;
     /* Bắt buộc áp dụng */
 }
 
+#leaderboard tr:nth-child(odd) {
+    background-color: #fffee9;
+    /* Màu nền xám nhạt cho hàng lẻ */
+}
+
 #leaderboard tr:hover {
-    background-color: #f1f1f1;
+    background-color: #f6efe3;
     /* Màu nền khi hover */
 }
 
