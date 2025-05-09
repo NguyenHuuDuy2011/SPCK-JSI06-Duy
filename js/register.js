@@ -23,6 +23,11 @@ function handleRegister(event) {
         return;
     }
 
+    if (email === "admin@gmail.com") {
+        alert("Email hệ thống không thể sử dụng để đăng ký!\nStop code: SYSTEM_EMAIL_DOES_NOT_USE_TO_REGISTER");
+        return;
+    }
+
     if (password !== confirmPassword) {
         alert("Mật khẩu không khớp!");
         return;
