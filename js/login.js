@@ -34,7 +34,7 @@ function handleLogin(event) {
 
             // Lưu trạng thái đăng nhập vào localStorage
             localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("username", user.email);
+            localStorage.setItem("username", user.username || email);
             localStorage.setItem("loginTime", Date.now().toString());
 
             // Chuyển hướng về trang chủ
@@ -42,15 +42,14 @@ function handleLogin(event) {
         })
         .catch((error) => {
             console.error("Lỗi đăng nhập:", error);
-            if (error.code === "auth/user-not-found") {
-                alert("Tài khoản không tồn tại. Vui lòng kiểm tra lại email.");
-            } else if (error.code === "auth/wrong-password") {
-                alert("Mật khẩu không đúng. Vui lòng thử lại.");
-            } else if (error.code === "auth/invalid-email") {
-                alert("Email không hợp lệ. Vui lòng nhập đúng định dạng email.");
-            } else {
-                alert("Đã xảy ra lỗi. Vui lòng thử lại sau.");
-            }
+            // if (error.code === "auth/user-not-found") {
+            //     alert("Tài khoản không tồn tại. Vui lòng kiểm tra lại email.");
+            // } else if (error.code === "auth/wrong-password") {
+            //     alert("Mật khẩu không đúng. Vui lòng thử lại.");
+            // } else if (error.code === "auth/invalid-email") {
+            //     alert("Email không hợp lệ. Vui lòng nhập đúng định dạng email.");
+            // } else {
+            alert("Lỗi đăng nhập!\nVui lòng kiểm tra lại thông tin tài khoản và mật khẩu hoặc đường truyền mạng của bạn.");
         });
 }
 

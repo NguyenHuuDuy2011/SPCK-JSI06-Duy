@@ -437,3 +437,22 @@ a {
     margin-left: 30px;
     margin-right: 20px;
 }
+
+.h4-opinion{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-opinion{
+    background-color: #b89a6f;
+    font-size: 20px;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    transition: 0.1s;
+}
+
+.btn-opinion:hover{
+    background-color: #9A7C4F;
+    cursor: pointer;
+}
