@@ -114,46 +114,22 @@
     <div class="container-fluid feeling" id="testimonial">
         <h2>Ý kiến của người dùng:</h2>
         <div id="carouselExampleIndicators" class="carousel slide">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
-                    aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                    aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                    aria-label="Slide 3"></button>
+                <div class="carousel-indicators"></div>
+                <div class="carousel-inner"></div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
-            <div class="carousel-inner">
-                <div class="carousel-item active container-fluid">
-                    <h2 class="testimonial-text nhan-xet">Quiz Website này khá hay, từ các câu hỏi đến phần giao diện đều rất tuyệt vời!</h2>
-                    <em><i class="fa-solid fa-computer"></i> Bình luận từ máy tính cá nhân - 123, Việt Nam</em><br>
-                    <em><i class="fa-solid fa-circle-check"></i> Có, tôi rất thích Quiz Website!</em>
-                </div>
-                <div class="carousel-item container-fluid">
-                    <h2 class="testimonial-text nhan-xet">Quiz Website này đã vừa giúp tôi ôn lại các kiến thức, vừa giúp tôi giải trí, quá chất!</h2>
-                    <em><i class="fa-solid fa-tablet-screen-button"></i> Bình luận từ máy tính bảng - ABC, Cuba</em><br>
-                    <em><i class="fa-solid fa-circle-check"></i> Có, tôi rất thích Quiz Website!</em>
-                </div>
-                <div class="carousel-item container-fluid">
-                    <h2 class="testimonial-text nhan-xet">Ừmm, Quiz Website này vẫn còn các lỗi như cách website hiển thị ở màn hình bé,...</h2>
-                    <em><i class="fa-solid fa-mobile-screen"></i> Bình luận từ điện thoại - XYZ, Lào</em><br>
-                    <em><i class="fa-solid fa-circle-xmark"></i> Không, tôi vẫn chưa thích trang web này lắm</em><br>
-                    <em><i class="fa-solid fa-screwdriver-wrench"></i> Chúng tôi đang khắc phục lỗi trên</em>
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
         <hr>
-        <h4 class="h4-opinion">Bạn có ý kiến của mình về Quiz Website?</h4>
-        <button class="btn-opinion" onclick="caution()">Thêm ý kiến ngay!</button>
+        <h4 class="h4-opinion">Bạn muốn đóng góp ý kiến của mình cho Quiz Website?</h4>
+        <button class="btn-opinion" onclick="window.location.href='./html/add-opinion.html'">Thêm ý kiến ngay!</button>
     </div>
 
     <!-- Footer -->
@@ -196,12 +172,11 @@
     <!-- <script>
         AOS.init();
     </script> -->
-    <script>
-        function caution() {
-            alert("Phần thêm ý kiến hiện đang trong quá trình phát triển. Chúng tôi sẽ sớm phát hành tính năng này. Cảm ơn bạn đã quan tâm!");
-            return;
-           }
-    </script>
+    <!-- ...existing code... -->
+    <script type="module" src="./js/opinion-carousel.js"></script>
+    </body>
+    
+    </html>
 </body>
 
 </html>

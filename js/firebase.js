@@ -7,7 +7,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyBqikvMPQ1_Zj2dsPzg9a0kj3Ki_h_AHaM",
   authDomain: "spck-jsi06-duy.firebaseapp.com",
   projectId: "spck-jsi06-duy",
-  storageBucket: "spck-jsi06-duy.firebasestorage.app",
+  storageBucket: "spck-jsi06-duy.appspot.com",
   messagingSenderId: "717118983053",
   appId: "1:717118983053:web:1855d19c8ef853c2e54bc4",
   measurementId: "G-42M9NZHWT1"
