@@ -46,7 +46,7 @@ window.onload = function () {
             <li><hr class="dropdown-divider"></li>
             <li>
                 <a class="dropdown-item" href="../html/info.html" style="color: yellow;">
-                    <i class="fa-solid fa-circle-info"></i> Thông tin tài khoản
+                    <i class="fa-solid fa-clock-rotate-left"></i> Lịch sử làm bài
                 </a>
             </li>
             <li><hr class="dropdown-divider"></li>
