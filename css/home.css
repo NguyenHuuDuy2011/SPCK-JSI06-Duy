@@ -444,7 +444,7 @@ a {
 }
 
 .btn-opinion{
-    background-color: #b89a6f;
+    background-color: #9A7C4F;
     font-size: 20px;
     padding: 15px;
     border: none;
@@ -453,6 +453,16 @@ a {
 }
 
 .btn-opinion:hover{
-    background-color: #9A7C4F;
+    background-color: #b89a6f;
+    cursor: pointer;
+}
+
+#review-btn{
+    background: linear-gradient(90deg, #1976d2 60%, #43a047 100%);
+    border: none;
+}
+
+#review-btn:hover {
+    background: linear-gradient(90deg, #43a047 60%, #1976d2 100%);
     cursor: pointer;
 }

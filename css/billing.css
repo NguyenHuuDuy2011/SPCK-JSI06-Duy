@@ -1,0 +1,84 @@
+body {
+    background: #f8f9fa;
+}
+
+.package-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px #0001;
+    padding: 24px 18px 18px 18px;
+    margin: 0 10px;
+    min-width: 260px;
+    position: relative;
+    border: 2px solid transparent;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.package-card.selected {
+    border: 2.5px solid #1976d2;
+    box-shadow: 0 0 0 2px #1976d233;
+}
+
+.package-card .price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1976d2;
+}
+
+.package-card .label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.package-card .desc {
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 12px;
+}
+
+.package-card .features {
+    font-size: 0.97rem;
+    text-align: left;
+    margin-bottom: 12px;
+}
+
+.package-card .features i {
+    color: #1976d2;
+    margin-right: 6px;
+}
+
+.package-card .btn-choose {
+    width: 100%;
+}
+
+.confirm-section,
+.final-section {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px #0001;
+    padding: 24px 18px;
+    margin-top: 24px;
+    text-align: center;
+}
+
+.nav-tabs .nav-link.active {
+    color: #1976d2 !important;
+    border-color: #1976d2 #1976d2 #fff !important;
+}
+
+.nav-tabs .nav-link {
+    color: #333;
+}
+
+.tab-content {
+    margin-top: 24px;
+}
+
+.user-info-box {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #0001;
+    padding: 24px 24px 12px 24px;
+    margin-bottom: 24px;
+}

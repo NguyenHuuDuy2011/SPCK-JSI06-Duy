@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý tài khoản & Gói học</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/billing.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        body {
+            background: #fcfaf6;
+        }
+
+        .package-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px #0001;
+            padding: 24px 18px 18px 18px;
+            margin: 0 10px 10px;
+            min-width: 260px;
+            position: relative;
+            border: 2px solid transparent;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        .package-card:hover,
+        .package-card.selected {
+            border: 2.5px solid yellowgreen;
+            box-shadow: 0 0 0 2px #1976d233;
+        }
+
+        .package-card .price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: green;
+        }
+
+        .package-card .label {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .package-card .desc {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 12px;
+        }
+
+        .package-card .features {
+            font-size: 0.97rem;
+            text-align: left;
+            margin-bottom: 12px;
+        }
+
+        .package-card .features i {
+            color: #1976d2;
+            margin-right: 6px;
+        }
+
+        .package-card .btn-choose {
+            width: 100%;
+        }
+
+        .confirm-section,
+        .final-section {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px #0001;
+            padding: 24px 18px;
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .final-section2{
+            text-align: left;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #0e9637 !important;
+            border-color: #0e9637 #0e9637 #fff !important;
+        }
+
+        .nav-tabs .nav-link {
+            color: #333;
+        }
+
+        .tab-content {
+            margin-top: 24px;
+        }
+
+        .user-info-box {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px #0001;
+            padding: 24px 24px 12px 24px;
+            margin-bottom: 24px;
+        }
+
+        .btn-home {
+            display: inline-block;
+            margin: 24px 0 0 24px;
+            padding: 8px 22px;
+            background: linear-gradient(90deg, #1976d2 60%, #43a047 100%);
+            color: #fff !important;
+            font-weight: 600;
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 2px 8px #1976d233;
+            transition: background 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+        .btn-home:hover {
+            background: linear-gradient(90deg, #43a047 60%, #1976d2 100%);
+            color: #fff !important;
+            box-shadow: 0 4px 16px #1976d255;
+            text-decoration: none;
+        }
+
+        #cancel .package-card.selected {
+            border: 2.5px solid #43a047 !important;
+            background: #fff !important;
+            border-radius: 18px;
+            box-shadow: 0 0 0 2px #1976d233;
+            padding: 24px 18px 18px 18px;
+        }
+        #cancel .price {
+            color: #0e9637 !important;
+            font-size: 2.2rem !important;
+            font-weight: bold;
+        }
+        #cancel .label {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        #cancel .desc {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 12px;
+        }
+        #cancel .features {
+            font-size: 0.97rem;
+            text-align: left;
+            margin-bottom: 12px;
+        }
+        #cancel .features i {
+            color: #1976d2;
+            margin-right: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="../index.html" class="btn-home mt-3">Quay lại trang chủ</a>
+    <div class="container mt-5 mb-5">
+        <h2 class="mb-4">Quản lý tài khoản</h2>
+        <div class="user-info-box mb-4">
+            <p><b>Tên tài khoản:</b> <span id="username"></span></p>
+            <p><b>Số dư:</b> <span id="balance"></span> <span id="currency"></span></p>
+            <p><b>Gói học:</b> <span id="package-status"></span></p>
+            <button id="btn-cancel-package" class="btn btn-outline-danger btn-sm mt-2 d-none">
+                Bỏ gói đã đăng ký
+            </button>
+        </div>
+        <!-- Tabs -->
+        <ul class="nav nav-tabs" id="billingTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="package-tab" data-bs-toggle="tab" data-bs-target="#package" type="button"
+                    role="tab" aria-controls="package" aria-selected="true">Mua/Thay đổi gói học</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit" type="button" role="tab"
+                    aria-controls="deposit" aria-selected="false">Nạp tiền</button>       </li>
+            <li class="nav-item d-none" id="dev-tab-li" role="presentation">
+                <button class="nav-link" id="dev-tab" data-bs-toggle="tab" data-bs-target="#dev" type="button"
+                    role="tab" aria-controls="dev" aria-selected="false">Nhà phát triển</button>
+            </li>
+            <li class="nav-item d-none" id="cancel-tab-li" role="presentation">
+                <button class="nav-link" id="cancel-tab" data-bs-toggle="tab" data-bs-target="#cancel" type="button"
+                    role="tab" aria-controls="cancel" aria-selected="false">Hủy gói học</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="billingTabContent">
+            <!-- Tab Nạp tiền -->
+            <div class="tab-pane fade" id="deposit" role="tabpanel" aria-labelledby="deposit-tab">
+                <form id="deposit-form" class="mx-auto" style="max-width:350px;">
+                    <div class="mb-3">
+                        <label for="deposit-amount" class="form-label">Số tiền muốn nạp</label>
+                        <input type="number" min="1" max="50000" class="form-control" id="deposit-amount" required>
+                        <div class="form-text">
+                            Tối đa 50,000 VND (~2 USD)
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="currency-select" class="form-label">Loại tiền tệ</label>
+                        <select id="currency-select" class="form-select" disabled>
+                            <option value="VND">VND</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Nạp tiền</button>
+                </form>
+                <div id="msg" class="mt-3"></div>
+            </div>
+            <!-- Tab Mua gói học -->
+            <div class="tab-pane fade show active" id="package" role="tabpanel" aria-labelledby="package-tab">
+                <h4 class="mb-4 text-center">Chọn gói học phù hợp</h4>
+                <div id="package-list" class="d-flex justify-content-center flex-wrap mb-4"></div>
+                <div id="confirm-section" class="confirm-section d-none">
+                    <h5>Bạn đã chọn <span id="confirm-package-label"></span></h5>
+                    <p>Giá: <span id="confirm-package-price"></span></p>
+                    <button class="btn btn-success" id="btn-confirm-continue">Xác nhận & Tiếp tục</button>
+                </div>
+                <div class="modal fade upgrade-modal" id="upgradeModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="upgradeModalLabel"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
+                            </div>
+                            <div class="modal-body" id="upgradeModalBody"></div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-dark" id="btn-keep-current"
+                                    data-bs-dismiss="modal">Giữ gói hiện tại</button>
+                                <button type="button" class="btn btn-success" id="btn-upgrade">Nâng hạng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="final-section" class="final-section d-none">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>Xác nhận gói học</h5>
+                            <div id="final-package"></div>
+                            <button class="btn btn-outline-success mt-3" id="btn-change-package">Thay đổi gói học</button>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card p-3 shadow-sm">
+                                <div class="d-flex justify-content-between">
+                                    <span><b>Tổng số tiền:</b></span>
+                                    <span id="final-total" style="font-size:1.3rem;color:#1976d2;font-weight:600"></span>
+                                </div>
+                                <div class="text-muted" style="font-size:0.95rem">
+                                    Tổng giá cho tất cả các hành khách (đã bao gồm thuế, phí và chiết khấu).
+                                </div>
+                                <button class="btn btn-success w-100 mt-3" id="btn-pay">Thanh toán</button>
+                            </div>
+                            <div class="mt-3" style="font-size:0.95rem">
+                                <a href="#">Chính sách hành lý</a> |
+                                <a href="#">Xem lại các điều kiện</a> |
+                                <a href="#">Chính sách hàng hóa nguy hiểm</a>
+                            </div>
+                        </div>
+                    </div>          </div>
+                <div id="package-msg" class="mt-3"></div>
+            </div>
+            <!-- Tab Nhà phát triển -->
+            <div class="tab-pane fade" id="dev" role="tabpanel" aria-labelledby="dev-tab">
+                <section id="dev-section">
+                    <h4 class="mb-4 text-center"><i class="fa-solid fa-user-gear"></i> Nhà phát triển</h4>
+                    <div class="user-info-box mb-4">
+                        <p><b>Tên nhà phát triển:</b> <span id="dev-username"></span></p>
+                        <p><b>Số dư nhận được:</b> <span id="dev-balance"></span> <span id="dev-currency"></span></p>
+                    </div>
+                    <form id="withdraw-form" class="mx-auto" style="max-width:350px;">
+                        <div class="mb-3">
+                            <label for="withdraw-amount" class="form-label">Số tiền muốn rút</label>
+                            <input type="number" min="1" class="form-control" id="withdraw-amount" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100">Rút tiền</button>
+                    </form>
+                    <div id="dev-msg" class="mt-3"></div>
+                </section>
+            </div>
+            <div class="tab-pane fade" id="cancel" role="tabpanel" aria-labelledby="cancel-tab">
+                <div class="final-section">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>Hủy gói học</h5>
+                            <div id="cancel-package"></div>
+                            <button class="btn btn-outline-success mt-3" id="btn-cancel-change">Thay đổi gói học</button>
+                        </div>
+                        <div class="col-md-4 final-section2">
+                            <div class="card p-3 shadow-sm">
+                                <div class="d-flex justify-content-between">
+                                    <span><b>Tổng số tiền được hoàn trả:</b></span>
+                                    <span id="refund-total" style="font-size:1.3rem;color:#1976d2;font-weight:600"></span>
+                                </div>
+                                <div class="text-muted" style="font-size:0.95rem">
+                                    Số tiền hoàn trả là phần còn lại sau khi trừ phí dịch vụ, thuế, chiết khấu theo quy định hiện
+                                    hành.
+                                    Số tiền nhận được đã hiển thị phía trên.
+                                </div>
+                                <ul class="mt-2" style="font-size:0.95rem">
+                                    <li>Phí dịch vụ, thuế, chiết khấu: đã trừ vào số tiền hoàn trả</li>
+                                    <ul>
+                                        <li>Quy định về số tiền quý khách được hoàn lại:</li>
+                                        <ol>
+                                            <li>Gói Phổ thông: 12.000 VND</li>
+                                            <li>Gói Phổ thông Đặc biệt: 18.000 VND</li>
+                                            <li>Gói Thương gia: 30.000 VND</li>
+                                        </ol>
+                                    </ul>
+                                </ul>
+                                <button class="btn btn-danger w-100 mt-3" id="btn-confirm-cancel">Xác nhận hủy và hoàn tiền</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="cancel-msg" class="mt-3"></div>
+                </div>      </div>
+        </div>
+    </div>
+    <script type="module">
+        import { db } from "../js/firebase.js";
+        import {
+            collection, query, where, getDocs, updateDoc, doc
+        } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+        const PACKAGES = [
+            {
+                key: "basic",
+                label: "Hạng Phổ thông",
+                price: 20000,
+                desc: "Hãy ôn tập thật kỹ trước khi làm bài nhé!",
+                features: [
+                    { icon: "fa-solid fa-check text-success", text: "Câu hỏi ôn tập cơ bản" },
+                    { icon: "fa-solid fa-xmark text-danger", text: "Được quyền ưu tiên hỗ trợ" },
+                    { icon: "fa-solid fa-xmark text-danger", text: "Học cùng thầy, cô giáo giàu kinh nghiệm" },
+                    { icon: "", text: "----" },
+                    { icon: "fa-solid fa-circle-info", text: "Phí hoàn tiền theo quy định là 12.000 đồng" }
+                ]
+            },
+            {
+                key: "premium",
+                label: "Hạng Phổ thông Đặc biệt",
+                price: 30000,
+                desc: "Hàng trăm câu hỏi được chọn lọc kỹ lưỡng.",
+                features: [
+                    { icon: "fa-solid fa-check text-success", text: "Câu hỏi ôn tập cơ bản + nâng cao" },
+                    { icon: "fa-solid fa-check text-success", text: "Được quyền ưu tiên hỗ trợ cơ bản" },
+                    { icon: "fa-solid fa-xmark text-danger", text: "Học cùng thầy, cô giáo giàu kinh nghiệm" },
+                    { icon: "", text: "----" },
+                    { icon: "fa-solid fa-circle-info", text: "Phí hoàn tiền theo quy định là 18.000 đồng" }
+                ]
+            },
+            {
+                key: "vip",
+                label: "Hạng Thương gia",
+                price: 50000,
+                desc: "Thử thách bản thân với các câu hỏi đa dạng.",
+                features: [
+                    { icon: "fa-solid fa-check text-success", text: "Câu hỏi ôn tập cơ bản + nâng cao + thử thách" },
+                    { icon: "fa-solid fa-check text-success", text: "Được quyền ưu tiên hỗ trợ đặc biệt" },
+                    { icon: "fa-solid fa-check text-success", text: "Học cùng thầy, cô giáo giàu kinh nghiệm" },
+                    { icon: "", text: "----" },
+                    { icon: "fa-solid fa-circle-info", text: "Phí hoàn tiền theo quy định là 30.000 đồng" }
+                ]
+            }
+            // {
+            //     key: "vip",
+            //     label: "Hạng Nhất",
+            //     price: 150000,
+            //     desc: "Thử thách bản thân với các câu hỏi đa dạng.",
+            //     features: [
+            //         { icon: "fa-solid fa-check text-success", text: "Tất cả câu hỏi ôn tập " },
+            //         { icon: "fa-solid fa-check text-success", text: "Có câu hỏi ôn tập nâng cao" },
+            //         { icon: "fa-solid fa-check text-success", text: "Có câu hỏi ôn tập thử thách" },
+            //         { icon: "fa-solid fa-check text-success", text: "Học cùng giáo viên có kinh nghiệm giảng dạy" }
+            //     ]
+            // }
+        ];
+
+        let userDocId = "";
+        let userData = {};
+        let devDocId = "";
+        let devData = {};
+
+        const username = localStorage.getItem("username")?.replace(/"/g, "");
+        if (!username) {
+            alert("Bạn cần đăng nhập!");
+            window.location.href = "./login.html";
+        }
+
+        // Lấy thông tin user từ Firestore
+        async function loadUserInfo() {
+                const q = query(collection(db, "users"), where("username", "==", username));
+                const snap = await getDocs(q);
+                if (snap.empty) {
+                    alert("Không tìm thấy tài khoản!");
+                    window.location.href = "./login.html";
+                    return;
+                }
+                userDocId = snap.docs[0].id;
+                userData = snap.docs[0].data();
+
+                // Nếu là Administrator, luôn lấy số dư từ tài khoản admin@gmail.com
+                if (userData.username === "Administrator") {
+                    const qAdmin = query(collection(db, "users"), where("email", "==", "admin@gmail.com"));
+                    const snapAdmin = await getDocs(qAdmin);
+                    if (!snapAdmin.empty) {
+                        const adminData = snapAdmin.docs[0].data();
+                        document.getElementById("balance").textContent = adminData.balance?.toLocaleString() ?? 0;
+                        document.getElementById("currency").textContent = adminData.currency ?? "VND";
+                    } else {
+                        document.getElementById("balance").textContent = userData.balance?.toLocaleString() ?? 0;
+                        document.getElementById("currency").textContent = userData.currency ?? "VND";
+                    }
+                } else {
+                    document.getElementById("balance").textContent = userData.balance?.toLocaleString() ?? 0;
+                    document.getElementById("currency").textContent = userData.currency ?? "VND";
+                }
+
+                document.getElementById("username").textContent = userData.username;
+                document.getElementById("package-status").textContent = userData.packageType
+                    ? PACKAGES.find(p => p.key === userData.packageType)?.label || "Đã đăng ký"
+                    : "Chưa đăng ký";
+                document.getElementById("btn-cancel-package").classList.toggle("d-none", !userData.packageType);
+
+                // ...phần còn lại giữ nguyên...
+                if (userData.username === "Administrator" || userData.role === "dev") {
+                    // Ẩn tab mua/thay đổi gói học
+                    document.getElementById("package-tab").parentElement.classList.add("d-none");
+                    // Hiện tab dev
+                    document.getElementById("dev-tab-li").classList.remove("d-none");
+                    // Kích hoạt tab dev
+                    const devTab = document.getElementById("dev-tab");
+                    const tab = new bootstrap.Tab(devTab);
+                    tab.show();
+                    // Đảm bảo tab nạp tiền đứng sau tab dev
+                    const depositTabLi = document.getElementById("deposit-tab").parentElement;
+                    const devTabLi = document.getElementById("dev-tab-li");
+                    devTabLi.parentElement.insertBefore(depositTabLi, devTabLi.nextSibling);
+                }
+                if (userData.username === "Administrator") {
+                    document.getElementById("dev-tab-li").classList.remove("d-none");
+                    // Lấy tài khoản admin@gmail.com
+                    const qAdmin = query(collection(db, "users"), where("email", "==", "admin@gmail.com"));
+                    const snapAdmin = await getDocs(qAdmin);
+                    if (!snapAdmin.empty) {
+                        devDocId = snapAdmin.docs[0].id;
+                        devData = snapAdmin.docs[0].data();
+                        loadDevInfo();
+                    }
+                } else if (userData.role === "dev") {
+                    document.getElementById("package-tab").parentElement.classList.add("d-none");
+                    document.getElementById("dev-tab-li").classList.remove("d-none");
+                    const devTab = document.getElementById("dev-tab");
+                    const tab = new bootstrap.Tab(devTab);
+                    tab.show();
+                    const depositTabLi = document.getElementById("deposit-tab").parentElement;
+                    const devTabLi = document.getElementById("dev-tab-li");
+                    devTabLi.parentElement.insertBefore(depositTabLi, devTabLi.nextSibling);
+                    loadDevInfo();
+                }
+            }
+        await loadUserInfo();
+
+        // Nạp tiền (cập nhật Firestore)
+        // document.getElementById("deposit-form").addEventListener("submit", async function (e) {
+        //     e.preventDefault();
+        //     const amount = parseInt(document.getElementById("deposit-amount").value);
+        //     const currency = document.getElementById("currency-select").value;
+        //     // Giới hạn tối đa 50,000 VND hoặc 26,000 USD
+        //     if (currency === "VND" && amount > 50000) {
+        //         showMsg("Chỉ được nạp tối đa 50,000 VND!", "danger", "msg");
+        //         return;
+        //     }
+        //     if (currency === "USD" && amount > 2) {
+        //         showMsg("Chỉ được nạp tối đa 2 USD!", "danger", "msg");
+        //         return;
+        //     }
+        //     if (amount <= 0) {
+        //         showMsg("Số tiền phải lớn hơn 0!", "danger", "msg");
+        //         return;
+        //     }
+        //     await updateDoc(doc(db, "users", userDocId), {
+        //         balance: (userData.balance ?? 0) + amount,
+        //         currency: currency
+        //     });
+        //     userData.balance = (userData.balance ?? 0) + amount;
+        //     userData.currency = currency;
+        //     await loadUserInfo();
+        //     showMsg(`Nạp thành công ${amount.toLocaleString()} ${currency}!`, "success", "msg");
+        //     document.getElementById("deposit-form").reset();
+        // });
+
+        document.getElementById("deposit-form").addEventListener("submit", async function (e) {
+                e.preventDefault();
+                const amount = parseInt(document.getElementById("deposit-amount").value);
+                if (amount > 50000) {
+                    showMsg("Chỉ được nạp tối đa 50,000 VND!", "danger", "msg");
+                    return;
+                }
+                if (amount <= 0) {
+                    showMsg("Số tiền phải lớn hơn 0!", "danger", "msg");
+                    return;
+                }
+                // HIỆN LOADING
+                document.getElementById("loading-overlay").style.display = "flex";
+                await updateDoc(doc(db, "users", userDocId), {
+                    balance: (userData.balance ?? 0) + amount,
+                    currency: "VND"
+                });
+                userData.balance = (userData.balance ?? 0) + amount;
+                userData.currency = "VND";
+                await loadUserInfo();
+                // ẨN LOADING
+                document.getElementById("loading-overlay").style.display = "none";
+                showMsg(`Nạp thành công ${amount.toLocaleString()} VND!`, "success", "msg");
+                document.getElementById("deposit-form").reset();
+            });
+
+        // Bỏ gói đã đăng ký
+        document.getElementById("btn-cancel-package").onclick = async function () {
+            if (!confirm("Bạn chắc chắn muốn hủy đăng ký gói đã đăng ký?")) return;
+            await updateDoc(doc(db, "users", userDocId), {
+                packageType: ""
+            });
+            userData.packageType = "";
+            await loadUserInfo();
+            showMsg("Đã hủy đăng ký gói học thành công!", "success", "msg");
+        };
+
+        // Tab mua gói học
+        let selectedPackage = null;
+        let upgradeTarget = null;
+
+        // Render các gói học
+        function renderPackages(selectedKey = null) {
+                const list = document.getElementById("package-list");
+                list.innerHTML = "";
+                const currentIdx = PACKAGES.findIndex(p => p.key === (userData.packageType || ""));
+                PACKAGES.forEach((pkg, idx) => {
+                    const card = document.createElement("div");
+                    card.className = "package-card" + (selectedKey === pkg.key ? " selected" : "");
+                    let btnHtml = "";
+                    if (userData.packageType) {
+                        if (idx < currentIdx) {
+                            // Gói thấp hơn, disable
+                            btnHtml = `<button class="btn btn-outline-dark btn-choose text-dark" data-key="${pkg.key}" disabled>Đã sử dụng gói cao hơn</button>`;
+                        } else if (idx === currentIdx) {
+                            btnHtml = `<button class="btn btn-success btn-choose" data-key="${pkg.key}" disabled>Đang sử dụng</button>`;
+                        } else {
+                            // Gói cao hơn, cho nâng cấp
+                            btnHtml = `<button class="btn btn-outline-warning btn-choose text-dark" data-key="${pkg.key}">Nâng cấp</button>`;
+                        }
+                    } else {
+                        btnHtml = `<button class="btn btn-outline-success btn-choose" data-key="${pkg.key}">Chọn</button>`;
+                    }
+                    card.innerHTML = `
+            <div class="price mb-2">${pkg.price.toLocaleString()} VND</div>
+            <div class="label">${pkg.label}</div>
+            <div class="desc">${pkg.desc}</div>
+            <div class="features mb-2">
+                ${pkg.features.map(f => `<div><i class="${f.icon}"></i> ${f.text}</div>`).join("")}
+            </div>
+            ${btnHtml}
+        `;
+                    list.appendChild(card);
+                });
+                // Gán sự kiện chọn
+                document.querySelectorAll(".btn-choose:not([disabled])").forEach(btn => {
+                    btn.onclick = () => {
+                        selectedPackage = PACKAGES.find(p => p.key === btn.dataset.key);
+                        renderPackages(selectedPackage.key);
+                        showConfirmSection();
+                    };
+                });
+            }
+
+        // Hiện phần xác nhận & tiếp tục
+        function showConfirmSection() {
+            document.getElementById("confirm-section").classList.remove("d-none");
+            document.getElementById("confirm-package-label").textContent = selectedPackage.label;
+            document.getElementById("confirm-package-price").textContent = selectedPackage.price.toLocaleString() + " VND";
+        }
+
+        // Khi bấm xác nhận & tiếp tục
+        document.getElementById("btn-confirm-continue").onclick = function () {
+            // Chỉ cho phép mua gói cao hơn gói hiện tại
+            const currentIdx = PACKAGES.findIndex(p => p.key === (userData.packageType || ""));
+            const selectedIdx = PACKAGES.findIndex(p => p.key === selectedPackage.key);
+            if (userData.packageType && selectedIdx <= currentIdx) {
+                showMsg("Bạn chỉ có thể mua gói cao hơn gói hiện tại!", "danger", "package-msg");
+                return;
+            }
+            // Nếu không phải gói cao nhất thì hiện popup nâng hạng
+            if (selectedPackage.key !== "vip") {
+                upgradeTarget = PACKAGES[PACKAGES.findIndex(p => p.key === selectedPackage.key) + 1];
+                showUpgradeModal();
+            } else {
+                showFinalSection(selectedPackage);
+            }
+        };
+
+        // Hiện popup nâng hạng
+        function showUpgradeModal() {
+                document.getElementById("upgradeModalLabel").textContent =
+                    `Nâng hạng lên ${upgradeTarget.label} chỉ với ${(upgradeTarget.price - selectedPackage.price).toLocaleString()} VND`;
+                document.getElementById("upgradeModalBody").innerHTML = `
+        <div class="feature-list mb-2">
+            <b>Thêm các quyền lợi:</b>
+            <ul>
+                ${upgradeTarget.features.map(f => `<li><i class="${f.icon}"></i> ${f.text}</li>`).join("")}
+            </ul>
+        </div>
+        <div class="mb-2 text-dark">Bạn muốn nâng cấp gói không?</div>
+    `;
+                document.getElementById("btn-keep-current").onclick = function () {
+                    document.getElementById("loading-overlay").style.display = "flex";
+                    setTimeout(() => {
+                        showFinalSection(selectedPackage);
+                        document.getElementById("loading-overlay").style.display = "none";
+                    }, 700); // loading 0.7s cho mượt
+                };
+                document.getElementById("btn-upgrade").onclick = function () {
+                    document.getElementById("loading-overlay").style.display = "flex";
+                    setTimeout(() => {
+                        selectedPackage = upgradeTarget;
+                        showFinalSection(selectedPackage);
+                        document.getElementById("loading-overlay").style.display = "none";
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('upgradeModal'));
+                        modal.hide();
+                    }, 700);
+                };
+                new bootstrap.Modal(document.getElementById('upgradeModal')).show();
+            }
+
+        // Hiện phần xác nhận cuối cùng
+        function showFinalSection(pkg) {
+                // Ẩn các section khác
+                document.getElementById("confirm-section").classList.add("d-none");
+                document.getElementById("package-list").classList.add("d-none");
+                const finalSection = document.getElementById("final-section");
+                finalSection.classList.remove("d-none", "animate__fadeOut");
+                finalSection.classList.add("animate__animated", "animate__fadeIn");
+
+                // Tính phí nâng cấp nếu có
+                let upgradeAmount = pkg.price;
+                let isUpgrade = false;
+                const currentIdx = PACKAGES.findIndex(p => p.key === (userData.packageType || ""));
+                const selectedIdx = PACKAGES.findIndex(p => p.key === pkg.key);
+                if (userData.packageType && selectedIdx > currentIdx) {
+                    upgradeAmount = pkg.price - PACKAGES[currentIdx].price;
+                    isUpgrade = true;
+                }
+
+                document.getElementById("final-package").innerHTML = `
+        <div class="package-card selected">
+            <div class="price mb-2">${pkg.price.toLocaleString()} VND</div>
+            <div class="label">${pkg.label}</div>
+            <div class="desc">${pkg.desc}</div>
+            <div class="features mb-2">
+                ${pkg.features.map(f => `<div><i class="${f.icon}"></i> ${f.text}</div>`).join("")}
+            </div>
+        </div>
+    `;
+                document.getElementById("final-total").textContent = upgradeAmount.toLocaleString() + " VND";
+                document.querySelector("#final-section .card .d-flex span:first-child").innerHTML = isUpgrade
+                    ? "<b>Tổng tiền nâng cấp:</b>"
+                    : "<b>Tổng số tiền:</b>";
+
+                // Nút thay đổi gói học
+                document.getElementById("btn-change-package").onclick = function () {
+                    finalSection.classList.remove("animate__fadeIn");
+                    finalSection.classList.add("animate__fadeOut");
+                    setTimeout(() => {
+                        finalSection.classList.add("d-none");
+                        document.getElementById("package-list").classList.remove("d-none");
+                        renderPackages();
+                    }, 400);
+                };
+
+                // Lưu lại số tiền nâng cấp để dùng khi thanh toán
+                finalSection.dataset.upgradeAmount = upgradeAmount;
+            }
+
+        // Thanh toán (trừ tiền, lưu gói, chuyển tiền cho dev)
+        document.getElementById("btn-pay").onclick = async function () {
+                const finalSection = document.getElementById("final-section");
+                const upgradeAmount = Number(finalSection.dataset.upgradeAmount) || selectedPackage.price;
+                if ((userData.balance ?? 0) < upgradeAmount) {
+                    showMsg("Số dư không đủ để mua/nâng cấp gói này!", "danger", "package-msg");
+                    return;
+                }
+                // HIỆN LOADING
+                document.getElementById("loading-overlay").style.display = "flex";
+                // Trừ tiền user
+                await updateDoc(doc(db, "users", userDocId), {
+                    balance: userData.balance - upgradeAmount,
+                    packageType: selectedPackage.key
+                });
+                userData.balance -= upgradeAmount;
+                userData.packageType = selectedPackage.key;
+                localStorage.setItem("packageType", selectedPackage.key);
+                await loadUserInfo();
+                // Cộng tiền cho dev
+                await payToDev(upgradeAmount);
+                // ẨN LOADING
+                document.getElementById("loading-overlay").style.display = "none";
+                showMsg(`Thanh toán thành công cho ${selectedPackage.label}!`, "success", "package-msg");
+                document.getElementById("final-section").classList.add("d-none");
+                document.getElementById("package-list").classList.remove("d-none");
+                renderPackages();
+            };
+
+        // Khi thanh toán/mua gói, cộng tiền cho admin@gmail.com nếu là Administrator
+        async function payToDev(amount) {
+                // Luôn cộng vào tài khoản admin@gmail.com
+                const q = query(collection(db, "users"), where("email", "==", "admin@gmail.com"));
+                const snap = await getDocs(q);
+                if (snap.empty) return;
+                const adminDoc = snap.docs[0];
+                await updateDoc(doc(db, "users", adminDoc.id), {
+                    balance: (adminDoc.data().balance ?? 0) + amount
+                });
+                // Nếu đang ở tab dev thì cập nhật luôn
+                if (devDocId === adminDoc.id) {
+                    devData.balance = (adminDoc.data().balance ?? 0) + amount;
+                    loadDevInfo();
+                }
+            }
+
+            async function refundFromDev(amount) {
+                // Luôn trừ từ tài khoản admin@gmail.com
+                const q = query(collection(db, "users"), where("email", "==", "admin@gmail.com"));
+                const snap = await getDocs(q);
+                if (snap.empty) return;
+                const adminDoc = snap.docs[0];
+                await updateDoc(doc(db, "users", adminDoc.id), {
+                    balance: (adminDoc.data().balance ?? 0) - amount
+                });
+                if (devDocId === adminDoc.id) {
+                    devData.balance = (adminDoc.data().balance ?? 0) - amount;
+                    loadDevInfo();
+                }
+            }
+
+            document.getElementById("withdraw-form").addEventListener("submit", async function (e) {
+                    e.preventDefault();
+                    const amount = parseInt(document.getElementById("withdraw-amount").value);
+                    if (amount <= 0) {
+                        showMsg("Số tiền phải lớn hơn 0!", "danger", "dev-msg");
+                        return;
+                    }
+                    // Lấy lại thông tin dev mới nhất
+                    let devSnap;
+                    if (userData.username === "Administrator") {
+                        const q = query(collection(db, "users"), where("email", "==", "admin@gmail.com"));
+                        const snap = await getDocs(q);
+                        if (snap.empty) {
+                            showMsg("Không tìm thấy tài khoản nhà phát triển!", "danger", "dev-msg");
+                            return;
+                        }
+                        devSnap = snap.docs[0];
+                    } else {
+                        const q = query(collection(db, "users"), where("username", "==", devData.username));
+                        const snap = await getDocs(q);
+                        if (snap.empty) {
+                            showMsg("Không tìm thấy tài khoản nhà phát triển!", "danger", "dev-msg");
+                            return;
+                        }
+                        devSnap = snap.docs[0];
+                    }
+                    const currentBalance = devSnap.data().balance ?? 0;
+                    if (currentBalance < amount) {
+                        showMsg("Số dư không đủ để rút!", "danger", "dev-msg");
+                        return;
+                    }
+                    // HIỆN LOADING
+                    document.getElementById("loading-overlay").style.display = "flex";
+                    await updateDoc(doc(db, "users", devSnap.id), {
+                        balance: currentBalance - amount
+                    });
+                    if (devSnap.id === devDocId) devData.balance = currentBalance - amount;
+                    await loadDevInfo();
+                    // ẨN LOADING
+                    document.getElementById("loading-overlay").style.display = "none";
+                    showMsg(`Rút thành công ${amount.toLocaleString()} VND!`, "success", "dev-msg");
+                    document.getElementById("withdraw-form").reset();
+                });
+
+        // Tab Nhà phát triển
+        // Khi vào tab dev, luôn lấy số dư mới nhất từ admin@gmail.com
+            async function loadDevInfo() {
+                const q = query(collection(db, "users"), where("email", "==", "admin@gmail.com"));
+                const snap = await getDocs(q);
+                if (snap.empty) return;
+                const adminDoc = snap.docs[0];
+                devDocId = adminDoc.id;
+                devData = adminDoc.data();
+                document.getElementById("dev-username").textContent = devData.username;
+                document.getElementById("dev-balance").textContent = devData.balance?.toLocaleString() ?? 0;
+                document.getElementById("dev-currency").textContent = devData.currency ?? "VND";
+            }
+
+            // Rút tiền (dev)
+            document.getElementById("deposit-form").addEventListener("submit", async function (e) {
+                    e.preventDefault();
+                    let amount = parseInt(document.getElementById("deposit-amount").value);
+                    const currency = document.getElementById("currency-select").value;
+                    if (currency === "USD") {
+                        amount = amount * 26000; // Quy đổi sang VNĐ
+                    }
+                    if (amount > 50000) {
+                        showMsg("Chỉ được nạp tối đa 50,000 VND!", "danger", "msg");
+                        return;
+                    }
+                    if (amount <= 0) {
+                        showMsg("Số tiền phải lớn hơn 0!", "danger", "msg");
+                        return;
+                    }
+                    await updateDoc(doc(db, "users", userDocId), {
+                        balance: (userData.balance ?? 0) + amount,
+                        currency: "VND"
+                    });
+                    userData.balance = (userData.balance ?? 0) + amount;
+                    userData.currency = "VND";
+                    await loadUserInfo();
+                    showMsg(`Nạp thành công ${amount.toLocaleString()} VND!`, "success", "msg");
+                    document.getElementById("deposit-form").reset();
+                });
+
+            // Khi chuyển tab, nếu là dev thì load info
+            document.getElementById('billingTab').addEventListener('shown.bs.tab', function (event) {
+                if (event.target.id === "dev-tab") {
+                    loadDevInfo();
+                }
+            });
+
+
+        // Hiện thông báo
+        function showMsg(msg, type, id) {
+            document.getElementById(id).innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+            setTimeout(() => { document.getElementById(id).innerHTML = ""; }, 2500);
+        }
+
+        renderPackages();
+        document.getElementById("btn-cancel-package").onclick = function () {
+                // Hiện tab hủy gói học
+                document.getElementById("cancel-tab-li").classList.remove("d-none");
+                document.getElementById("cancel-tab").click();
+                const pkg = PACKAGES.find(p => p.key === userData.packageType);
+                if (!pkg) return;
+                document.getElementById("cancel-package").innerHTML = `
+        <div class="package-card selected">
+            <div class="price mb-2">${pkg.price.toLocaleString()} VND</div>
+            <div class="label">${pkg.label}</div>
+            <div class="desc">${pkg.desc}</div>
+            <div class="features mb-2">
+                ${pkg.features.map(f => `<div><i class="${f.icon}"></i> ${f.text}</div>`).join("")}
+            </div>
+        </div>
+    `;
+                // Tiền hoàn trả chia đều: 20k->12k, 30k->18k, 50k->30k
+                let refund = 0;
+                if (pkg.price === 20000) refund = 12000;
+                else if (pkg.price === 30000) refund = 18000;
+                else if (pkg.price === 50000) refund = 30000;
+                document.getElementById("refund-total").textContent = refund.toLocaleString() + " VND";
+                document.getElementById("btn-cancel-change").onclick = function () {
+                    document.getElementById("package-tab").click();
+                };
+                document.getElementById("btn-confirm-cancel").onclick = async function () {
+                // HIỆN LOADING
+                document.getElementById("loading-overlay").style.display = "flex";
+                await updateDoc(doc(db, "users", userDocId), {
+                    balance: (userData.balance ?? 0) + refund,
+                    packageType: ""
+                });
+                await refundFromDev(refund);
+                userData.balance = (userData.balance ?? 0) + refund;
+                userData.packageType = "";
+                localStorage.setItem("packageType", "");
+                await loadUserInfo();
+                // ẨN LOADING
+                document.getElementById("loading-overlay").style.display = "none";
+                renderPackages(); // Reset lại nút chọn
+                showMsg("Đã hủy gói học và hoàn tiền thành công!", "success", "cancel-msg");
+                setTimeout(() => {
+                    document.getElementById("cancel-tab-li").classList.add("d-none");
+                    document.getElementById("package-tab").click();
+                }, 1500);
+            };
+            };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Thêm vào cuối body -->
+    <div id="loading-overlay"
+        style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.85);justify-content:center;align-items:center;flex-direction:column;">
+        <div class="spinner-border text-success" style="width:4rem;height:4rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div style="margin-top:18px;font-size:1.2rem;color:green;">Đang xử lý...</div>
+    </div>
+</body>

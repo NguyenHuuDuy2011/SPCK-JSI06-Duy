@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Ôn tập</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" href="../css/quiz.css">
+</head>
+
+<body>
+    <a href="./review.html"><button class="btn-back"><i class="fa-solid fa-arrow-left"></i> Về phần ôn tập</button></a>
+    <div class="quiz-container">
+        <h2 id="quiz-mode-title" style="display:inline-block;font-size:1.8rem;font-weight:550;margin: 20px 0 0 0;">
+            Chế độ Ôn tập
+            <span id="question-type-label"></span>
+        </h2>
+        <h2 id="question">Câu hỏi sẽ hiển thị ở đây</h2>
+        <div id="answer-buttons" class="btn-container">
+            <button class="btn">Đáp án 1</button>
+            <button class="btn">Đáp án 2</button>
+            <button class="btn">Đáp án 3</button>
+            <button class="btn">Đáp án 4</button>
+        </div>
+        <h3>Tổng điểm: <span id="score">0</span></h3>
+        <div id="question-nav" class="question-nav"></div>
+        <hr>
+        <button class="btn-home" id="retry-quiz-btn"><i class="fa-solid fa-arrow-right"></i> Làm lại bài Quiz</button>
+        <button class="btn-home" id="end-quiz-btn"><i class="fa-solid fa-arrow-right"></i> Kết thúc Quiz</button>
+    </div>
+    <script type="module" src="../js/firebase-quiz.js"></script>
+    <script type="module" src="../js/script_review.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get("type") || "basic";
+        const label = document.getElementById("question-type-label");
+        const title = document.getElementById("quiz-mode-title");
+        let color = "#222"; // Mặc định màu đen
+
+        if (type === "basic") {
+            label.textContent = "- Cơ bản";
+            color = "#43a047";
+        } else if (type === "advanced") {
+            label.textContent = "- Nâng cao";
+            color = "#ff9800";
+        } else if (type === "challenge") {
+            label.textContent = "- Thử thách";
+            color = "#e53935";
+        } else {
+            label.textContent = "";
+        }
+        // Áp dụng màu cho cả tiêu đề và label
+        title.style.color = color;
+        label.style.color = color;
+    </script>
+</body>
+
+</html>

@@ -23,10 +23,10 @@ function handleRegister(event) {
         return;
     }
 
-    if (email === "admin@gmail.com") {
-        alert("Email hệ thống không thể sử dụng để đăng ký!\nStop code: SYSTEM_EMAIL_DOES_NOT_USE_TO_REGISTER");
-        return;
-    }
+    // if (email === "admin@gmail.com") {
+    //     alert("Email hệ thống không thể sử dụng để đăng ký!\nStop code: SYSTEM_EMAIL_DOES_NOT_USE_TO_REGISTER");
+    //     return;
+    // }
 
     if (password !== confirmPassword) {
         alert("Mật khẩu không khớp!");
@@ -42,7 +42,9 @@ function handleRegister(event) {
             addDoc(collection(db, "users"), {
                 uid: user.uid,
                 username: username,
-                email: email
+                email: email,
+                hasPackage: false, // Chưa mua gói học
+                balance: 0         // Số dư tài khoản
             })
                 .then(() => {
                     alert("Đăng ký tài khoản thành công!\nChuyển đến trang Đăng nhập tại đây");

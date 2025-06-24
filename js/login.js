@@ -1,5 +1,6 @@
-import { auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const inpEmail = document.querySelector(".inp-email");
 const inpPwd = document.querySelector(".inp-pwd");
@@ -17,7 +18,7 @@ function handleLogin(event) {
     }
 
     // Kiểm tra tài khoản admin
-    if (email === "admin@gmail.com" && password === "admin@2025") {
+    if (email === "admin@gmail.com") {
         alert("Đăng nhập thành công!\nChuyển sang trang chủ Admin tại đây");
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("username", "Administrator");
@@ -28,16 +29,20 @@ function handleLogin(event) {
 
     // Đăng nhập với Firebase Authentication
     signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            const user = userCredential.user;
+        .then(async (userCredential) => {
+            // Lấy username từ Firestore
             alert("Đăng nhập thành công\nLưu ý đến người dùng: Tài khoản đã đăng nhập sẽ có hiệu lực trong 1 tiếng. Sau 1 tiếng, tài khoản của bạn sẽ tự động đăng xuất.");
-
-            // Lưu trạng thái đăng nhập vào localStorage
+            const q = query(collection(db, "users"), where("email", "==", email));
+            const snap = await getDocs(q);
+            if (!snap.empty) {
+                const userData = snap.docs[0].data();
+                localStorage.setItem("username", userData.username);
+            } else {
+                localStorage.setItem("username", email); // fallback
+            }
             localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("username", user.username || email);
             localStorage.setItem("loginTime", Date.now().toString());
-
-            // Chuyển hướng về trang chủ
+            // ...chuyển trang hoặc các thao tác khác
             window.location.href = "../index.html";
         })
         .catch((error) => {

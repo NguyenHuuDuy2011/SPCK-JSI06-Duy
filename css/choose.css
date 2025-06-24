@@ -121,3 +121,16 @@ th {
     background-color: #fcfaf6;
     scale: 105%;
 }
+
+input[type="radio"] {
+    width: 22px;
+    height: 22px;
+    accent-color: green;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+label {
+    font-size: 1.15rem;
+    cursor: pointer;
+}

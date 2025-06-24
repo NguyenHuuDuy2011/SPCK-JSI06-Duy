@@ -49,6 +49,12 @@ window.onload = function () {
                     <i class="fa-solid fa-circle-info"></i> Thông tin tài khoản
                 </a>
             </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item" href="../html/billing.html" style="color: yellow;">
+                    <i class="fa-solid fa-wallet"></i> Đăng ký gói học / Nạp tiền
+                </a>
+            </li>
         </ul>
     </div>
     `;
