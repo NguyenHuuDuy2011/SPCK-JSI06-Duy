@@ -154,9 +154,10 @@
 </head>
 
 <body>
-    <a href="../index.html" class="btn-home mt-3">Quay lại trang chủ</a>
-    <div class="container mt-5 mb-5">
-        <h2 class="mb-4">Quản lý tài khoản</h2>
+    <button onclick="back()" class="btn-home mt-3">Quay lại trang chủ</button>
+    <!-- <a href="" onclick="back()" class="btn-home mt-3">Quay lại trang chủ</a> -->
+    <div class="container mt-3 mb-5">
+        <h2 class="mb-2">Quản lý tài khoản</h2>
         <div class="user-info-box mb-4">
             <p><b>Tên tài khoản:</b> <span id="username"></span></p>
             <p><b>Số dư:</b> <span id="balance"></span> <span id="currency"></span></p>
@@ -241,7 +242,7 @@
                             <div class="card p-3 shadow-sm">
                                 <div class="d-flex justify-content-between">
                                     <span><b>Tổng số tiền:</b></span>
-                                    <span id="final-total" style="font-size:1.3rem;color:#1976d2;font-weight:600"></span>
+                                    <span id="final-total" style="font-size:1.3rem;color:#0e9637;font-weight:600"></span>
                                 </div>
                                 <div class="text-muted" style="font-size:0.95rem">
                                     Tổng giá cho tất cả các hành khách (đã bao gồm thuế, phí và chiết khấu).
@@ -249,9 +250,9 @@
                                 <button class="btn btn-success w-100 mt-3" id="btn-pay">Thanh toán</button>
                             </div>
                             <div class="mt-3" style="font-size:0.95rem">
-                                <a href="#">Chính sách hành lý</a> |
-                                <a href="#">Xem lại các điều kiện</a> |
-                                <a href="#">Chính sách hàng hóa nguy hiểm</a>
+                                <a href="#" style="color: #0e9637; text-decoration: none;">Chính sách giá gói</a> |
+                                <a href="#" style="color: #0e9637; text-decoration: none">Xem lại các điều kiện</a> |
+                                <a href="#" style="color: #0e9637; text-decoration: none">Chính sách hỗ trợ ưu tiên</a>
                             </div>
                         </div>
                     </div>          </div>
@@ -287,7 +288,7 @@
                             <div class="card p-3 shadow-sm">
                                 <div class="d-flex justify-content-between">
                                     <span><b>Tổng số tiền được hoàn trả:</b></span>
-                                    <span id="refund-total" style="font-size:1.3rem;color:#1976d2;font-weight:600"></span>
+                                    <span id="refund-total" style="font-size:1.3rem;color:#0e9637;font-weight:600"></span>
                                 </div>
                                 <div class="text-muted" style="font-size:0.95rem">
                                     Số tiền hoàn trả là phần còn lại sau khi trừ phí dịch vụ, thuế, chiết khấu theo quy định hiện
@@ -313,6 +314,11 @@
                 </div>      </div>
         </div>
     </div>
+    <script>
+        function back() {
+            window.history.back();
+        }
+    </script>
     <script type="module">
         import { db } from "../js/firebase.js";
         import {
@@ -330,7 +336,7 @@
                     { icon: "fa-solid fa-xmark text-danger", text: "Được quyền ưu tiên hỗ trợ" },
                     { icon: "fa-solid fa-xmark text-danger", text: "Học cùng thầy, cô giáo giàu kinh nghiệm" },
                     { icon: "", text: "----" },
-                    { icon: "fa-solid fa-circle-info", text: "Phí hoàn tiền theo quy định là 12.000 đồng" }
+                    { icon: "fa-solid fa-circle-info", text: "Phí hoàn tiền theo quy định là 14.000 đồng" }
                 ]
             },
             {
@@ -343,7 +349,7 @@
                     { icon: "fa-solid fa-check text-success", text: "Được quyền ưu tiên hỗ trợ cơ bản" },
                     { icon: "fa-solid fa-xmark text-danger", text: "Học cùng thầy, cô giáo giàu kinh nghiệm" },
                     { icon: "", text: "----" },
-                    { icon: "fa-solid fa-circle-info", text: "Phí hoàn tiền theo quy định là 18.000 đồng" }
+                    { icon: "fa-solid fa-circle-info", text: "Phí hoàn tiền theo quy định là 21.000 đồng" }
                 ]
             },
             {
@@ -356,7 +362,7 @@
                     { icon: "fa-solid fa-check text-success", text: "Được quyền ưu tiên hỗ trợ đặc biệt" },
                     { icon: "fa-solid fa-check text-success", text: "Học cùng thầy, cô giáo giàu kinh nghiệm" },
                     { icon: "", text: "----" },
-                    { icon: "fa-solid fa-circle-info", text: "Phí hoàn tiền theo quy định là 30.000 đồng" }
+                    { icon: "fa-solid fa-circle-info", text: "Phí hoàn tiền theo quy định là 35.000 đồng" }
                 ]
             }
             // {
@@ -579,22 +585,27 @@
         }
 
         // Khi bấm xác nhận & tiếp tục
-        document.getElementById("btn-confirm-continue").onclick = function () {
-            // Chỉ cho phép mua gói cao hơn gói hiện tại
-            const currentIdx = PACKAGES.findIndex(p => p.key === (userData.packageType || ""));
-            const selectedIdx = PACKAGES.findIndex(p => p.key === selectedPackage.key);
-            if (userData.packageType && selectedIdx <= currentIdx) {
-                showMsg("Bạn chỉ có thể mua gói cao hơn gói hiện tại!", "danger", "package-msg");
-                return;
-            }
-            // Nếu không phải gói cao nhất thì hiện popup nâng hạng
-            if (selectedPackage.key !== "vip") {
-                upgradeTarget = PACKAGES[PACKAGES.findIndex(p => p.key === selectedPackage.key) + 1];
-                showUpgradeModal();
-            } else {
-                showFinalSection(selectedPackage);
-            }
-        };
+            document.getElementById("btn-confirm-continue").onclick = function () {
+                // Chỉ cho phép mua gói cao hơn gói hiện tại
+                const currentIdx = PACKAGES.findIndex(p => p.key === (userData.packageType || ""));
+                const selectedIdx = PACKAGES.findIndex(p => p.key === selectedPackage.key);
+                if (userData.packageType && selectedIdx <= currentIdx) {
+                    showMsg("Bạn chỉ có thể mua gói cao hơn gói hiện tại!", "danger", "package-msg");
+                    return;
+                }
+                // Nếu không phải gói cao nhất thì hiện popup nâng hạng
+                if (selectedPackage.key !== "vip") {
+                    upgradeTarget = PACKAGES[PACKAGES.findIndex(p => p.key === selectedPackage.key) + 1];
+                    showUpgradeModal();
+                } else {
+                    // Thêm hiệu ứng loading cho hạng Thương gia
+                    document.getElementById("loading-overlay").style.display = "flex";
+                    setTimeout(() => {
+                        showFinalSection(selectedPackage);
+                        document.getElementById("loading-overlay").style.display = "none";
+                    }, 700); // loading 0.7s cho mượt
+                }
+            };
 
         // Hiện popup nâng hạng
         function showUpgradeModal() {
@@ -855,11 +866,11 @@
             </div>
         </div>
     `;
-                // Tiền hoàn trả chia đều: 20k->12k, 30k->18k, 50k->30k
+                // Tiền hoàn trả chia đều:
                 let refund = 0;
-                if (pkg.price === 20000) refund = 12000;
-                else if (pkg.price === 30000) refund = 18000;
-                else if (pkg.price === 50000) refund = 30000;
+                if (pkg.price === 20000) refund = 14000;
+                else if (pkg.price === 30000) refund = 21000;
+                else if (pkg.price === 50000) refund = 35000;
                 document.getElementById("refund-total").textContent = refund.toLocaleString() + " VND";
                 document.getElementById("btn-cancel-change").onclick = function () {
                     document.getElementById("package-tab").click();
