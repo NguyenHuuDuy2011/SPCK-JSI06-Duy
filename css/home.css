@@ -398,34 +398,82 @@ a {
 /* } */
 /* } */
 
+/* Banner phiên bản 30/4*/
+/*
 .banner {
     background-color: #ffcc00;
     /* Màu nền vàng */
-    color: #000;
+    /*color: #000;
     /* Màu chữ đen */
-    text-align: center;
+    /*text-align: center;
     /* Căn giữa nội dung */
-    padding: 10px 0;
+    /*padding: 10px 0;
     /* Khoảng cách trên dưới */
-    font-size: 1.2rem;
+    /*font-size: 1.2rem;
     /* Kích thước chữ */
-    font-weight: bold;
+    /*font-weight: bold;
     /* Chữ đậm */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     /* Thêm bóng đổ */
-    display: flex;
+    /*display: flex;
     /* Sử dụng flexbox để căn chỉnh */
-    justify-content: center;
+    /*justify-content: center;
     /* Căn giữa nội dung theo chiều ngang */
-    align-items: center;
+    /*align-items: center;
     /* Căn giữa nội dung theo chiều dọc */
-    gap: 10px;
+    /*gap: 10px;
     /* Khoảng cách giữa hình ảnh và văn bản */
+/*}*/
+
+.banner {
+    /* Định nghĩa gradient để tạo hiệu ứng như Ảnh 1:
+       - Màu xanh lá cây (#43a047) từ 0% đến 15% (tạo thành một "khối" xanh sắc nét ở bên trái).
+       - Từ 15% đến 40% của gradient sẽ chuyển tiếp từ xanh lá cây sang màu vàng (#ffcc00).
+       - Từ 40% đến 100% của gradient sẽ tiếp tục chuyển tiếp từ vàng sang xanh lá cây (#43a047).
+       Điều này tạo ra phần xanh lá cây cố định ở đầu, sau đó là sự pha trộn vàng-xanh mà bạn muốn.
+    */
+    background: linear-gradient(90deg, #43a047 0%, #43a047 15%, #ffcc00 40%, #43a047 100%);
+
+    color: #000;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    /* border-radius: 0px 0px 20px 20px; */
+
+    /* Làm cho gradient rộng hơn để có thể dịch chuyển và tạo hiệu ứng */
+    background-size: 150% 100%;
+    /* Gradient rộng gấp 1.5 lần banner */
+
+    /* Vị trí ban đầu của gradient:
+       0% 0% sẽ hiển thị phần đầu của gradient (từ 0% đến khoảng 66.6% của gradient vì background-size là 150%).
+       Phần này sẽ bao gồm khối xanh sắc nét, phần chuyển tiếp xanh-vàng, và một phần vàng-xanh.
+       Đây sẽ là trạng thái "vàng trộn lẫn" như bạn mong muốn trong Ảnh 1. */
+    background-position: 0% 0%;
+
+    /* Áp dụng transition cho background-position để chuyển màu mượt mà, và cho box-shadow */
+    transition: background-position 0.5s ease, box-shadow 0.5s ease;
+}
+
+.banner:hover {
+    /* Vị trí khi hover: Dịch chuyển gradient sang trái.
+       Khi dịch chuyển gradient sang trái (giá trị âm), phần xanh lá cây ở đầu gradient sẽ "trượt" vào nhiều hơn,
+       làm cho phần màu vàng trở nên ít nổi bật hơn (ít vàng hơn, như bạn muốn 30% chẳng hạn). */
+    background-position: -30% 0%;
+    /* Dịch chuyển gradient sang trái 30% so với kích thước TỔNG của nó */
+
+    /* Hiệu ứng bóng đổ vẫn giữ nguyên */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
 
 .banner img {
     margin-left: 20px;
-    width: 50px;
+    width: 40px;
     /* Kích thước hình ảnh */
     height: auto;
     /* Tự động điều chỉnh chiều cao */

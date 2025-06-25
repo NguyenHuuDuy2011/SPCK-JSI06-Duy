@@ -23,6 +23,7 @@
             position: relative;
             border: 2px solid transparent;
             transition: border 0.2s, box-shadow 0.2s;
+            transition: 0.1s;
         }
 
         .package-card:hover,
@@ -64,12 +65,19 @@
             width: 100%;
         }
 
+        .package-card.compact {
+            min-height: unset !important;
+            display: block !important;
+        }
+
         .confirm-section,
         .final-section {
             background: #fff;
             border-radius: 16px;
             box-shadow: 0 4px 24px #0001;
-            padding: 24px 18px;
+            padding: 24px 18px; /* Giữ padding trên và hai bên */
+            /* Thêm padding-bottom cụ thể nếu muốn ít hơn */
+            padding-bottom: 12px; /* Ví dụ: giảm xuống 12px hoặc ít hơn */
             margin-top: 24px;
             text-align: center;
         }
@@ -117,6 +125,7 @@
             color: #fff !important;
             box-shadow: 0 4px 16px #1976d255;
             text-decoration: none;
+            cursor: pointer;
         }
 
         #cancel .package-card.selected {
@@ -150,6 +159,42 @@
             color: #1976d2;
             margin-right: 6px;
         }
+
+        /* Thêm vào <style> hoặc billing.css */
+        .package-card {
+            min-height: 480px; /* hoặc giá trị phù hợp với nội dung dài nhất */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .package-card .btn-choose {
+            margin-top: auto;
+        }
+
+        #btn-cancel-package {
+            margin: 0px 10px 10px 0px;
+            width: auto;
+            padding: 8px 22px;
+            font-weight: 600;
+        }
+        #btn-review-now {
+            background: linear-gradient(90deg, #1976d2 60%, #43a047 100%);
+            color: #fff !important;
+            margin: 0px 10px 10px 0px;
+            padding: 8px 22px;
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 2px 8px #1976d233;
+            transition: background 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+        #btn-review-now:hover {
+            background: linear-gradient(90deg, #43a047 60%, #1976d2 100%);
+            color: #fff !important;
+            box-shadow: 0 4px 16px #1976d255;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -162,8 +207,11 @@
             <p><b>Tên tài khoản:</b> <span id="username"></span></p>
             <p><b>Số dư:</b> <span id="balance"></span> <span id="currency"></span></p>
             <p><b>Gói học:</b> <span id="package-status"></span></p>
-            <button id="btn-cancel-package" class="btn btn-outline-danger btn-sm mt-2 d-none">
-                Bỏ gói đã đăng ký
+            <button id="btn-review-now" class="btn btn-outline-danger d-none" onclick="window.location.href='../html/review.html'">
+                Vào trang ôn tập ngay!
+                </button>
+            <button id="btn-cancel-package" class="btn btn-outline-danger d-none">
+                Hủy gói đã đăng ký
             </button>
         </div>
         <!-- Tabs -->
@@ -208,7 +256,7 @@
             <!-- Tab Mua gói học -->
             <div class="tab-pane fade show active" id="package" role="tabpanel" aria-labelledby="package-tab">
                 <h4 class="mb-4 text-center">Chọn gói học phù hợp</h4>
-                <div id="package-list" class="d-flex justify-content-center flex-wrap mb-4"></div>
+                <div id="package-list" class="row justify-content-center flex-wrap mb-4"></div>
                 <div id="confirm-section" class="confirm-section d-none">
                     <h5>Bạn đã chọn <span id="confirm-package-label"></span></h5>
                     <p>Giá: <span id="confirm-package-price"></span></p>
@@ -327,12 +375,27 @@
 
         const PACKAGES = [
             {
-                key: "basic",
-                label: "Hạng Phổ thông",
-                price: 20000,
-                desc: "Hãy ôn tập thật kỹ trước khi làm bài nhé!",
+                key: "trial",
+                label: "Phổ thông Tiết kiệm",
+                price: 0,
+                icon: "fa-solid fa-users",
+                desc: "Gói thử nghiệm miễn phí",
                 features: [
-                    { icon: "fa-solid fa-check text-success", text: "Câu hỏi ôn tập cơ bản" },
+                    { icon: "fa-solid fa-check text-success", text: "3 câu hỏi ôn tập cơ bản miễn phí" },
+                    { icon: "fa-solid fa-xmark text-danger", text: "Được quyền ưu tiên hỗ trợ" },
+                    { icon: "fa-solid fa-xmark text-danger", text: "Học cùng thầy, cô giáo giàu kinh nghiệm" },
+                    { icon: "", text: "----" },
+                    { icon: "fa-solid fa-clock text-warning", text: "Mỗi tài khoản được dùng thử 3 lần, mỗi lần hiệu lực 24h" }
+                ]
+            },
+            {
+                key: "basic",
+                label: "Phổ thông",
+                price: 20000,
+                icon: "fa-solid fa-gem",
+                desc: "Gói ôn tập chính thức.",
+                features: [
+                    { icon: "fa-solid fa-check text-success", text: "Tất cả câu hỏi ôn tập cơ bản" },
                     { icon: "fa-solid fa-xmark text-danger", text: "Được quyền ưu tiên hỗ trợ" },
                     { icon: "fa-solid fa-xmark text-danger", text: "Học cùng thầy, cô giáo giàu kinh nghiệm" },
                     { icon: "", text: "----" },
@@ -341,9 +404,10 @@
             },
             {
                 key: "premium",
-                label: "Hạng Phổ thông Đặc biệt",
+                label: "Phổ thông Đặc biệt",
                 price: 30000,
-                desc: "Hàng trăm câu hỏi được chọn lọc kỹ lưỡng.",
+                icon: "fa-solid fa-gem",
+                desc: "Gói ôn tập chính thức.",
                 features: [
                     { icon: "fa-solid fa-check text-success", text: "Câu hỏi ôn tập cơ bản + nâng cao" },
                     { icon: "fa-solid fa-check text-success", text: "Được quyền ưu tiên hỗ trợ cơ bản" },
@@ -354,9 +418,10 @@
             },
             {
                 key: "vip",
-                label: "Hạng Thương gia",
+                label: "Thương gia",
                 price: 50000,
-                desc: "Thử thách bản thân với các câu hỏi đa dạng.",
+                icon: "fa-solid fa-unlock",
+                desc: "Gói ôn tập đầy đủ chính thức.",
                 features: [
                     { icon: "fa-solid fa-check text-success", text: "Câu hỏi ôn tập cơ bản + nâng cao + thử thách" },
                     { icon: "fa-solid fa-check text-success", text: "Được quyền ưu tiên hỗ trợ đặc biệt" },
@@ -371,10 +436,11 @@
             //     price: 150000,
             //     desc: "Thử thách bản thân với các câu hỏi đa dạng.",
             //     features: [
-            //         { icon: "fa-solid fa-check text-success", text: "Tất cả câu hỏi ôn tập " },
-            //         { icon: "fa-solid fa-check text-success", text: "Có câu hỏi ôn tập nâng cao" },
-            //         { icon: "fa-solid fa-check text-success", text: "Có câu hỏi ôn tập thử thách" },
-            //         { icon: "fa-solid fa-check text-success", text: "Học cùng giáo viên có kinh nghiệm giảng dạy" }
+            //         { icon: "fa-solid fa-check text-success", text: "Câu hỏi ôn tập cơ bản + nâng cao + thử thách" },
+            //         { icon: "fa-solid fa-check text-success", text: "Được quyền ưu tiên hỗ trợ đặc biệt" },
+            //         { icon: "fa-solid fa-check text-success", text: "Học cùng thầy, cô giáo giàu kinh nghiệm" },
+            //         { icon: "", text: "----" },
+            //         { icon: "fa-solid fa-circle-info", text: "Phí hoàn tiền theo quy định là 105.000 đồng" }
             //     ]
             // }
         ];
@@ -424,6 +490,7 @@
                     ? PACKAGES.find(p => p.key === userData.packageType)?.label || "Đã đăng ký"
                     : "Chưa đăng ký";
                 document.getElementById("btn-cancel-package").classList.toggle("d-none", !userData.packageType);
+                document.getElementById("btn-review-now").classList.toggle("d-none", !userData.packageType);
 
                 // ...phần còn lại giữ nguyên...
                 if (userData.username === "Administrator" || userData.role === "dev") {
@@ -460,6 +527,18 @@
                     const devTabLi = document.getElementById("dev-tab-li");
                     devTabLi.parentElement.insertBefore(depositTabLi, devTabLi.nextSibling);
                     loadDevInfo();
+                }
+
+                // Sau khi userData = snap.docs[0].data();
+                if (userData.packageType === "trial" && userData.trialActivatedAt) {
+                    const now = Date.now();
+                    if (now - userData.trialActivatedAt > 24 * 60 * 60 * 1000) {
+                        // Hết hạn trial
+                        await updateDoc(doc(db, "users", userDocId), { packageType: "" });
+                        userData.packageType = "";
+                        await loadUserInfo();
+                        showMsg("Gói dùng thử đã hết hạn!", "warning", "msg");
+                    }
                 }
             }
         await loadUserInfo();
@@ -538,41 +617,72 @@
         function renderPackages(selectedKey = null) {
                 const list = document.getElementById("package-list");
                 list.innerHTML = "";
+
+                const trialCount = userData.trialCount || 0;
+                const trialUsedUp = trialCount >= 3;
                 const currentIdx = PACKAGES.findIndex(p => p.key === (userData.packageType || ""));
-                PACKAGES.forEach((pkg, idx) => {
+
+                PACKAGES.forEach((pkg, i) => {
                     const card = document.createElement("div");
-                    card.className = "package-card" + (selectedKey === pkg.key ? " selected" : "");
+                    card.className = "col-12 col-md-6 col-lg-3 mb-4 d-flex justify-content-center";
                     let btnHtml = "";
-                    if (userData.packageType) {
-                        if (idx < currentIdx) {
-                            // Gói thấp hơn, disable
-                            btnHtml = `<button class="btn btn-outline-dark btn-choose text-dark" data-key="${pkg.key}" disabled>Đã sử dụng gói cao hơn</button>`;
-                        } else if (idx === currentIdx) {
-                            btnHtml = `<button class="btn btn-success btn-choose" data-key="${pkg.key}" disabled>Đang sử dụng</button>`;
+
+                    if (pkg.key === "trial") {
+                        if (userData.packageType && currentIdx > 0) {
+                            // Đang dùng gói cao hơn trial
+                            btnHtml = `<button class="btn btn-outline-dark btn-choose text-dark" data-key="${pkg.key}" disabled>Đang sử dụng gói cao hơn</button>`;
                         } else {
-                            // Gói cao hơn, cho nâng cấp
-                            btnHtml = `<button class="btn btn-outline-warning btn-choose text-dark" data-key="${pkg.key}">Nâng cấp</button>`;
+                            btnHtml = `<button class="btn btn-outline-primary btn-choose" data-key="trial" style="font-weight:500;font-size:1.05rem;" ${trialUsedUp ? "disabled" : ""}>
+                    ${trialUsedUp ? "Đã hết lượt dùng thử" : `Dùng thử miễn phí<br>(${3 - trialCount} lần còn lại)`}
+                </button>`;
                         }
                     } else {
-                        btnHtml = `<button class="btn btn-outline-success btn-choose" data-key="${pkg.key}">Chọn</button>`;
+                        if (userData.packageType) {
+                            if (i < currentIdx) {
+                                btnHtml = `<button class="btn btn-outline-dark btn-choose text-dark" data-key="${pkg.key}" disabled>Đang sử dụng gói cao hơn</button>`;
+                                
+                            } else if (i === currentIdx) {
+                                btnHtml = `<button class="btn btn-success btn-choose" data-key="${pkg.key}" disabled>Đang sử dụng</button>`;
+                            } else {
+                                btnHtml = `<button class="btn btn-outline-warning btn-choose text-dark" data-key="${pkg.key}">Nâng cấp</button>`;
+                            }
+                        } else {
+                            btnHtml = `<button class="btn btn-outline-success btn-choose" data-key="${pkg.key}">Chọn</button>`;
+                        }
+                    }
+                    let badgeHtml = "";
+                    if (pkg.key === "trial") {
+                        badgeHtml = `<span class="badge bg-success" style="position:absolute;top:0px;right:0px;font-size:1rem;">Miễn phí</span>`;
+                    } else if (pkg.key === "vip") {
+                        badgeHtml = `<span class="badge bg-warning text-dark" style="position:absolute;top:0px;right:0px;font-size:1rem;"><i class="fa-regular fa-gem"></i> Khuyên dùng</span>`;
                     }
                     card.innerHTML = `
-            <div class="price mb-2">${pkg.price.toLocaleString()} VND</div>
-            <div class="label">${pkg.label}</div>
-            <div class="desc">${pkg.desc}</div>
-            <div class="features mb-2">
-                ${pkg.features.map(f => `<div><i class="${f.icon}"></i> ${f.text}</div>`).join("")}
+            <div class="package-card" style="width:100%;max-width:340px;position:relative;">
+                ${badgeHtml}
+                <div class="price mb-2">${pkg.price === 0 ? "0 VND" : pkg.price.toLocaleString() + " VND"}</div>
+                <div class="label">${pkg.label}</div>
+                <div class="desc">
+                    ${pkg.icon ? `<i class="${pkg.icon}" style="margin-right:1px"></i>` : ""}
+                    ${pkg.desc}
+                </div>
+                <div class="features mb-2">
+                    ${pkg.features.map(f => `<div><i class="${f.icon}"></i> ${f.text}</div>`).join("")}
+                </div>
+                ${btnHtml}
             </div>
-            ${btnHtml}
         `;
                     list.appendChild(card);
                 });
-                // Gán sự kiện chọn
+
+                // Gán sự kiện chọn cho tất cả nút
                 document.querySelectorAll(".btn-choose:not([disabled])").forEach(btn => {
                     btn.onclick = () => {
                         selectedPackage = PACKAGES.find(p => p.key === btn.dataset.key);
                         renderPackages(selectedPackage.key);
                         showConfirmSection();
+                        setTimeout(() => {
+                            document.getElementById("confirm-section").scrollIntoView({ behavior: "smooth", block: "center" });
+                        }, 100);
                     };
                 });
             }
@@ -659,16 +769,20 @@
                     isUpgrade = true;
                 }
 
-                document.getElementById("final-package").innerHTML = `
-        <div class="package-card selected">
-            <div class="price mb-2">${pkg.price.toLocaleString()} VND</div>
-            <div class="label">${pkg.label}</div>
-            <div class="desc">${pkg.desc}</div>
-            <div class="features mb-2">
-                ${pkg.features.map(f => `<div><i class="${f.icon}"></i> ${f.text}</div>`).join("")}
-            </div>
+                // Khi render ở phần xác nhận/hủy:
+            document.getElementById("final-package").innerHTML = `
+    <div class="package-card compact selected">
+        <div class="price mb-2">${pkg.price.toLocaleString()} VND</div>
+        <div class="label">${pkg.label}</div>
+        <div class="desc">
+            ${pkg.icon ? `<i class="${pkg.icon}" style="margin-right:1px"></i>` : ""}
+            ${pkg.desc}
         </div>
-    `;
+        <div class="features mb-2">
+            ${pkg.features.map(f => `<div><i class="${f.icon}"></i> ${f.text}</div>`).join("")}
+        </div>
+    </div>
+`;
                 document.getElementById("final-total").textContent = upgradeAmount.toLocaleString() + " VND";
                 document.querySelector("#final-section .card .d-flex span:first-child").innerHTML = isUpgrade
                     ? "<b>Tổng tiền nâng cấp:</b>"
@@ -691,12 +805,32 @@
 
         // Thanh toán (trừ tiền, lưu gói, chuyển tiền cho dev)
         document.getElementById("btn-pay").onclick = async function () {
-                const finalSection = document.getElementById("final-section");
-                const upgradeAmount = Number(finalSection.dataset.upgradeAmount) || selectedPackage.price;
-                if ((userData.balance ?? 0) < upgradeAmount) {
-                    showMsg("Số dư không đủ để mua/nâng cấp gói này!", "danger", "package-msg");
-                    return;
-                }
+            const finalSection = document.getElementById("final-section");
+            const upgradeAmount = Number(finalSection.dataset.upgradeAmount) || selectedPackage.price;
+            if ((userData.balance ?? 0) < upgradeAmount && selectedPackage.key !== "trial") {
+                showMsg("Số dư không đủ để mua/nâng cấp gói này!", "danger", "package-msg");
+                return;
+            }
+
+            if (selectedPackage.key === "trial") {
+                // Tăng số lần dùng thử
+                const trialCount = (userData.trialCount || 0) + 1;
+                await updateDoc(doc(db, "users", userDocId), {
+                    packageType: "trial",
+                    trialActivatedAt: Date.now(),
+                    trialCount: trialCount
+                });
+                userData.packageType = "trial";
+                userData.trialCount = trialCount;
+                localStorage.setItem("packageType", "trial");
+                await loadUserInfo();
+                document.getElementById("loading-overlay").style.display = "none";
+                showMsg("Bạn đã kích hoạt gói dùng thử miễn phí!", "success", "package-msg");
+                document.getElementById("final-section").classList.add("d-none");
+                document.getElementById("package-list").classList.remove("d-none");
+                renderPackages();
+                return;
+            }
                 // HIỆN LOADING
                 document.getElementById("loading-overlay").style.display = "flex";
                 // Trừ tiền user
@@ -857,15 +991,18 @@
                 const pkg = PACKAGES.find(p => p.key === userData.packageType);
                 if (!pkg) return;
                 document.getElementById("cancel-package").innerHTML = `
-        <div class="package-card selected">
-            <div class="price mb-2">${pkg.price.toLocaleString()} VND</div>
-            <div class="label">${pkg.label}</div>
-            <div class="desc">${pkg.desc}</div>
-            <div class="features mb-2">
-                ${pkg.features.map(f => `<div><i class="${f.icon}"></i> ${f.text}</div>`).join("")}
-            </div>
+    <div class="package-card compact selected">
+        <div class="price mb-2">${pkg.price.toLocaleString()} VND</div>
+        <div class="label">${pkg.label}</div>
+        <div class="desc">
+            ${pkg.icon ? `<i class="${pkg.icon}" style="margin-right:1px"></i>` : ""}
+            ${pkg.desc}
         </div>
-    `;
+        <div class="features mb-2">
+            ${pkg.features.map(f => `<div><i class="${f.icon}"></i> ${f.text}</div>`).join("")}
+        </div>
+    </div>
+`;
                 // Tiền hoàn trả chia đều:
                 let refund = 0;
                 if (pkg.price === 20000) refund = 14000;
@@ -878,13 +1015,23 @@
                 document.getElementById("btn-confirm-cancel").onclick = async function () {
                 // HIỆN LOADING
                 document.getElementById("loading-overlay").style.display = "flex";
-                await updateDoc(doc(db, "users", userDocId), {
-                    balance: (userData.balance ?? 0) + refund,
-                    packageType: ""
-                });
-                await refundFromDev(refund);
-                userData.balance = (userData.balance ?? 0) + refund;
+                if (pkg.price === 0) {
+                        await updateDoc(doc(db, "users", userDocId), {
+                            packageType: "",
+                            trialActivatedAt: null
+                        });
+                    } else {
+                        // Cộng tiền hoàn trả vào tài khoản user trên Firestore
+                        await updateDoc(doc(db, "users", userDocId), {
+                            packageType: "",
+                            balance: (userData.balance ?? 0) + refund,
+                            trialActivatedAt: null
+                        });
+                        await refundFromDev(refund);
+                        userData.balance = (userData.balance ?? 0) + refund;
+                    }
                 userData.packageType = "";
+                userData.trialActivatedAt = null;
                 localStorage.setItem("packageType", "");
                 await loadUserInfo();
                 // ẨN LOADING

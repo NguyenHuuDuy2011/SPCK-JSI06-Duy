@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <a href="../index.html"><button class="btn-back"><i class="fa-solid fa-arrow-left"></i> Về trang chủ</button></a>
+    <button class="btn-back" onclick="back()"><i class="fa-solid fa-arrow-left"></i> Về trang chủ</button>
     <div class="quiz-container">
         <h1>Quiz ôn tập</h1>
         <div id="grade-selection" class="grade-container">
@@ -54,6 +54,9 @@
         </div>
     </div>
     <script>
+        function back() {
+            window.history.back();
+        }
         function soon() {
             alert("Chức năng này hiện chưa khả dụng. Vui lòng quay lại sau!");
         }
@@ -124,34 +127,42 @@
         }
 
         function showQuestionTypeSection() {
-            const section = document.getElementById("question-type-section");
-            section.style.display = "block";
-            // Mặc định disable hết
-            document.getElementById("radio-basic").disabled = true;
-            document.getElementById("radio-advanced").disabled = true;
-            document.getElementById("radio-challenge").disabled = true;
+                const section = document.getElementById("question-type-section");
+                section.style.display = "block";
+                // Mặc định disable hết
+                document.getElementById("radio-basic").disabled = true;
+                document.getElementById("radio-advanced").disabled = true;
+                document.getElementById("radio-challenge").disabled = true;
 
-            // Lấy gói học của user từ localStorage (giả sử đã lưu khi đăng nhập)
-            let packageType = localStorage.getItem("packageType") || "";
-            // Quyền theo gói
-            if (packageType === "basic") {
-                document.getElementById("radio-basic").disabled = false;
-                document.getElementById("radio-basic").checked = true;
-            } else if (packageType === "premium") {
-                document.getElementById("radio-basic").disabled = false;
-                document.getElementById("radio-advanced").disabled = false;
-                document.getElementById("radio-basic").checked = true;
-            } else if (packageType === "vip") {
-                document.getElementById("radio-basic").disabled = false;
-                document.getElementById("radio-advanced").disabled = false;
-                document.getElementById("radio-challenge").disabled = false;
-                document.getElementById("radio-basic").checked = true;
-            } else {
-                // Chưa mua gói nào
-                document.getElementById("radio-basic").disabled = false;
-                document.getElementById("radio-basic").checked = true;
+                // Lấy gói học của user từ localStorage (giả sử đã lưu khi đăng nhập)
+                let packageType = localStorage.getItem("packageType") || "";
+                // Quyền theo gói
+                if (packageType === "trial") {
+                    // Chỉ cho phép chọn loại "Cơ bản", disable các radio khác
+                    document.getElementById("radio-basic").disabled = false;
+                    document.getElementById("radio-basic").checked = true;
+                    document.getElementById("radio-advanced").disabled = true;
+                    document.getElementById("radio-challenge").disabled = true;
+                    // Khi vào quiz_review.html, chỉ load 3 câu hỏi cơ bản
+                }
+                if (packageType === "basic") {
+                    document.getElementById("radio-basic").disabled = false;
+                    document.getElementById("radio-basic").checked = true;
+                } else if (packageType === "premium") {
+                    document.getElementById("radio-basic").disabled = false;
+                    document.getElementById("radio-advanced").disabled = false;
+                    document.getElementById("radio-basic").checked = true;
+                } else if (packageType === "vip") {
+                    document.getElementById("radio-basic").disabled = false;
+                    document.getElementById("radio-advanced").disabled = false;
+                    document.getElementById("radio-challenge").disabled = false;
+                    document.getElementById("radio-basic").checked = true;
+                } else {
+                    // Chưa mua gói nào
+                    document.getElementById("radio-basic").disabled = false;
+                    document.getElementById("radio-basic").checked = true;
+                }
             }
-        }
 
         function goBackToGrade() {
             document.getElementById("grade-selection").style.display = "block";

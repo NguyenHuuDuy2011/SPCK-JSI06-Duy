@@ -53,6 +53,7 @@ function handleLogin(event) {
         })
         .catch((error) => {
             console.error("Lỗi đăng nhập:", error);
+            document.getElementById("loading-overlay").style.display = "none";
             // if (error.code === "auth/user-not-found") {
             //     alert("Tài khoản không tồn tại. Vui lòng kiểm tra lại email.");
             // } else if (error.code === "auth/wrong-password") {
