@@ -1,4 +1,7 @@
 /* Thiết lập chung cho toàn bộ trang */
+html {
+    scroll-behavior: smooth;
+}
 body {
     font-family: 'Noto Sans', sans-serif;
     /* Phông chữ chính cho nội dung */
@@ -241,4 +244,159 @@ footer ul li a:hover {
     box-shadow: 0 4px 16px #1976d255;
     text-decoration: none;
     cursor: pointer;
+}
+
+/* Chính sách giá các gói ôn tập (section.pricing-policy) */
+.pricing-policy {
+    /* Đảm bảo phần section này có margin và padding phù hợp,
+       tương tự như các section khác trên trang của bạn.
+       Ví dụ: */
+    margin-top: 40px;
+    margin-bottom: 40px;
+    padding: 0 20px;
+    /* Thêm padding nếu cần */
+    /* Giới hạn chiều rộng giống container chính */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pricing-policy h3 {
+    font-family: 'Poppins', sans-serif;
+    /* Sử dụng font tiêu đề đã chọn */
+    font-size: 2.2rem;
+    /* Kích thước tiêu đề */
+    color: #212529;
+    /* Màu tối hơn cho tiêu đề */
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #dee2e6;
+    /* Đường kẻ dưới tiêu đề */
+    padding-bottom: 10px;
+    text-align: left;
+    /* Tiêu đề con canh trái */
+}
+
+.pricing-policy p {
+    font-family: 'Noto Sans', sans-serif;
+    /* Sử dụng font nội dung đã chọn */
+    font-size: 1rem;
+    color: #495057;
+    margin-bottom: 20px;
+}
+
+/* Wrapper cho bảng responsive */
+.table-responsive {
+    overflow-x: auto;
+    /* Cho phép cuộn ngang nếu bảng quá rộng */
+    -webkit-overflow-scrolling: touch;
+    /* Hiệu ứng cuộn mượt mà trên iOS */
+}
+
+/* Bảng Chính sách giá */
+.pricing-policy table {
+    width: 100%;
+    border-collapse: collapse;
+    /* Gộp các đường viền bảng */
+    margin-top: 20px;
+    background-color: #ffffff;
+    /* Nền trắng sạch sẽ */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    /* Bóng đổ mềm mại, đồng bộ */
+    border-radius: 8px;
+    /* Bo tròn góc bảng */
+    overflow: hidden;
+    /* Quan trọng để bo tròn góc bảng hoạt động với border-collapse */
+}
+
+.pricing-policy th,
+.pricing-policy td {
+    padding: 15px;
+    /* Tăng padding để nội dung có không gian */
+    text-align: left;
+    /* Canh trái cho các ô nội dung */
+    border-bottom: 1px solid #e9ecef;
+    /* Đường kẻ dưới mỗi hàng */
+    font-family: 'Noto Sans', sans-serif;
+    /* Font cho nội dung bảng */
+    color: #343a40;
+    /* Màu chữ */
+}
+
+.pricing-policy th {
+    background-color: #f0f2f5;
+    /* Màu nền xám nhạt cho tiêu đề cột, đồng bộ với các card */
+    font-weight: 600;
+    color: #212529;
+    /* Màu chữ đậm hơn cho tiêu đề */
+    text-transform: uppercase;
+    /* Chữ hoa cho tiêu đề cột */
+    font-size: 0.95rem;
+    /* Kích thước font phù hợp */
+}
+
+/* Loại bỏ border-bottom cho hàng cuối cùng của tbody */
+.pricing-policy tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Hiệu ứng hover cho hàng */
+.pricing-policy tbody tr:hover {
+    background-color: #fcfcfc;
+    /* Màu nền rất nhạt khi hover */
+}
+
+/* Kiểu cho các tag gói (Miễn phí, Chính thức, Khuyên dùng) */
+.package-tag {
+    display: inline-block;
+    padding: 3px 7px;
+    /* Kích thước padding nhỏ hơn cho tag trong bảng */
+    border-radius: 4px;
+    font-size: 0.7rem;
+    /* Kích thước font nhỏ hơn */
+    font-weight: 600;
+    margin-left: 5px;
+    /* Khoảng cách với tên gói */
+    vertical-align: middle;
+    white-space: nowrap;
+    /* Ngăn tag bị xuống dòng */
+}
+
+.free-tag {
+    background-color: #d4edda;
+    /* Nền xanh lá nhạt */
+    color: #155724;
+    /* Chữ xanh lá đậm */
+}
+
+.official-tag {
+    background-color: #e2e6ea;
+    /* Nền xám nhạt */
+    color: #495057;
+    /* Chữ xám đậm */
+}
+
+.featured-tag {
+    background-color: #fff3cd;
+    /* Nền vàng nhạt */
+    color: #856404;
+    /* Chữ vàng đậm */
+}
+
+.package-tag .fas {
+    font-size: 0.7rem;
+    /* Icon nhỏ hơn trong tag */
+    margin-right: 3px;
+}
+
+/* Kiểu cho các icon tick/cross trong bảng */
+.pricing-policy .green-icon {
+    color: #28a745;
+    /* Màu xanh lá cho tick */
+    margin-right: 5px;
+}
+
+.pricing-policy .red-icon {
+    color: #dc3545;
+    /* Màu đỏ cho cross */
+    margin-right: 5px;
 }

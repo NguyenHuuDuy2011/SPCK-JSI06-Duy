@@ -293,14 +293,18 @@
                                     <span id="final-total" style="font-size:1.3rem;color:#0e9637;font-weight:600"></span>
                                 </div>
                                 <div class="text-muted" style="font-size:0.95rem">
-                                    Tổng giá cho tất cả các hành khách (đã bao gồm thuế, phí và chiết khấu).
+                                    Giá trên đã bao gồm thuế, phí và chiết khấu.
                                 </div>
-                                <button class="btn btn-success w-100 mt-3" id="btn-pay">Thanh toán</button>
+                                <div class="form-check my-2">
+                                    <input class="form-check-input" type="checkbox" id="agree-pay">
+                                    <label class="form-check-label" for="agree-pay" style="text-align: left;">Tôi đồng ý quy định, điều khoản của Quiz Website
+                                    </label>                          </div>
+                                    <button class="btn btn-success w-100 mt-3" id="btn-pay" disabled>Thanh toán</button>
                             </div>
                             <div class="mt-3" style="font-size:0.95rem">
-                                <a href="#" style="color: #0e9637; text-decoration: none;">Chính sách giá gói</a> |
-                                <a href="#" style="color: #0e9637; text-decoration: none">Xem lại các điều kiện</a> |
-                                <a href="#" style="color: #0e9637; text-decoration: none">Chính sách hỗ trợ ưu tiên</a>
+                                <a href="./dieu_khoan.html" target="_blank" style="color: #0e9637; text-decoration: none;">Chính sách giá gói</a> |
+                                <a href="./dieu_khoan.html" target="_blank" style="color: #0e9637; text-decoration: none">Xem lại các điều kiện</a> |
+                                <a href="./dieu_khoan.html" target="_blank" style="color: #0e9637; text-decoration: none">Chính sách hỗ trợ ưu tiên</a>
                             </div>
                         </div>
                     </div>          </div>
@@ -354,7 +358,12 @@
                                         </ol>
                                     </ul>
                                 </ul>
-                                <button class="btn btn-danger w-100 mt-3" id="btn-confirm-cancel">Xác nhận hủy và hoàn tiền</button>
+                                <div class="form-check my-2">
+                                    <input class="form-check-input" type="checkbox" id="agree-cancel">
+                                    <label class="form-check-label" for="agree-cancel">Tôi xác nhận sẽ hủy gói và hoàn tiền
+                                    </label>
+                                </div>
+                                <button class="btn btn-danger w-100 mt-3" id="btn-confirm-cancel" disabled>Xác nhận hủy và hoàn tiền</button>
                             </div>
                         </div>
                     </div>
@@ -385,7 +394,7 @@
                     { icon: "fa-solid fa-xmark text-danger", text: "Được quyền ưu tiên hỗ trợ" },
                     { icon: "fa-solid fa-xmark text-danger", text: "Học cùng thầy, cô giáo giàu kinh nghiệm" },
                     { icon: "", text: "----" },
-                    { icon: "fa-solid fa-clock text-warning", text: "Mỗi tài khoản được dùng thử 3 lần, mỗi lần hiệu lực 24h" }
+                    { icon: "fa-solid fa-clock text-warning", text: "Mỗi tài khoản được dùng thử 3 lần, mỗi lần hiệu lực 24 giờ" }
                 ]
             },
             {
@@ -801,9 +810,17 @@
 
                 // Lưu lại số tiền nâng cấp để dùng khi thanh toán
                 finalSection.dataset.upgradeAmount = upgradeAmount;
+                const agreePay = document.getElementById("agree-pay");
+            if (agreePay) {
+                agreePay.checked = false;
+                document.getElementById("btn-pay").disabled = true;
+            }  
             }
 
         // Thanh toán (trừ tiền, lưu gói, chuyển tiền cho dev)
+        document.getElementById("agree-pay").onchange = function () {
+                document.getElementById("btn-pay").disabled = !this.checked;
+            };
         document.getElementById("btn-pay").onclick = async function () {
             const finalSection = document.getElementById("final-section");
             const upgradeAmount = Number(finalSection.dataset.upgradeAmount) || selectedPackage.price;
@@ -984,6 +1001,9 @@
         }
 
         renderPackages();
+        document.getElementById("agree-cancel").onchange = function () {
+                document.getElementById("btn-confirm-cancel").disabled = !this.checked;
+            };
         document.getElementById("btn-cancel-package").onclick = function () {
                 // Hiện tab hủy gói học
                 document.getElementById("cancel-tab-li").classList.remove("d-none");
@@ -1042,6 +1062,11 @@
                     document.getElementById("cancel-tab-li").classList.add("d-none");
                     document.getElementById("package-tab").click();
                 }, 1500);
+                const agreeCancel = document.getElementById("agree-cancel");
+                    if (agreeCancel) {
+                        agreeCancel.checked = false;
+                        document.getElementById("btn-confirm-cancel").disabled = true;
+                    }
             };
             };
     </script>
