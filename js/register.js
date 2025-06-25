@@ -13,6 +13,9 @@ const registerForm = document.querySelector("#register-form"); // Đảm bảo k
 function handleRegister(event) {
     event.preventDefault();
 
+    // Hiện overlay loading
+    document.getElementById("loading-overlay").style.display = "flex";
+
     const username = inpUsername.value.trim();
     const email = inpEmail.value.trim();
     const password = inpPwd.value.trim();
@@ -20,6 +23,7 @@ function handleRegister(event) {
 
     if (!username || !email || !password || !confirmPassword) {
         alert("Vui lòng điền đủ thông tin!");
+        document.getElementById("loading-overlay").style.display = "none";
         return;
     }
 
@@ -30,6 +34,7 @@ function handleRegister(event) {
 
     if (password !== confirmPassword) {
         alert("Mật khẩu không khớp!");
+        document.getElementById("loading-overlay").style.display = "none";
         return;
     }
 
@@ -48,15 +53,19 @@ function handleRegister(event) {
             })
                 .then(() => {
                     alert("Đăng ký tài khoản thành công!\nChuyển đến trang Đăng nhập tại đây");
+                    // ...xử lý thành công...
+                    document.getElementById("loading-overlay").style.display = "none";
                     window.location.href = "../html/login.html";
                 })
                 .catch((error) => {
                     console.error("Lỗi khi lưu thông tin người dùng:", error);
+                    document.getElementById("loading-overlay").style.display = "none";
                     alert("Đăng ký thất bại!");
                 });
         })
         .catch((error) => {
             console.error("Lỗi đăng ký:", error);
+            document.getElementById("loading-overlay").style.display = "none";
             alert("Đăng ký thất bại! " + error.message);
         });
 }

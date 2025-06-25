@@ -466,3 +466,13 @@ a {
     background: linear-gradient(90deg, #43a047 60%, #1976d2 100%);
     cursor: pointer;
 }
+
+#start-btn {
+    background: linear-gradient(90deg, #1976d2 60%, #43a047 100%);
+    border: none;
+}
+
+#start-btn:hover {
+    background: linear-gradient(90deg, #43a047 60%, #1976d2 100%);
+    cursor: pointer;
+}

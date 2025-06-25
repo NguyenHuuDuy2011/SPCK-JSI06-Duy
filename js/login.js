@@ -9,11 +9,15 @@ const loginForm = document.querySelector("#login-form");
 function handleLogin(event) {
     event.preventDefault();
 
+    // Hiện overlay loading
+    document.getElementById("loading-overlay").style.display = "flex";
+
     const email = inpEmail.value.trim();
     const password = inpPwd.value.trim();
 
     if (!email || !password) {
         alert("Vui lòng điền đủ các thông tin trước khi đăng nhập!");
+        document.getElementById("loading-overlay").style.display = "none";
         return;
     }
 
@@ -43,6 +47,8 @@ function handleLogin(event) {
             localStorage.setItem("isLoggedIn", "true");
             localStorage.setItem("loginTime", Date.now().toString());
             // ...chuyển trang hoặc các thao tác khác
+            // ...xử lý thành công...
+            document.getElementById("loading-overlay").style.display = "none";
             window.location.href = "../index.html";
         })
         .catch((error) => {
