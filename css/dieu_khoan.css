@@ -246,25 +246,9 @@ footer ul li a:hover {
     cursor: pointer;
 }
 
-/* Chính sách giá các gói ôn tập (section.pricing-policy) */
-.pricing-policy {
-    /* Đảm bảo phần section này có margin và padding phù hợp,
-       tương tự như các section khác trên trang của bạn.
-       Ví dụ: */
-    margin-top: 40px;
-    margin-bottom: 40px;
-    padding: 0 20px;
-    /* Thêm padding nếu cần */
-    /* Giới hạn chiều rộng giống container chính */
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .pricing-policy h3 {
     font-family: 'Poppins', sans-serif;
     /* Sử dụng font tiêu đề đã chọn */
-    font-size: 2.2rem;
-    /* Kích thước tiêu đề */
     color: #212529;
     /* Màu tối hơn cho tiêu đề */
     margin-top: 0;
