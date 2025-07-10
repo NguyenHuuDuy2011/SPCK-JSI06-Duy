@@ -11,6 +11,13 @@
         integrity="sha512-6sSYJqDreZRZGkJ3b+YfdhB3MzmuP9R7X1QZ6g5aIXhRvR1Y/N/P47jmnkENm7YL3oqsmI6AK+V6AD99uWDnIw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/edit.css">
+    <script>
+        window.onload = function () {
+            const theme = localStorage.getItem("theme") || "light";
+            if (theme === "dark") document.body.classList.add("dark-mode");
+        }
+    </script>
 </head>
 
 <body>
@@ -113,6 +120,31 @@
     </section>
 
     <!-- Testimonials Section -->
+    <div class="container-fluid feeling" id="testimonial">
+        <h2>Quản lí ý kiến của người dùng</h2>
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-theme="dark">
+            <div class="carousel-indicators"></div>
+            <div class="carousel-inner"></div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <hr>
+        <h5 class="h5-opinion">Lưu ý dành cho quản trị viên, giáo viên của Quiz Website</h5>
+        <!-- <p>Đảm bảo công bằng trong mọi góp ý, trân trọng mọi phản hồi của người dùng. Những ý kiến không phù hợp sẽ được điều chỉnh vì
+        một nơi học tập văn minh.</p> -->
+        <p>Vì một Quiz Website công bằng và tiến bộ: Tôn trọng ý kiến hay, học hỏi để hoàn thiện, mạnh dạn loại bỏ, sửa đổi, hoàn thiện những điều chưa đúng.</p>
+        <!-- <hr>
+        <h4 class="h4-opinion">Bạn muốn đóng góp ý kiến của mình cho Quiz Website?</h4>
+        <button class="btn-opinion" onclick="window.location.href='./html/add-opinion.html'">Thêm ý kiến ngay!</button> -->
+    </div>
 
     </div>
 
@@ -136,6 +168,7 @@
     <script type="module" src="../js/home.js"></script>
     <script type="module" src="../js/firebase.js"></script>
     <script type="module" src="../js/review_check.js"></script>
+    <script type="module" src="../js/opinion-carousel.js"></script>
 </body>
 
 </html>

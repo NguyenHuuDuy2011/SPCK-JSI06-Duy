@@ -117,7 +117,7 @@ a {
 .feeling {
     border-radius: 50px;
     width: 80%;
-    background-color: #9A7C4F;
+    background: linear-gradient(90deg, #fff1d0 60%, #f6efe3 100%);
 }
 
 .card-body {
@@ -492,7 +492,7 @@ a {
 }
 
 .btn-opinion{
-    background-color: #9A7C4F;
+    background-color: #fff1d0;
     font-size: 20px;
     padding: 15px;
     border: none;
@@ -501,7 +501,7 @@ a {
 }
 
 .btn-opinion:hover{
-    background-color: #b89a6f;
+    background-color: #f6efe3;
     cursor: pointer;
 }
 
@@ -523,4 +523,21 @@ a {
 #start-btn:hover {
     background: linear-gradient(90deg, #43a047 60%, #1976d2 100%);
     cursor: pointer;
+}
+
+.carousel-item .mt-2 {
+    margin-bottom: 0.8rem !important;
+    /* Thêm dòng này để đẩy nút lên xa gạch dưới */
+}
+
+.btn-edit-opinion,
+.btn-delete-opinion {
+    font-size: 1.1rem !important;
+    padding: 0.5rem 2rem !important;
+    border-radius: 0.5rem !important;
+    color: black;
+}
+
+.btn-delete-opinion:hover{
+    color: black;
 }

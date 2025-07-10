@@ -26,6 +26,7 @@ function handleLogin(event) {
         alert("Đăng nhập thành công!\nChuyển sang trang chủ Admin tại đây");
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("username", "Administrator");
+        localStorage.setItem("email", "admin@gmail.com");
         localStorage.setItem("loginTime", Date.now().toString());
         window.location.href = "../html/admin.html";
         return;

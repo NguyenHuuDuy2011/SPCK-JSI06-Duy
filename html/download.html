@@ -11,9 +11,16 @@
         integrity="sha512-6sSYJqDreZRZGkJ3b+YfdhB3MzmuP9R7X1QZ6g5aIXhRvR1Y/N/P47jmnkENm7YL3oqsmI6AK+V6AD99uWDnIw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="../css/download.css">
+    <link rel="stylesheet" href="../css/edit.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&display=swap" rel="stylesheet">
+    <script>
+        window.onload = function () {
+            const theme = localStorage.getItem("theme") || "light";
+            if (theme === "dark") document.body.classList.add("dark-mode");
+        }
+    </script>
 </head>
 
 <body>

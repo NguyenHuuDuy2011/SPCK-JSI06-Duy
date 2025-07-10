@@ -6,6 +6,7 @@
     <title>Quản lý tài khoản & Gói học</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/billing.css">
+    <link rel="stylesheet" href="../css/edit.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
@@ -195,7 +196,16 @@
             text-decoration: none;
             cursor: pointer;
         }
+        #package-loading > div {
+            text-align: center;
+        }
     </style>
+    <script>
+        window.onload = function () {
+            const theme = localStorage.getItem("theme") || "light";
+            if (theme === "dark") document.body.classList.add("dark-mode");
+        }
+    </script>
 </head>
 
 <body>
@@ -257,6 +267,14 @@
             <div class="tab-pane fade show active" id="package" role="tabpanel" aria-labelledby="package-tab">
                 <h4 class="mb-4 text-center">Chọn gói học phù hợp</h4>
                 <div id="package-list" class="row justify-content-center flex-wrap mb-4"></div>
+                <!-- Thêm vào trước hoặc sau #package-list -->
+                <div id="package-loading" style="display:none;justify-content:center;align-items:center;height:220px;">
+                    <div style="text-align:center;">
+                        <div class="spinner-border text-success" style="width:3rem;height:3rem;" role="status"></div>
+                        <div style="margin-top:12px;font-size:1.1rem;color:green;">
+                            Đang tải các gói<span id="loading-dots"></span>
+                        </div>
+                    </div>          </div>
                 <div id="confirm-section" class="confirm-section d-none">
                     <h5>Bạn đã chọn <span id="confirm-package-label"></span></h5>
                     <p>Giá: <span id="confirm-package-price"></span></p>
@@ -396,6 +414,22 @@
         }
     </script>
     <script type="module">
+        // Hiệu ứng dấu chấm động
+            let loadingDotInterval = null;
+            function startLoadingDots() {
+                const dots = document.getElementById("loading-dots");
+                let count = 0;
+                if (loadingDotInterval) clearInterval(loadingDotInterval);
+                loadingDotInterval = setInterval(() => {
+                    count = (count + 1) % 4;
+                    dots.textContent = '.'.repeat(count);
+                }, 500);
+            }
+            function stopLoadingDots() {
+                if (loadingDotInterval) clearInterval(loadingDotInterval);
+                const dots = document.getElementById("loading-dots");
+                if (dots) dots.textContent = '';
+            }
         import { db } from "../js/firebase.js";
         import {
             collection, query, where, getDocs, updateDoc, doc
@@ -522,30 +556,35 @@
 
                 // ...phần còn lại giữ nguyên...
                 if (userData.username === "Administrator" || userData.role === "dev") {
-                    // Ẩn tab mua/thay đổi gói học
-                    document.getElementById("package-tab").parentElement.classList.add("d-none");
-                    // Hiện tab dev
-                    document.getElementById("dev-tab-li").classList.remove("d-none");
-                    // Kích hoạt tab dev
-                    const devTab = document.getElementById("dev-tab");
-                    const tab = new bootstrap.Tab(devTab);
-                    tab.show();
-                    // Đảm bảo tab nạp tiền đứng sau tab dev
-                    const depositTabLi = document.getElementById("deposit-tab").parentElement;
-                    const devTabLi = document.getElementById("dev-tab-li");
-                    devTabLi.parentElement.insertBefore(depositTabLi, devTabLi.nextSibling);
+                // HIỆN LOADING NGAY LẬP TỨC
+                document.getElementById("loading-overlay").style.display = "flex";
+
+                // Ẩn tab mua/thay đổi gói học
+                document.getElementById("package-tab").parentElement.classList.add("d-none");
+                // Hiện tab dev
+                document.getElementById("dev-tab-li").classList.remove("d-none");
+                // Kích hoạt tab dev
+                const devTab = document.getElementById("dev-tab");
+                const tab = new bootstrap.Tab(devTab);
+                tab.show();
+                // Đảm bảo tab nạp tiền đứng sau tab dev
+                const depositTabLi = document.getElementById("deposit-tab").parentElement;
+                const devTabLi = document.getElementById("dev-tab-li");
+                devTabLi.parentElement.insertBefore(depositTabLi, devTabLi.nextSibling);
+
+                // Lấy tài khoản admin@gmail.com
+                const qAdmin = query(collection(db, "users"), where("email", "==", "admin@gmail.com"));
+                const snapAdmin = await getDocs(qAdmin);
+                if (!snapAdmin.empty) {
+                    devDocId = snapAdmin.docs[0].id;
+                    devData = snapAdmin.docs[0].data();
+                    loadDevInfo();
                 }
-                if (userData.username === "Administrator") {
-                    document.getElementById("dev-tab-li").classList.remove("d-none");
-                    // Lấy tài khoản admin@gmail.com
-                    const qAdmin = query(collection(db, "users"), where("email", "==", "admin@gmail.com"));
-                    const snapAdmin = await getDocs(qAdmin);
-                    if (!snapAdmin.empty) {
-                        devDocId = snapAdmin.docs[0].id;
-                        devData = snapAdmin.docs[0].data();
-                        loadDevInfo();
-                    }
-                } else if (userData.role === "dev") {
+                // ẨN LOADING SAU KHI ĐÃ XONG
+                setTimeout(() => {
+                    document.getElementById("loading-overlay").style.display = "none";
+                }, 600); // Thời gian loading giả lập
+            } else if (userData.role === "dev") {
                     document.getElementById("package-tab").parentElement.classList.add("d-none");
                     document.getElementById("dev-tab-li").classList.remove("d-none");
                     const devTab = document.getElementById("dev-tab");
@@ -559,15 +598,22 @@
 
                 // Sau khi userData = snap.docs[0].data();
                 if (userData.packageType === "trial" && userData.trialActivatedAt) {
-                    const now = Date.now();
-                    if (now - userData.trialActivatedAt > 24 * 60 * 60 * 1000) {
-                        // Hết hạn trial
-                        await updateDoc(doc(db, "users", userDocId), { packageType: "" });
-                        userData.packageType = "";
-                        await loadUserInfo();
-                        showMsg("Gói dùng thử đã hết hạn!", "warning", "msg");
-                    }
+                const now = Date.now();
+                if (now - userData.trialActivatedAt > 24 * 60 * 60 * 1000) {
+                    // Hết hạn trial
+                    await updateDoc(doc(db, "users", userDocId), { packageType: "" });
+                    userData.packageType = "";
+                    userData.trialCount = (userData.trialCount || 1); // Đảm bảo có trialCount
+                    await loadUserInfo();
+                    const used = userData.trialCount || 1;
+                    const left = Math.max(0, 3 - used);
+                    showMsg(
+                        `Hết thời gian thử nghiệm lần ${used} cho gói Phổ thông Tiết kiệm, bạn còn ${left} lần thử nghiệm còn lại.`,
+                        "warning",
+                        "msg"
+                    );
                 }
+            }
             }
         await loadUserInfo();
 
@@ -641,8 +687,27 @@
         let selectedPackage = null;
         let upgradeTarget = null;
 
+        function renderPackages(selectedKey = null, showLoading = false) {
+                if (showLoading) {
+                    document.getElementById("package-list").style.display = "none";
+                    document.getElementById("package-loading").style.display = "flex";
+                    startLoadingDots();
+                    setTimeout(() => {
+                        stopLoadingDots();
+                        document.getElementById("package-loading").style.display = "none";
+                        document.getElementById("package-list").style.display = "flex";
+                        renderAllPackages(selectedKey);
+                    }, 3000);
+                } else {
+                    stopLoadingDots();
+                    document.getElementById("package-loading").style.display = "none";
+                    document.getElementById("package-list").style.display = "flex";
+                    renderAllPackages(selectedKey);
+                }
+            }
+
         // Render các gói học
-        function renderPackages(selectedKey = null) {
+        function renderAllPackages(selectedKey = null) {
                 const list = document.getElementById("package-list");
                 list.innerHTML = "";
 
@@ -659,6 +724,8 @@
                         if (userData.packageType && currentIdx > 0) {
                             // Đang dùng gói cao hơn trial
                             btnHtml = `<button class="btn btn-outline-dark btn-choose text-dark" data-key="${pkg.key}" disabled>Đang sử dụng gói cao hơn</button>`;
+                        } else if (i === currentIdx) {
+                            btnHtml = `<button class="btn btn-success btn-choose" data-key="${pkg.key}" disabled>Đang sử dụng</button>`;
                         } else {
                             btnHtml = `<button class="btn btn-outline-primary btn-choose" data-key="trial" style="font-weight:500;font-size:1.05rem;" ${trialUsedUp ? "disabled" : ""}>
                     ${trialUsedUp ? "Đã hết lượt dùng thử" : `Dùng thử miễn phí<br>(${3 - trialCount} lần còn lại)`}
@@ -1019,7 +1086,7 @@
             setTimeout(() => { document.getElementById(id).innerHTML = ""; }, 2500);
         }
 
-        renderPackages();
+        renderPackages(null, true); // Hiện loading
         document.getElementById("agree-cancel").onchange = function () {
                 document.getElementById("btn-confirm-cancel").disabled = !this.checked;
             };

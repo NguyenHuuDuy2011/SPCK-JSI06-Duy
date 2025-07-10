@@ -7,6 +7,13 @@
     <title>Quiz Ôn tập</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" href="../css/quiz.css">
+    <link rel="stylesheet" href="../css/edit.css">
+    <script>
+        window.onload = function () {
+            const theme = localStorage.getItem("theme") || "light";
+            if (theme === "dark") document.body.classList.add("dark-mode");
+        }
+    </script>
 </head>
 
 <body>

@@ -95,3 +95,377 @@
     object-fit: cover;
     border-radius: 8px;
 }
+
+body.dark-mode {
+    background: #181818 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .container,
+body.dark-mode .box,
+body.dark-mode .rounded-md {
+    background: #232323 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .quiz-container,
+body.dark-mode .container,
+body.dark-mode .main-content {
+    background: #232323 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .form-control {
+    background: #232323 !important;
+    color: #f1f1f1 !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode .btn {
+    background: #333 !important;
+    color: #fff !important;
+}
+
+body.dark-mode .feature-card {
+    background-color: gray !important;
+}
+
+body.dark-mode #navbar {
+    color: white !important;
+}
+
+body.dark-mode .feeling {
+    background: linear-gradient(90deg, #232323 70%, rgb(65, 64, 64) 100%) !important;
+}
+
+body.dark-mode .user-info-box {
+    background: rgb(82, 81, 81) !important;
+}
+
+body.dark-mode .text-dark {
+    color: #fff !important;
+}
+
+body.dark-mode .package-card{
+    background-color: #333 !important;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px #0001;
+    padding: 24px 18px 18px 18px;
+    margin: 0 10px;
+    min-width: 260px;
+    position: relative;
+    border: 2px solid transparent;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+body.dark-mode #cancel-package .package-card {
+    background-color: #111 !important;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px #0001;
+    padding: 24px 18px 18px 18px;
+    margin: 0 10px;
+    min-width: 260px;
+    position: relative;
+    border: 2px solid transparent;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+body.dark-mode .package-card .price {
+    color: yellowgreen !important;
+}
+
+body.dark-mode .package-card .label {
+    color: #fff !important;
+}
+
+body.dark-mode .package-card .desc {
+    color: #ccc !important;
+}
+
+body.dark-mode .package-card .features {
+    color: #ccc !important;
+}
+
+body.dark-mode .package-card .features i {
+    color: #fff !important;
+}
+
+body.dark-mode .package-card .btn-choose {
+    color: #fff !important;
+}
+
+body.dark-mode .confirm-section,
+body.dark-mode .final-section {
+    background: #333 !important;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px #0001;
+    padding: 24px 18px;
+}
+
+body.dark-mode .confirm-section h3,
+body.dark-mode .final-section h3 {
+    color: #fff !important;
+}
+
+body.dark-mode .confirm-section p,
+body.dark-mode .final-section p {
+    color: #ccc !important;
+}
+
+body.dark-mode .confirm-section .btn-choose,
+body.dark-mode .final-section .btn-choose {
+    color: #fff !important;
+    background-color: var(--color-primary) !important;
+}
+
+body.dark-mode .confirm-section .btn-choose:hover,
+body.dark-mode .final-section .btn-choose:hover {
+    background-color: var(--color-primary-blur) !important;
+}
+
+body.dark-mode .confirm-section .btn-cancle,
+body.dark-mode .final-section .btn-cancle {
+    color: #fff !important;
+    background-color: var(--color-grey) !important;
+}
+
+body.dark-mode .nav-tabs .nav-link.active {
+    color: #fff !important;
+    border-color: #1976d2 #1976d2 #232323 !important;
+}
+
+body.dark-mode .nav-tabs .nav-link {
+    color: #ccc !important;
+}
+
+body.dark-mode .tab-content {
+    margin-top: 24px;
+}
+
+body.dark-mode .modal-content {
+    background: #333 !important;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #0001;
+    padding: 10px;
+    margin-bottom: 24px;
+}
+
+body.dark-mode .icon-youtube {
+    color: white !important;
+}
+
+body.dark-mode .icon-youtube:hover {
+    color: red !important;
+    scale: 150%;
+}
+
+body.dark-mode .icon1-x {
+    margin-left: 20px;
+    color: white !important;
+    font-size: 25px;
+    transition: 0.1s;
+}
+
+body.dark-mode .icon1-x:hover {
+    scale: 150%;
+}
+
+body.dark-mode .icon1-github {
+    margin-left: 20px;
+    color: white !important;
+    font-size: 25px;
+    transition: 0.1s;
+}
+
+body.dark-mode .icon1-github:hover {
+    scale: 150%;
+}
+
+body.dark-mode #package-tab.nav-link.active {
+    background: rgb(65, 64, 64) !important;
+}
+
+body.dark-mode #deposit-tab.nav-link.active {
+    background: rgb(65, 64, 64) !important;
+}
+
+body.dark-mode #dev-tab.nav-link.active {
+    background: rgb(65, 64, 64) !important;
+}
+
+body.dark-mode #cancel-tab.nav-link.active {
+    background: rgb(65, 64, 64) !important;
+}
+
+body.dark-mode .card {
+    background: rgb(82, 81, 81) !important;
+    color: white !important;
+}
+
+body.dark-mode .package-card {
+    background: rgb(65, 64, 64) !important;
+    color: white !important;
+}
+
+body.dark-mode .package-card:hover {
+    border: 2px solid green !important;
+    box-shadow: 0 4px 24px #0001 !important;
+}
+
+body.dark-mode #final-total {
+    color: yellowgreen !important;
+}
+
+body.dark-mode .text-muted {
+    color: white !important;
+}
+
+body.dark-mode .form-text {
+    color: white !important;
+}
+
+body.dark-mode .container {
+    background-color: #181818 !important;
+}
+
+body.dark-mode .feature-box {
+    background-color: #232323 !important;
+    color: #f1f1f1 !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode .container-fluid.end {
+    background-color: #232323 !important;
+    color: #f1f1f1 !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode .navbar {
+    color: #fff !important;
+}
+
+body.dark-mode .navbar .navbar-brand,
+body.dark-mode .navbar .nav-link,
+body.dark-mode .navbar .dropdown-toggle,
+body.dark-mode .navbar .dropdown-item {
+    color: #fff !important;
+}
+
+body.dark-mode {
+    background: #181818 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .quiz-container {
+    background: #232323 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .feature-card {
+    background: #232323 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .btn-opinion {
+    background: #232323 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .btn-opinion:hover {
+    background: #333 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .carousel-item {
+    margin-bottom: 0.8rem !important;
+    /* Thêm dòng này để đẩy nút lên xa gạch dưới */
+}
+
+body.dark-mode .leaderboard {
+    background: #232323 !important;
+    color: #f1f1f1 !important;
+    .title {
+        color: #f1f1f1 !important;
+    }
+}
+
+body.dark-mode .leaderboard tr {
+    border-bottom: 1px solid #444 !important;
+}
+
+body.dark-mode .leaderboard th {
+    background-color: #333 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .leaderboard td {
+    background-color: #232323 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .leaderboard tr:nth-child(even) {
+    background-color: #333 !important;
+}
+
+body.dark-mode .leaderboard tr:nth-child(odd) {
+    background-color: #232323 !important;
+}
+
+/* body.dark-mode .leaderboard tr:hover {
+    background-color: gray !important;
+} */
+
+body.dark-mode .leaderboard th,
+body.dark-mode .leaderboard td {
+    padding: 10px !important;
+    text-align: center !important;
+    border: 1px solid #444 !important;
+}
+
+body.dark-mode #filter-btn {
+    background-color: #5c5c5e !important;
+    color: #fff !important;
+    font-size: 18px !important;
+}
+
+body.dark-mode .btn-home {
+    background-color: #232323 !important;
+    color: #fff !important;
+    font-size: 18px !important;
+}
+
+body.dark-mode .btn-home:hover {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+body.dark-mode .history-title {
+    color: #fff !important;
+}
+
+body.dark-mode .container-history {
+    background-color: #232323 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .history-table th {
+    background-color: #333 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .history-table td {
+    background-color: #232323 !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .history-table tr:nth-child(even) {
+    background-color: #333 !important;
+}
+
+body.dark-mode .history-table tr:nth-child(odd) {
+    background-color: #232323 !important;
+}
+
+body.dark-mode .history-table tr:hover {
+    background-color: #444 !important;
+}

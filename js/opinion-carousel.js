@@ -1,10 +1,12 @@
 import { db } from './firebase.js';
-import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { collection, getDocs, query, orderBy, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const carouselInner = document.querySelector('.carousel-inner');
 const carouselIndicators = document.querySelector('.carousel-indicators');
 const carouselPrev = document.querySelector('.carousel-control-prev');
 const carouselNext = document.querySelector('.carousel-control-next');
+const currentEmail = localStorage.getItem("email") || "";
+const isAdmin = currentEmail === "admin@gmail.com";
 
 async function loadOpinions() {
     const q = query(collection(db, "opinions"), orderBy("createdAt", "desc"));
@@ -30,14 +32,21 @@ async function loadOpinions() {
     let count = 0;
     querySnapshot.forEach((doc) => {
         const data = doc.data();
-        const item = document.createElement('div');
-        item.className = `carousel-item container-fluid${idx === 0 ? ' active' : ''}`;
-        item.innerHTML = `
-            <h2 class="testimonial-text nhan-xet">${data.comment}</h2>
-            <em><i class="fa-solid ${data.deviceIcon}"></i> Bình luận từ ${data.deviceText}${data.address ? ' - ' + data.address : ''}${data.author ? ' - ' + data.author : ''}</em><br>
-            <em><i class="fa-solid ${data.likeIcon}"></i> ${data.likeText}</em>
-        `;
-        carouselInner.appendChild(item);
+    const item = document.createElement('div');
+    item.className = `carousel-item container-fluid${idx === 0 ? ' active' : ''}`;
+    item.innerHTML = `
+    <h2 class="testimonial-text nhan-xet">${data.comment}</h2>
+    <em><i class="fa-solid ${data.deviceIcon}"></i> Bình luận từ ${data.deviceText}${data.address ? ' - ' + data.address : ''}${data.author ? ' - ' + data.author : ''}</em><br>
+    <em><i class="fa-solid ${data.likeIcon}"></i> ${data.likeText}</em>
+    ${isAdmin ? `
+        <div class="mt-2">
+            <button class="btn btn-sm btn-warning me-2 btn-edit-opinion" data-id="${doc.id}"><i class="fa fa-edit"></i> Sửa</button>
+            <button class="btn btn-sm btn-danger btn-delete-opinion" data-id="${doc.id}"><i class="fa fa-trash"></i> Xóa</button>
+            <span class="loading-dots d-none" id="loading-${doc.id}">Đang xử lý <span class="dots"></span></span>
+        </div>
+    ` : ""}
+`;
+    carouselInner.appendChild(item);
 
         // Tạo indicator
         const indicator = document.createElement('button');
@@ -63,6 +72,60 @@ async function loadOpinions() {
         carouselPrev.style.display = '';
         carouselNext.style.display = '';
     }
+    
+function startLoadingDotsSpan(span) {
+    let count = 0;
+    span.classList.remove('d-none');
+    const dots = span.querySelector('.dots');
+    span._interval = setInterval(() => {
+        count = (count + 1) % 4; // 0, 1, 2, 3, 0, 1, ...
+        dots.textContent = '.'.repeat(count);
+    }, 400);
+}
+function stopLoadingDotsSpan(span) {
+    if (span._interval) clearInterval(span._interval);
+    const dots = span.querySelector('.dots');
+    if (dots) dots.textContent = '';
+    span.classList.add('d-none');
+}
+
+// ...sau khi loadOpinions() xong, thêm sự kiện:
+carouselInner.querySelectorAll('.btn-delete-opinion').forEach(btn => {
+    btn.onclick = async function () {
+        if (!confirm("Bạn chắc chắn muốn xóa ý kiến của người dùng này?")) return;
+        const id = btn.getAttribute('data-id');
+        const loadingSpan = document.getElementById(`loading-${id}`);
+        startLoadingDotsSpan(loadingSpan);
+        try {
+            await deleteDoc(doc(db, "opinions", id));
+            await loadOpinions();
+        } catch (e) {
+            alert("Xóa thất bại!");
+        }
+        stopLoadingDotsSpan(loadingSpan);
+    };
+});
+
+carouselInner.querySelectorAll('.btn-edit-opinion').forEach(btn => {
+    btn.onclick = async function () {
+        const id = btn.getAttribute('data-id');
+        const loadingSpan = document.getElementById(`loading-${id}`);
+        // Lấy ý kiến cũ
+        const item = btn.closest('.carousel-item');
+        const oldComment = item.querySelector('.testimonial-text.nhan-xet').textContent || "";
+        const comment = prompt("Nhập nội dung mới cho ý kiến này:", oldComment); // <-- truyền giá trị cũ vào prompt
+        if (comment && comment.trim()) {
+            startLoadingDotsSpan(loadingSpan);
+            try {
+                await updateDoc(doc(db, "opinions", id), { comment: comment.trim() });
+                await loadOpinions();
+            } catch (e) {
+                alert("Sửa thất bại!");
+            }
+            stopLoadingDotsSpan(loadingSpan);
+        }
+    };
+});
 }
 
 loadOpinions();
